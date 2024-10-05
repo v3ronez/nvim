@@ -118,6 +118,7 @@ vim.schedule(function()
   vim.opt.clipboard = 'unnamedplus'
 end)
 
+vim.opt.termguicolors = true
 -- Enable break indent
 vim.opt.breakindent = true
 
