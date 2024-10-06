@@ -633,7 +633,9 @@ require('lazy').setup({
           staticcheck = true,
           gofumpt = true,
         },
-        biome = {},
+        biome = {
+          filetypes = { 'javascript', 'html' },
+        },
         html = {
           on_attach = on_attach,
           capabilities = capabilities,

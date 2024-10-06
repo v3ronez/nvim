@@ -30,7 +30,11 @@ return {
         gofumpt = true,
       },
     },
-    biome = {},
+    biome = {
+      on_attach = on_attach,
+      capabilities = capabilities,
+      filetypes = { 'html', 'javascript', 'typescript', 'react', 'vue' },
+    },
     html = {
       on_attach = on_attach,
       capabilities = capabilities,
