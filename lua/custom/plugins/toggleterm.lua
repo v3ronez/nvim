@@ -4,7 +4,7 @@ return {
   version = '*',
   config = true,
   opts = {
-    open_mapping = [[<c-\>]],
+    open_mapping = [[<C-t>]],
     direction = 'float',
   },
 }

@@ -17,10 +17,10 @@ return {
     -- from Neovim.
     'adalessa/laravel.nvim',
     dependencies = {
-      'nvim-telescope/telescope.nvim',
       'tpope/vim-dotenv',
+      'nvim-telescope/telescope.nvim',
       'MunifTanjim/nui.nvim',
-      'nvimtools/none-ls.nvim',
+      'kevinhwang91/promise-async',
     },
     event = { 'VeryLazy' },
     cmd = { 'Sail', 'Artisan', 'Composer', 'Npm', 'Yarn', 'Laravel' },
@@ -44,7 +44,7 @@ return {
     },
     ft = { 'blade', 'php' }, -- optional, improves startup time
     opts = {
-      close_tag_on_complete = true, -- default: true
+      close_tag_on_complete = false, -- default: true
     },
   },
   {

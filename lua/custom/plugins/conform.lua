@@ -20,6 +20,15 @@ return {
         'fix',
         '--no-cache',
         '--rules=@PSR12', -- Formatting preset. Other presets are available, see the php-cs-fixer docs.
+        'phpdoc_indent',
+        'line_ending',
+        'array_indentation',
+        'blank_line_before_statement',
+        'method_chaining_indentation',
+        'type_declaration_spaces',
+        'types_spaces',
+        'no_useless_return',
+        'semicolon_after_instruction',
         '$FILENAME',
       },
       stdin = false,
@@ -36,7 +45,7 @@ return {
         lsp_format_opt = 'fallback'
       end
       return {
-        timeout_ms = 500,
+        timeout_ms = 800,
         lsp_format = lsp_format_opt,
       }
     end,
