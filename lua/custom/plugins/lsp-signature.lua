@@ -4,7 +4,7 @@ return {
     event = 'VeryLazy',
     opts = {
       hint_prefix = '',
-      max_width = 60,
+      max_width = 50,
       hint_enable = false,
     },
     config = function(_, opts)
