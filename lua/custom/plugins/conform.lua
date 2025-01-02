@@ -54,7 +54,9 @@ return {
       php = { 'php_cs_fixer' },
       blade = { 'blade-formatter', 'rustywind' },
       typescript = { 'biome' },
+      typescriptreact = { 'biome' },
       javascript = { 'biome' },
+      javascriptreact = { 'biome' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
