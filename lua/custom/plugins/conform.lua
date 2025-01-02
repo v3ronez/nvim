@@ -53,6 +53,8 @@ return {
       lua = { 'stylua' },
       php = { 'php_cs_fixer' },
       blade = { 'blade-formatter', 'rustywind' },
+      typescript = { 'biome' },
+      javascript = { 'biome' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
