@@ -141,6 +141,10 @@ return {
           },
         },
       },
+      hls = {
+        capabilities = capabilities,
+        filetypes = { 'haskell', 'lhaskell', 'cabal' },
+      },
       gopls = {
         analyses = {
           unusedparams = true,
