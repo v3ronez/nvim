@@ -352,6 +352,9 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+      vim.keymap.set('n', '<leader>dS', function()
+        vim.cmd 'noautocmd write'
+      end, { desc = '[D]ocument [S]ave (no formatting)' })
     end,
   },
 
