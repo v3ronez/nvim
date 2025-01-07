@@ -144,6 +144,10 @@ return {
       hls = {
         capabilities = capabilities,
         filetypes = { 'haskell', 'lhaskell', 'cabal' },
+        settings = {
+          cabalFormattingProvider = 'cabalfmt',
+          formattingProvider = 'ormolu',
+        },
       },
       gopls = {
         analyses = {
