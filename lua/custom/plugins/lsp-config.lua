@@ -123,6 +123,7 @@ return {
     --  - settings (table): Override the default settings passed when initializing the server.
     --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
     local util = require 'lspconfig.util'
+    -- local on_attach = require('lspconfig').on_attach
     local servers = {
       intelephense = {
         filetypes = { 'php', 'blade', 'php_only' },
@@ -172,10 +173,13 @@ return {
       -- gopls = {},
       -- pyright = {},
       rust_analyzer = {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        filetypes = { 'rust' },
+        root_dir = util.root_pattern 'Cargo.toml',
         flags = {
           debounce_text_changes = 150,
         },
-        capabilities = capabilities,
         settings = {
           ['rust_analyzer'] = {
             completion = {
@@ -183,8 +187,16 @@ return {
             },
           },
           cargo = {
-            features = 'all',
             allFeatures = true,
+          },
+          imports = {
+            granularity = {
+              group = 'module',
+            },
+            prefix = 'self',
+          },
+          procMacro = {
+            enable = true,
           },
         },
       },
@@ -219,6 +231,7 @@ return {
       'html',
       'phpactor',
       'jsonls',
+      'rust_analyzer',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
