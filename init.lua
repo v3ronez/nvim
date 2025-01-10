@@ -7,6 +7,8 @@ vim.g.have_nerd_font = true
 -- See `:help vim.opt`
 -- NOTE: You can change these options as you wish!
 --  For more options, you can see `:help option-list`
+vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
+
 vim.opt.ignorecase = true
 vim.opt.wildignore:append {
   '*.o',
@@ -30,6 +32,8 @@ vim.opt.wildignore:append {
   '*.hg',
   '*.svn',
   '*/vendor/*',
+  'target/*', -- Rust's build directory
+  '*.rs.bk', -- Rust backup files, if any
 }
 vim.opt.autoread = true
 -- Make line numbers default
@@ -51,7 +55,7 @@ vim.opt.showmode = false
 -- vim.schedule(function()
 --   vim.opt.clipboard = 'unnamedplus'
 -- end)
-
+--
 -- hover space config
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
   border = 'rounded', -- Optional: add a border style
@@ -295,6 +299,12 @@ require('lazy').setup({
     config = function()
       require('telescope').setup {
         -- pickers = {}
+        pickers = {
+          find_files = {
+            -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*', '--glob', '!**/target/*' },
+          },
+        },
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
