@@ -153,7 +153,6 @@ return {
         capabilities = capabilities,
         filetypes = { 'html', 'templ', 'htmx' },
       },
-
       cssls = {
         capabilities = capabilities,
         filetypes = { 'css' },
@@ -172,33 +171,37 @@ return {
       -- clangd = {},
       -- gopls = {},
       -- pyright = {},
+      markdownlint = {
+        lint = {
+          enabled = false,
+        },
+      },
       rust_analyzer = {
-        on_attach = on_attach,
         capabilities = capabilities,
         filetypes = { 'rust' },
-        root_dir = util.root_pattern 'Cargo.toml',
-        flags = {
-          debounce_text_changes = 150,
-        },
-        settings = {
-          ['rust_analyzer'] = {
-            completion = {
-              postfix = { enable = true },
-            },
-          },
-          cargo = {
-            allFeatures = true,
-          },
-          imports = {
-            granularity = {
-              group = 'module',
-            },
-            prefix = 'self',
-          },
-          procMacro = {
-            enable = true,
-          },
-        },
+        -- root_dir = util.root_pattern 'Cargo.toml',
+        -- flags = {
+        --   debounce_text_changes = 150,
+        -- },
+        -- settings = {
+        --   ['rust_analyzer'] = {
+        --     completion = {
+        --       postfix = { enable = true },
+        --     },
+        --   },
+        --   cargo = {
+        --     allFeatures = true,
+        --   },
+        --   imports = {
+        --     granularity = {
+        --       group = 'module',
+        --     },
+        --     prefix = 'self',
+        --   },
+        --   procMacro = {
+        --     enable = true,
+        --   },
+        -- },
       },
       -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
       --
