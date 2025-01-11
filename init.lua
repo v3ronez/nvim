@@ -3,52 +3,6 @@ vim.g.maplocalleader = ' '
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
--- [[ Setting options ]]
--- See `:help vim.opt`
--- NOTE: You can change these options as you wish!
---  For more options, you can see `:help option-list`
-vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
-
-vim.opt.ignorecase = true
-vim.opt.wildignore:append {
-  '*.o',
-  '*.obj',
-  '*.exe',
-  '*.dll',
-  '*.pyc',
-  '*.pyo',
-  '*.so',
-  '*.jpg',
-  '*.jpeg',
-  '*.png',
-  '*.gif',
-  '*.zip',
-  '*.tar.gz',
-  '*.rar',
-  '*.tar.bz2',
-  '*node_modules/*',
-  '*.DS_Store',
-  '*.git',
-  '*.hg',
-  '*.svn',
-  '*/vendor/*',
-  'target/*', -- Rust's build directory
-  '*.rs.bk', -- Rust backup files, if any
-}
-vim.opt.autoread = true
--- Make line numbers default
-vim.opt.number = true
--- You can also add relative line numbers, to help with jumping.
---  Experiment for yourself to see if you like it!
-vim.opt.relativenumber = true
-
-vim.cmd.hi 'Comment gui=none'
--- Enable mouse mode, can be useful for resizing splits for example!
-vim.opt.mouse = 'a'
-
--- Don't show the mode, since it's already in the status line
-vim.opt.showmode = false
-
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -63,46 +17,6 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
   max_width = 70, -- Max width of the hover window
   max_height = 8, -- Max height of the hover window
 })
-
-vim.opt.termguicolors = true
--- Enable break cndent
-vim.opt.breakindent = true
-
--- Save undo history
-vim.opt.undofile = true
-
--- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-
--- Keep signcolumn on by default
-vim.opt.signcolumn = 'yes'
-
--- Decrease update time
-vim.opt.updatetime = 250
-
--- Decrease mapped sequence wait time
--- Displays which-key popup sooner
-vim.opt.timeoutlen = 300
-
--- Configure how new splits should be opened
-vim.opt.splitright = true
-vim.opt.splitbelow = true
-
--- Sets how neovim will display certain whitespace characters in the editor.
---  See `:help 'list'`
---  and `:help 'listchars'`
--- vim.opt.list = true
--- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
--- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
-
--- Show which line your cursor is on
-vim.opt.cursorline = true
-
--- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 10
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -509,39 +423,6 @@ require('lazy').setup({
       }
     end,
   },
-
-  -- { -- You can easily change to a different colorscheme.
-  --   -- Change the name of the colorscheme plugin below, and then
-  --   -- change the command in the config to whatever the name of that colorscheme is.
-  --   --
-  --   -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-  --   -- 'folke/tokyonight.nvim',
-  --   'catppuccin/nvim',
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   init = function()
-  --     -- Load the colorscheme here.
-  --     -- Like many other themes, this one has different styles, and you could load
-  --     -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
-  --     vim.cmd.colorscheme 'catppuccin-mocha'
-  --
-  --     -- You can configure highlights by doing something like:
-  --   end,
-  -- },
-  -- {
-  --   'rose-pine/neovim',
-  --   name = 'rose-pine',
-  --
-  --   priority = 1000, -- Make sure to load this before all the other start plugins.
-  --   config = function()
-  --     require('rose-pine').setup {
-  --       disable_background = true,
-  --       styles = {
-  --         italic = false,
-  --       },
-  --     }
-  --   end,
-  -- },
-
   -- Highlight todo, notes, etc in comments
   { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
