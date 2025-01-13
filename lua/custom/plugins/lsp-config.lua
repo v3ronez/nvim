@@ -1,21 +1,21 @@
-local custom_format = function()
-  if vim.bo.filetype == 'templ' then
-    local bufnr = vim.api.nvim_get_current_buf()
-    local filename = vim.api.nvim_buf_get_name(bufnr)
-    local cmd = 'templ fmt ' .. vim.fn.shellescape(filename)
-
-    vim.fn.jobstart(cmd, {
-      on_exit = function()
-        -- Reload the buffer only if it's still the current buffer
-        if vim.api.nvim_get_current_buf() == bufnr then
-          vim.cmd 'e!'
-        end
-      end,
-    })
-  else
-    vim.lsp.buf.format()
-  end
-end
+-- local custom_format = function()
+--   if vim.bo.filetype == 'templ' then
+--     local bufnr = vim.api.nvim_get_current_buf()
+--     local filename = vim.api.nvim_buf_get_name(bufnr)
+--     local cmd = 'templ fmt ' .. vim.fn.shellescape(filename)
+--
+--     vim.fn.jobstart(cmd, {
+--       on_exit = function()
+--         -- Reload the buffer only if it's still the current buffer
+--         if vim.api.nvim_get_current_buf() == bufnr then
+--           vim.cmd 'e!'
+--         end
+--       end,
+--     })
+--   else
+--     vim.lsp.buf.format()
+--   end
+-- end
 return {
   -- Main LSP Configuration
   'neovim/nvim-lspconfig',
@@ -103,13 +103,23 @@ return {
           },
         },
       },
-
       gopls = {
         analyses = {
+          -- unusedparams = true,
+          fieldalignment = true,
+          nilness = true,
           unusedparams = true,
+          unusedwrite = true,
+          useany = true,
         },
+        completeUnimported = true,
         staticcheck = true,
         gofumpt = true,
+        cmd = { 'gopls' },
+        filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+        directoryFilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules', '-.nvim' },
+        semanticTokens = true,
+        root_dir = require('lspconfig').util.root_pattern('go.work', 'go.mod', '.git'),
 
         vim.api.nvim_create_autocmd('BufWritePre', {
           pattern = '*.go',
@@ -194,6 +204,7 @@ return {
       'templ',
       'htmx',
       'cmake',
+      'gopls',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
