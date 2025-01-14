@@ -18,6 +18,62 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
   max_height = 8, -- Max height of the hover window
 })
 
+-- OPTS
+vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
+vim.opt.ignorecase = true
+vim.opt.wildignore:append {
+  '*.o',
+  '*.obj',
+  '*.exe',
+  '*.dll',
+  '*.pyc',
+  '*.pyo',
+  '*.so',
+  '*.jpg',
+  '*.jpeg',
+  '*.png',
+  '*.gif',
+  '*.zip',
+  '*.tar.gz',
+  '*.rar',
+  '*.tar.bz2',
+  '*node_modules/*',
+  '*.DS_Store',
+  '*.git',
+  '*.hg',
+  '*.svn',
+  '*/vendor/*',
+  'target/*', -- Rust's build directory
+  '*.rs.bk', -- Rust backup files, if any
+}
+vim.opt.autoread = true
+vim.cmd.hi 'Comment gui=none'
+vim.opt.mouse = 'a'
+vim.opt.nu = true
+vim.opt.relativenumber = true
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.smartcase = true
+vim.opt.wrap = false
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.undofile = true
+vim.opt.hlsearch = true
+vim.opt.incsearch = true
+vim.opt.termguicolors = true
+vim.opt.scrolloff = 8
+vim.opt.isfname:append '@-@'
+vim.opt.updatetime = 50
+vim.g.have_nerd_font = true
+vim.opt.breakindent = true
+vim.opt.inccommand = 'split'
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+-- endOPTS-
+
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 
 vim.keymap.set({ 'i', 'n' }, '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, silent = true })
