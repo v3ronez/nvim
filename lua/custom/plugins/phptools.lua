@@ -11,6 +11,10 @@ return {
         enable = true, -- default:true; false only if you have a UI enhancement plugin
         fzf = false, -- default:false; tests requires fzf used only in tests module otherwise there might long list  of tests
       },
+      custom_toggles = { -- delete if you dont use it
+        enable = true, -- default:false
+        { 'public', 'private' }, -- Add more custom toggle groups here
+      },
     }
 
     local map = vim.keymap.set

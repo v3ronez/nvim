@@ -180,7 +180,7 @@ return {
     vim.list_extend(ensure_installed, {
       'stylua', -- Used to format Lua code,
       'html',
-      'phpactor',
+      -- 'phpactor',
       'jsonls',
       'rust_analyzer',
       'templ',
