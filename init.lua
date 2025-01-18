@@ -19,6 +19,19 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
 })
 
 -- OPTS
+vim.opt.laststatus = 3 -- Or 3 for global statusline
+-- vim.opt.statusline = '   %f %m %= %l:%c λ    '
+
+-- Function to get the current Git branch
+local function get_git_branch()
+  local branch = vim.fn.system('git branch --show-current 2>/dev/null'):gsub('\n', '')
+  return branch ~= '' and branch or 'no-branch'
+end
+
+_G.get_git_branch = get_git_branch
+
+-- Set the status line
+vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
 vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
 vim.opt.ignorecase = true
 vim.opt.wildignore:append {
