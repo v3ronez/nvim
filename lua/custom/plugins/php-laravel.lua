@@ -1,3 +1,6 @@
+local map = vim.keymap.set
+
+map('n', '<Leader>pl', '<cmd>:Laravel <cr>', { desc = '[P]HP [L]aravel commands' })
 return {
   {
     -- Add neotest-pest plugin for running PHP tests.
