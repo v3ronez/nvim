@@ -1,0 +1,7 @@
+snippet pd "print with debug"
+    fmt.Printf("${0:debug -> }: %+v\n", ${1})
+
+snippet eh "Error handler"
+    if err != nil {
+        return ${0:err}
+    }
