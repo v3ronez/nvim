@@ -262,10 +262,11 @@ require('lazy').setup({
           return vim.fn.executable 'make' == 1
         end,
       },
-      { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      -- { 'nvim-telescope/telescope-ui-select.nvim' },
+      -- { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      -- { 'echasnovski/mini.icons', opts = {} } --better icons,
     },
     config = function()
       require('telescope').setup {
@@ -273,7 +274,7 @@ require('lazy').setup({
         pickers = {
           find_files = {
             -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
-            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*', '--glob', '!**/target/*' },
+            find_command = { 'rg', '--files', '--hidden', '--glob', '!**/.git/*', '--glob', '!**/target/*', '--glob', '!**/vendor/*' },
           },
         },
         extensions = {
@@ -559,7 +560,7 @@ require('lazy').setup({
   require 'custom.configs',
   require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
-  require 'kickstart.plugins.neo-tree',
+  -- require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
