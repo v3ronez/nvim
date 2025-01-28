@@ -1,0 +1,14 @@
+snippet st "declare strict type"
+    declare(strict_types=1);
+
+snippet pe "pretty array/json log"
+    print_r(json_encode([${0}], JSON_PRETTY_PRINT));exit;
+
+snippet __ "construct"
+    public function __construct(${0}) {}
+
+snippet func "new function"
+    ${0:public} function ${1:functionName}(${2:arguments})
+	{
+		${3:// Function body}
+	}
