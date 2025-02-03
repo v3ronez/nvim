@@ -33,7 +33,7 @@ _G.get_git_branch = get_git_branch
 
 -- Set the status line
 vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
-vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
+-- vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
 vim.opt.ignorecase = true
 vim.opt.wildignore:append {
   '*.o',
@@ -280,7 +280,7 @@ require('lazy').setup({
         },
         pickers = {
           find_files = {
-            -- `hidden = true` will still show the inside of `.git/` as it's not `.gitignore`d.
+            hidden = true, -- will still show the inside of `.git/` as it's not `.gitignore`d.
             find_command = {
               'rg',
               '--files',
