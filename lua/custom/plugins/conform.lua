@@ -1,6 +1,6 @@
 return {
   'stevearc/conform.nvim',
-  event = { 'BufWritePre' },
+  event = { 'BufReadPre', 'BufNewFile' },
   cmd = { 'ConformInfo' },
   keys = {
     {
@@ -14,24 +14,17 @@ return {
   },
   opts = {
     notify_on_error = false,
-    ['php_cs_fixer'] = {
-      command = 'php-cs-fixer',
-      args = {
-        'fix',
-        '--no-cache',
-        '--rules=@PSR12', -- Formatting preset. Other presets are available, see the php-cs-fixer docs.
-        'phpdoc_indent',
-        'line_ending',
-        'array_indentation',
-        'blank_line_before_statement',
-        'method_chaining_indentation',
-        'type_declaration_spaces',
-        'types_spaces',
-        'no_useless_return',
-        'semicolon_after_instruction',
-        '$FILENAME',
+    formatters = {
+      ['php_cs_fixer'] = {
+        command = 'php-cs-fixer',
+        args = {
+          'fix',
+          '--using-cache=no',
+          '--rules=@PSR12,phpdoc_indent,line_ending,array_indentation,blank_line_before_statement,method_chaining_indentation,type_declaration_spaces,types_spaces,no_useless_return,semicolon_after_instruction',
+          '$FILENAME',
+        },
+        stdin = false,
       },
-      stdin = false,
     },
     format_on_save = function(bufnr)
       -- Disable "format_on_save lsp_fallback" for languages that don't
