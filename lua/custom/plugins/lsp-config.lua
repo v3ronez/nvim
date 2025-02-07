@@ -141,7 +141,7 @@ return {
       },
       tailwindcss = {
         capabilities = capabilities,
-        filetypes = { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react' },
+        filetypes = { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' },
         settings = {
           tailwindCSS = {
             includeLanguages = {
