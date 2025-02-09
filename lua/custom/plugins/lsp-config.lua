@@ -139,6 +139,14 @@ return {
         capabilities = capabilities,
         filetypes = { 'css' },
       },
+      dockerls = {
+        capabilities = capabilities,
+        filetypes = { 'dockerfile' },
+      },
+      docker_compose_language_service = {
+        capabilities = capabilities,
+        filetypes = { 'yaml', 'docker-compose' },
+      },
       tailwindcss = {
         capabilities = capabilities,
         filetypes = { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' },
