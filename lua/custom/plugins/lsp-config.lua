@@ -159,11 +159,11 @@ return {
           },
         },
       },
-      markdownlint = {
-        lint = {
-          enabled = false,
-        },
-      },
+      -- markdownlint = {
+      --   lint = {
+      --     enabled = false,
+      --   },
+      -- },
       rust_analyzer = {
         capabilities = capabilities,
         filetypes = { 'rust' },
