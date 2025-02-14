@@ -67,6 +67,7 @@ return {
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+    local util = require 'lspconfig.util'
     local servers = {
       intelephense = {
         filetypes = { 'php', 'blade', 'php_only' },
@@ -195,6 +196,7 @@ return {
       'htmx',
       'cmake',
       'gopls',
+      'intelephense',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
