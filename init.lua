@@ -1,5 +1,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+vim.opt.colorcolumn = '80'
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 
@@ -89,6 +90,8 @@ vim.opt.splitbelow = true
 -- endOPTS-
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
+--Switch to the previous buffer
+vim.keymap.set({ 'n', 'v' }, '<TAB>', '<cmd>b#<CR>')
 
 -- LSP SIGNATURE
 vim.keymap.set({ 'i', 'n' }, '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, silent = true })
