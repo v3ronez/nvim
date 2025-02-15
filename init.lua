@@ -8,9 +8,9 @@ vim.g.have_nerd_font = true
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
--- vim.schedule(function()
---   vim.opt.clipboard = 'unnamedplus'
--- end)
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
 --
 -- hover space config
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
