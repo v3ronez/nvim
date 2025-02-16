@@ -86,7 +86,6 @@ vim.g.have_nerd_font = true
 vim.opt.breakindent = true
 vim.opt.inccommand = 'split'
 vim.opt.splitright = true
-vim.opt.splitbelow = true
 -- endOPTS-
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
