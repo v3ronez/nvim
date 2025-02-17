@@ -158,7 +158,7 @@ vim.opt.rtp:prepend(lazypath)
 --
 --  To update plugins you can run
 --    :Lazy update
---
+
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
@@ -552,6 +552,7 @@ require('lazy').setup({
         'query',
         'css',
         'rust',
+        'haskell',
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
