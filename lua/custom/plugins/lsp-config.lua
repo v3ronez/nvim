@@ -168,7 +168,28 @@ return {
         filetypes = { 'rust' },
       },
       ts_ls = {},
+      hls = {
+        filetypes = { 'haskell', 'lhaskell', 'cabal' },
+        flags = {
+          debounce_text_changes = 150, -- debounce for text changes (to avoid excessive requests)
+        },
+        settings = {
+          haskell = {
+            -- Optimization: Enable in-memory compilation instead of using disk storage
+            -- useInMemoryCompilation = true,
 
+            -- Optional: Disable some HLS features to reduce overhead for large projects
+            -- formattingProvider = 'none', -- Disable formatting if you want to use another formatter
+            hlintOn = true, -- Disable hlint for performance (can enable later if needed)
+            lintOn = true, -- Disable linting (can be enabled later if needed)
+            -- maxOnDemandDiagnostics = 10, -- Limit the number of diagnostics per file
+            -- addPkgDeps = false, -- Disable automatic package dependency updates
+
+            -- Optional: Limit the number of threads HLS uses for better performance on larger projects
+            -- threads = 4,  -- Uncomment to set a specific number of threads (adjust according to your system)
+          },
+        },
+      },
       lua_ls = {
         settings = {
           Lua = {
@@ -176,12 +197,14 @@ return {
               callSnippet = 'Replace',
             },
             -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            -- diagnostics = { disable = { 'missing-fields' } },
+            diagnostics = { disable = { 'missing-fields' } },
           },
         },
       },
-      hls = {},
     }
+
+    -- require('lspconfig').hls.setup {
+    -- }
 
     require('mason').setup()
 
