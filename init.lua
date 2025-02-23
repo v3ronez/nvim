@@ -8,9 +8,9 @@ vim.g.have_nerd_font = true
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+-- vim.schedule(function()
+--   vim.opt.clipboard = 'unnamedplus'
+-- end)
 --
 -- hover space config
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
@@ -20,7 +20,7 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
 })
 
 -- OPTS
-vim.diagnostic.config { virtual_lines = true }
+-- vim.diagnostic.config({virtual_lines = true})
 vim.opt.laststatus = 3 -- Or 3 for global statusline
 -- vim.opt.statusline = '   %f %m %= %l:%c λ    '
 
@@ -31,7 +31,8 @@ local function get_git_branch()
 end
 
 _G.get_git_branch = get_git_branch
-
+vim.opt.updatetime = 50
+vim.opt.autoindent = true
 -- Set the status line
 vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
 -- vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
@@ -98,6 +99,9 @@ vim.keymap.set({ 'i', 'n' }, '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close current buffer' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
+-- yank and paste to system clipboard
+vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>ps', '"+p', { desc = '[P]aste from [S]ystem clipboard', noremap = true, silent = true })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
