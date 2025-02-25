@@ -6,6 +6,7 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    'maan2003/lsp_lines.nvim',
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -57,6 +58,46 @@ return {
           })
         end
 
+        -- --codelens setup with virtual text
+        -- if client and client.supports_method 'textDocument/codeLens' then
+        --   -- vim.diagnostic.config {
+        --   --   virtual_text = false,
+        --   -- }
+        --   local ns = vim.api.nvim_create_namespace('codelens-' .. event.buf)
+        --   local refresh_and_display = function()
+        --     -- -- Refresh Code Lenses
+        --     -- vim.lsp.codelens.refresh()
+        --
+        --     local lenses = vim.lsp.codelens.get(event.buf)
+        --     if not lenses then
+        --       return
+        --     end
+        --
+        --     -- Clear previous virtual text
+        --     vim.api.nvim_buf_clear_namespace(event.buf, ns, 0, -1)
+        --
+        --     -- Add new virtual text for each Code Lens
+        --     for _, lens in ipairs(lenses) do
+        --       if lens.command and lens.command.title then
+        --         local line = lens.range.start.line
+        --         local text = lens.command.title
+        --         vim.api.nvim_buf_set_extmark(event.buf, ns, line, 0, {
+        --           virt_lines = { { { text, 'Comment' } } }, -- Use 'Comment' highlight group
+        --           virt_lines_above = true, -- Display above the line
+        --         })
+        --       end
+        --     end
+        --   end
+        --
+        --   vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
+        --     buffer = event.buf,
+        --     callback = refresh_and_display,
+        --   })
+        --
+        --   -- Initial refresh to display code lenses immediately
+        --   refresh_and_display()
+        -- end
+        -- --
         if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
           map('<leader>th', function()
             vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
@@ -168,28 +209,6 @@ return {
         filetypes = { 'rust' },
       },
       ts_ls = {},
-      hls = {
-        filetypes = { 'haskell', 'lhaskell', 'cabal' },
-        flags = {
-          debounce_text_changes = 150, -- debounce for text changes (to avoid excessive requests)
-        },
-        settings = {
-          haskell = {
-            -- Optimization: Enable in-memory compilation instead of using disk storage
-            -- useInMemoryCompilation = true,
-
-            -- Optional: Disable some HLS features to reduce overhead for large projects
-            -- formattingProvider = 'none', -- Disable formatting if you want to use another formatter
-            hlintOn = true, -- Disable hlint for performance (can enable later if needed)
-            lintOn = true, -- Disable linting (can be enabled later if needed)
-            -- maxOnDemandDiagnostics = 10, -- Limit the number of diagnostics per file
-            -- addPkgDeps = false, -- Disable automatic package dependency updates
-
-            -- Optional: Limit the number of threads HLS uses for better performance on larger projects
-            -- threads = 4,  -- Uncomment to set a specific number of threads (adjust according to your system)
-          },
-        },
-      },
       lua_ls = {
         settings = {
           Lua = {
@@ -202,9 +221,6 @@ return {
         },
       },
     }
-
-    -- require('lspconfig').hls.setup {
-    -- }
 
     require('mason').setup()
 
@@ -220,7 +236,6 @@ return {
       'cmake',
       'gopls',
       'intelephense',
-      'hls',
     })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -236,5 +251,16 @@ return {
         end,
       },
     }
+    require('lsp_lines').setup()
+
+    vim.diagnostic.config { virtual_text = false, virtual_lines = { only_current_line = true } }
+    vim.keymap.set('', '<leader>tL', function()
+      local config = vim.diagnostic.config() or {}
+      if config.virtual_text then
+        vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+      else
+        vim.diagnostic.config { virtual_text = false, virtual_lines = { only_current_line = true } }
+      end
+    end, { desc = 'Toggle lsp_lines' })
   end,
 }
