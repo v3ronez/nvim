@@ -36,6 +36,7 @@ return {
 
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
+          -- client.server_capabilities.codeLensProvider = nil
           local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
           vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
             buffer = event.buf,
@@ -57,7 +58,6 @@ return {
             end,
           })
         end
-
         -- --codelens setup with virtual text
         -- if client and client.supports_method 'textDocument/codeLens' then
         --   -- vim.diagnostic.config {
@@ -174,7 +174,6 @@ return {
         capabilities = capabilities,
         vim.filetype.add { extension = { templ = 'templ' } },
         vim.api.nvim_create_autocmd({ 'BufWritePre' }, { pattern = { '*.templ' }, callback = vim.lsp.buf.format }),
-        -- vim.api.nvim_create_autocmd({ 'BufWritePre' }, { pattern = { '*.templ' }, callback = custom_format }),
       },
       cssls = {
         capabilities = capabilities,

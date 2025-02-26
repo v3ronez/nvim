@@ -7,7 +7,7 @@ return {
       hls = {
         settings = {
           haskell = {
-            formattingProvider = 'stylish-haskell',
+            -- formattingProvider = 'fourmolu',
             plugin = {
               class = { -- missing class methods
                 codeLensOn = false,
@@ -28,7 +28,7 @@ return {
                 globalOn = false,
               },
               ['ghcide-type-lenses'] = { -- show/add missing type signatures
-                globalOn = true,
+                globalOn = false,
               },
             },
           },
