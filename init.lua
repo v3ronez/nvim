@@ -11,13 +11,14 @@ vim.g.have_nerd_font = true
 -- vim.schedule(function()
 --   vim.opt.clipboard = 'unnamedplus'
 -- end)
---
+
 -- hover space config
 vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-  border = 'rounded', -- Optional: add a border style
-  max_width = 70, -- Max width of the hover window
-  max_height = 8, -- Max height of the hover window
+  border = 'rounded',
+  max_width = 70,
+  max_height = 8,
 })
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
 -- OPTS
 -- vim.diagnostic.config({virtual_lines = true})
@@ -31,7 +32,8 @@ local function get_git_branch()
 end
 
 _G.get_git_branch = get_git_branch
-vim.opt.updatetime = 50
+vim.opt.updatetime = 250
+vim.opt.timeoutlen = 300
 vim.opt.autoindent = true
 -- Set the status line
 vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
@@ -73,6 +75,7 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.smartcase = true
+vim.opt.ignorecase = true
 vim.opt.wrap = false
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -80,7 +83,7 @@ vim.opt.undofile = true
 vim.opt.hlsearch = true
 vim.opt.incsearch = true
 vim.opt.termguicolors = true
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 10
 vim.opt.isfname:append '@-@'
 vim.opt.updatetime = 50
 vim.g.have_nerd_font = true

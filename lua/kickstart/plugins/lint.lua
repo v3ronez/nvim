@@ -7,7 +7,7 @@ return {
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
         json = { 'jsonlint' },
-        -- haskell = { 'hlint' },
+        haskell = { 'hlint' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
