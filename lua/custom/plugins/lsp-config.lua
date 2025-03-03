@@ -286,11 +286,6 @@ return {
         },
       },
     }
-    vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-      virtual_text = {
-        prefix = '',
-      },
-    })
     require('mason').setup()
 
     local ensure_installed = vim.tbl_keys(servers or {})
@@ -322,6 +317,11 @@ return {
     }
     require('lsp_lines').setup()
 
+    -- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+    --   virtual_text = {
+    --     prefix = '',
+    --   },
+    -- })
     vim.diagnostic.config { virtual_text = false, signs = false, virtual_lines = { only_current_line = true } }
     vim.keymap.set('', '<leader>tL', function()
       local config = vim.diagnostic.config() or {}
