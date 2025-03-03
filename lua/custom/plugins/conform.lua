@@ -29,7 +29,7 @@ return {
         stdin = false,
       },
       ['ml-format'] = {
-        -- command = './_build/_private/default/.dev-tool/ocamlformat/ocamlformat/target/bin/ocamlformat',
+        command = './_build/_private/default/.dev-tool/ocamlformat/ocamlformat/target/bin/ocamlformat',
         args = {
           '--enable-outside-detected-project',
           '--name',
@@ -62,7 +62,7 @@ return {
       -- python = { "isort", "black" },
       -- You can use 'stop_after_first' to run the first available formatter from the list
       javascript = { 'prettierd', 'prettier', stop_after_first = true },
-      ocaml_mlx = { 'ocamlformat_mlx' },
+      -- ocaml_mlx = { 'ocamlformat_mlx' },
       ocaml = { 'ocamlformat' },
     },
   },

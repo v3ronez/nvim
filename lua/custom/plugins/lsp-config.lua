@@ -6,7 +6,7 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    'maan2003/lsp_lines.nvim',
+    -- 'maan2003/lsp_lines.nvim',
 
     -- Useful status updates for LSP.
     -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
@@ -24,6 +24,8 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
+
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
@@ -33,8 +35,6 @@ return {
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
 
         if client and client.server_capabilities.codeLensProvider then
           local codelens = vim.api.nvim_create_augroup('LSPCodeLens', { clear = true })
@@ -238,7 +238,7 @@ return {
             heex = 'phoenix-heex',
           },
         },
-        filetypes = extend('tailwindcss', 'filetypes', { 'ocaml.mlx' }),
+        filetypes = extend('tailwindcss', 'filetypes', { 'ocaml.mlx', 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' }),
         settings = {
           tailwindCSS = {
             experimental = {
@@ -315,21 +315,46 @@ return {
         end,
       },
     }
-    require('lsp_lines').setup()
 
     -- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
     --   virtual_text = {
-    --     prefix = '',
+    --     prefix = '<',
     --   },
     -- })
-    vim.diagnostic.config { virtual_text = false, signs = false, virtual_lines = { only_current_line = true } }
-    vim.keymap.set('', '<leader>tL', function()
-      local config = vim.diagnostic.config() or {}
-      if config.virtual_text then
-        vim.diagnostic.config { virtual_text = false, virtual_lines = true }
-      else
-        vim.diagnostic.config { virtual_text = true, virtual_lines = false }
-      end
-    end, { desc = 'Toggle lsp_lines' })
+
+    -- setup diagnostics float windows
+    vim.api.nvim_create_autocmd('CursorHold', {
+      callback = function()
+        local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line '.' - 1 })
+        if #diagnostics > 0 then
+          vim.diagnostic.open_float(nil, { scope = 'line' })
+        end
+      end,
+    })
+
+    vim.diagnostic.config {
+      virtual_text = false,
+      -- update_in_insert = true,
+      float = {
+        focusable = false,
+        style = 'minimal',
+        border = 'rounded',
+        source = true,
+        header = '',
+        prefix = '',
+      },
+    }
+    --end
+
+    -- require('lsp_lines').setup()
+    -- vim.diagnostic.config { virtual_text = false, signs = false, virtual_lines = { only_current_line = true } }
+    -- vim.keymap.set('', '<leader>tL', function()
+    --   local config = vim.diagnostic.config() or {}
+    --   if config.virtual_text then
+    --     vim.diagnostic.config { virtual_text = false, virtual_lines = true }
+    --   else
+    --     vim.diagnostic.config { virtual_text = true, virtual_lines = false }
+    --   end
+    -- end, { desc = 'Toggle lsp_lines' })
   end,
 }

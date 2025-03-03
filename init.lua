@@ -37,7 +37,6 @@ vim.opt.timeoutlen = 300
 vim.opt.autoindent = true
 -- Set the status line
 vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
--- vim.opt.grepprg = "rg --vimgrep --hidden --glob '!target'"
 vim.opt.ignorecase = true
 vim.opt.wildignore:append {
   '*.o',
@@ -55,7 +54,7 @@ vim.opt.wildignore:append {
   '*.tar.gz',
   '*.rar',
   '*.tar.bz2',
-  '*node_modules/*',
+  '***/node_modules/*',
   '*.DS_Store',
   '*.git',
   '*.hg',
@@ -90,6 +89,9 @@ vim.g.have_nerd_font = true
 vim.opt.breakindent = true
 vim.opt.inccommand = 'split'
 vim.opt.splitright = true
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+
 -- endOPTS-
 
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -291,7 +293,7 @@ require('lazy').setup({
         },
         pickers = {
           find_files = {
-            hidden = true, -- will still show the inside of `.git/` as it's not `.gitignore`d.
+            hidden = true,
             find_command = {
               'rg',
               '--files',
@@ -312,6 +314,8 @@ require('lazy').setup({
               '!**/_*/*',
               '--glob',
               '!**/vendor/**',
+              '--glob',
+              '!**/node_modules/**',
               '--glob',
               '!**/storage/framework/**',
             },
