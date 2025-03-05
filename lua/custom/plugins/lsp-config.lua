@@ -6,25 +6,66 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    -- 'maan2003/lsp_lines.nvim',
-
-    -- Useful status updates for LSP.
-    -- NOTE: `opts = {}` is the same as calling `require('fidget').setup({})`
+    {
+      'rachartier/tiny-inline-diagnostic.nvim',
+      event = 'VeryLazy', -- Or `LspAttach`
+      priority = 1000, -- needs to be loaded in first
+      config = function()
+        require('tiny-inline-diagnostic').setup()
+        vim.diagnostic.config { virtual_text = false } -- Only if needed in your configuration, if you already have native LSP diagnostics
+      end,
+    },
     { 'j-hui/fidget.nvim', opts = {} },
-
-    -- Allows extra capabilities provided by nvim-cmp
     'hrsh7th/cmp-nvim-lsp',
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
+        local client = vim.lsp.get_client_by_id(event.data.client_id)
         local map = function(keys, func, desc, mode)
           mode = mode or 'n'
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
-        end
 
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
+          if client and client.server_capabilities.codeLensProvider then
+            vim.lsp.codelens.refresh()
+          end
+          -- codelens above function
+          --   if client and client.server_capabilities.codeLensProvider then
+          --     local ns = vim.api.nvim_create_namespace('codelens-' .. event.buf)
+          --     local refresh_and_display = function()
+          --       vim.api.nvim_buf_clear_namespace(event.buf, -1, 0, -1)
+          --       local lenses = vim.lsp.codelens.get(event.buf)
+          --       if not lenses then
+          --         return
+          --       end
+          --
+          --       vim.api.nvim_buf_clear_namespace(event.buf, ns, 0, -1)
+          --
+          --       for _, lens in ipairs(lenses) do
+          --         if lens.command and lens.command.title then
+          --           local line = lens.range.start.line
+          --           local text = lens.command.title
+          --           vim.api.nvim_buf_set_extmark(event.buf, ns, line, 0, {
+          --             virt_lines = { { { text, 'Comment' } } },
+          --             virt_lines_above = true,
+          --           })
+          --         end
+          --       end
+          --     end
+          --
+          --     vim.api.nvim_create_autocmd({ 'LspAttach', 'BufEnter', 'CursorHold', 'InsertLeavePre' }, {
+          --       buffer = event.buf,
+          --       callback = function()
+          --         vim.lsp.codelens.refresh()
+          --         refresh_and_display()
+          --       end,
+          --     })
+          --     vim.lsp.codelens.refresh()
+          --     refresh_and_display()
+          --   end
+          -- end
+        end
 
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
@@ -35,17 +76,6 @@ return {
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
-        if client and client.server_capabilities.codeLensProvider then
-          local codelens = vim.api.nvim_create_augroup('LSPCodeLens', { clear = true })
-          vim.api.nvim_create_autocmd({ 'BufEnter', 'InsertLeave', 'CursorHold' }, {
-            group = codelens,
-            callback = function()
-              vim.lsp.codelens.refresh()
-            end,
-            buffer = event.buf,
-          })
-        end
 
         if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
           local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
@@ -61,52 +91,16 @@ return {
             callback = vim.lsp.buf.clear_references,
           })
 
-          -- vim.api.nvim_create_autocmd('LspDetach', {
-          --   group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-          --   callback = function(event2)
-          --     vim.lsp.buf.clear_references()
-          --     vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-          --   end,
-          -- })
+          vim.api.nvim_create_autocmd('LspDetach', {
+            group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
+            callback = function(event2)
+              vim.lsp.buf.clear_references()
+              vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
+            end,
+          })
         end
 
         -- --codelens setup with virtual text
-        -- if client and client.supports_method 'textDocument/codeLens' then
-        --   local ns = vim.api.nvim_create_namespace('codelens-' .. event.buf)
-        --   local refresh_and_display = function()
-        --     -- -- -- Refresh Code Lenses
-        --     -- vim.lsp.codelens.refresh()
-        --
-        --     vim.api.nvim_buf_clear_namespace(event.buf, -1, 0, -1)
-        --     local lenses = vim.lsp.codelens.get(event.buf)
-        --     if not lenses then
-        --       return
-        --     end
-        --
-        --     -- Clear previous virtual text
-        --     vim.api.nvim_buf_clear_namespace(event.buf, ns, 0, -1)
-        --
-        --     -- Add new virtual text for each Code Lens
-        --     for _, lens in ipairs(lenses) do
-        --       if lens.command and lens.command.title then
-        --         local line = lens.range.start.line
-        --         local text = lens.command.title
-        --         vim.api.nvim_buf_set_extmark(event.buf, ns, line, 0, {
-        --           virt_lines = { { { text, 'Comment' } } }, -- Use 'Comment' highlight group
-        --           virt_lines_above = true, -- Display above the line
-        --         })
-        --       end
-        --     end
-        --   end
-        --
-        --   vim.api.nvim_create_autocmd({ 'BufEnter', 'CursorHold', 'InsertLeave' }, {
-        --     buffer = event.buf,
-        --     callback = refresh_and_display,
-        --   })
-        --
-        --   -- Initial refresh to display code lenses immediately
-        --   refresh_and_display()
-        -- end
         -- --
         if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
           map('<leader>th', function()
@@ -147,7 +141,7 @@ return {
         root_dir = require('lspconfig').util.root_pattern('*.opam', 'esy.json', 'package.json', '.git', 'dune-project', 'dune-workspace'),
         settings = {
           codelens = { enable = true },
-          inlayHints = { enable = true },
+          -- inlayHints = { enable = true },
           syntaxDocumentation = { enable = true },
         },
         server_capabilities = { semanticTokensProvider = false },
@@ -249,26 +243,11 @@ return {
             },
             includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
               ['ocaml.mlx'] = 'html',
+              ['templ'] = 'html',
             }),
           },
         },
       },
-      -- tailwindcss = {
-      --   capabilities = capabilities,
-      --   filetypes = { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' },
-      --   settings = {
-      --     tailwindCSS = {
-      --       includeLanguages = {
-      --         templ = 'html',
-      --       },
-      --     },
-      --   },
-      -- },
-      -- markdownlint = {
-      --   lint = {
-      --     enabled = false,
-      --   },
-      -- },
       rust_analyzer = {
         capabilities = capabilities,
         filetypes = { 'rust' },
@@ -315,46 +294,5 @@ return {
         end,
       },
     }
-
-    -- vim.lsp.handlers['textDocument/publishDiagnostics'] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-    --   virtual_text = {
-    --     prefix = '<',
-    --   },
-    -- })
-
-    -- setup diagnostics float windows
-    vim.api.nvim_create_autocmd('CursorHold', {
-      callback = function()
-        local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line '.' - 1 })
-        if #diagnostics > 0 then
-          vim.diagnostic.open_float(nil, { scope = 'line' })
-        end
-      end,
-    })
-
-    vim.diagnostic.config {
-      virtual_text = false,
-      -- update_in_insert = true,
-      float = {
-        focusable = false,
-        style = 'minimal',
-        border = 'rounded',
-        source = true,
-        header = '',
-        prefix = '',
-      },
-    }
-    --end
-
-    -- require('lsp_lines').setup()
-    -- vim.diagnostic.config { virtual_text = false, signs = false, virtual_lines = { only_current_line = true } }
-    -- vim.keymap.set('', '<leader>tL', function()
-    --   local config = vim.diagnostic.config() or {}
-    --   if config.virtual_text then
-    --     vim.diagnostic.config { virtual_text = false, virtual_lines = true }
-    --   else
-    --     vim.diagnostic.config { virtual_text = true, virtual_lines = false }
-    --   end
-    -- end, { desc = 'Toggle lsp_lines' })
   end,
 }

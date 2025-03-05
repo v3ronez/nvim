@@ -21,7 +21,6 @@ vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
 vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
 -- OPTS
--- vim.diagnostic.config({virtual_lines = true})
 vim.opt.laststatus = 3 -- Or 3 for global statusline
 -- vim.opt.statusline = '   %f %m %= %l:%c λ    '
 
