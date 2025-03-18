@@ -6,7 +6,7 @@ return {
     {
       '<leader>cf',
       function()
-        require('conform').format { async = true, lsp_format = 'fallback' }
+        require('conform').format { async = true, lsp_format = 'fallback', quiet = true }
       end,
       mode = '',
       desc = '[C]ode format',
@@ -62,8 +62,8 @@ return {
       -- python = { "isort", "black" },
       -- You can use 'stop_after_first' to run the first available formatter from the list
       javascript = { 'prettierd', 'prettier', stop_after_first = true },
-      -- ocaml_mlx = { 'ocamlformat_mlx' },
-      ocaml = { 'ocamlformat' },
+      ocaml = { 'ml-format' },
+      ocaml_mlx = { 'ocamlformat_mlx' },
     },
   },
 }

@@ -3,6 +3,7 @@ vim.g.maplocalleader = ' '
 vim.opt.colorcolumn = '120'
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
+vim.o.pumheight = 10
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
