@@ -235,6 +235,22 @@ return {
       },
       rust_analyzer = {
         capabilities = capabilities,
+        flags = {
+          debounce_text_changes = 150,
+        },
+        settings = {
+          ['rust-analyzer'] = {
+            completion = {
+              postfix = {
+                enable = false,
+              },
+            },
+            cargo = {
+              features = 'all',
+              allFeatures = true,
+            },
+          },
+        },
         filetypes = { 'rust' },
       },
       ts_ls = {},
