@@ -6,24 +6,13 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    { 'https://git.sr.ht/~whynothugo/lsp_lines.nvim' },
-    -- {
-    --   'rachartier/tiny-inline-diagnostic.nvim',
-    --   event = 'VeryLazy', -- Or `LspAttach`
-    --   priority = 1000, -- needs to be loaded in first
-    --   config = function()
-    --     require('tiny-inline-diagnostic').setup {
-    --       transparent_bg = true,
-    --       -- options = {
-    --       --   multilines = {
-    --       --     enabled = true,
-    --       --     always_show = true,
-    --       --   },
-    --       -- },
-    --     }
-    --     vim.diagnostic.config { virtual_text = false } -- Only if needed in your configuration, if you already have native LSP diagnostics
-    --   end,
-    -- },
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-path',
+    'hrsh7th/cmp-cmdline',
+    'hrsh7th/nvim-cmp',
+    'L3MON4D3/LuaSnip',
+    'saadparwaiz1/cmp_luasnip',
     { 'j-hui/fidget.nvim', opts = {} },
     'hrsh7th/cmp-nvim-lsp',
   },
@@ -125,17 +114,6 @@ return {
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
     local servers = {
-      -- ocamllsp = {
-      --   cmd = { 'ocamllsp' },
-      --   filetypes = { 'ocaml', 'ocaml.menhir', 'ocaml.interface', 'ocaml.ocamllex', 'reason', 'dune' },
-      --   root_dir = require('lspconfig').util.root_pattern('*.opam', 'esy.json', 'package.json', '.git', 'dune-project', 'dune-workspace'),
-      --   settings = {
-      --     codelens = { enable = true },
-      --     inlayHints = { enable = true },
-      --     syntaxDocumentation = { enable = true },
-      --   },
-      --   server_capabilities = { semanticTokensProvider = false },
-      -- },
       intelephense = {
         filetypes = { 'php', 'blade', 'php_only' },
         default_config = {
@@ -279,18 +257,8 @@ return {
       'cmake',
       'gopls',
       'intelephense',
-      -- 'ocamllsp',
     })
 
-    vim.diagnostic.config { virtual_text = false, virtual_lines = true }
-    vim.keymap.set('', '<leader>tL', function()
-      local config = vim.diagnostic.config() or {}
-      if config.virtual_text then
-        vim.diagnostic.config { virtual_text = true, virtual_lines = false }
-      else
-        vim.diagnostic.config { virtual_text = false, virtual_lines = true }
-      end
-    end, { desc = 'Toggle lsp_lines' })
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
     require('mason-lspconfig').setup {
@@ -307,36 +275,3 @@ return {
     }
   end,
 }
-
--- local refresh_and_display = function(event)
---   local client = vim.lsp.get_client_by_id(event.data.client_id)
---   if client and client.server_capabilities.codeLensProvider then
---     local ns = vim.api.nvim_create_namespace('codelens-' .. event.buf)
---     local refresh_and_display = function()
---       vim.api.nvim_buf_clear_namespace(event.buf, -1, 0, -1)
---       local lenses = vim.lsp.codelens.get(event.buf)
---       if not lenses then
---         return
---       end
---       vim.api.nvim_buf_clear_namespace(event.buf, ns, 0, -1)
---
---       -- vim.lsp.codelens.refresh { bufnr = event.bufnr }
---       for _, lens in ipairs(lenses) do
---         if lens.command and lens.command.title then
---           local line = lens.range.start.line
---           local text = lens.command.title
---           vim.api.nvim_buf_set_extmark(event.buf, ns, line, 0, {
---             virt_lines = { { { text, 'Comment' } } },
---             virt_lines_above = true,
---           })
---           vim.api.nvim_buf_set_extmark(event.buf, ns, line, 0, {
---             virt_text = {}, -- Hides virtual text
---             virt_text_pos = 'overlay', -- Ensures no inline text appears
---             hl_mode = 'combine', -- Prevents any highlighting issues
---           })
---         end
---       end
---     end
---     refresh_and_display()
---   end
--- end
