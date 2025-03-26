@@ -274,4 +274,5 @@ return {
       },
     }
   end,
+  vim.diagnostic.config { virtual_lines = true },
 }
