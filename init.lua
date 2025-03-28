@@ -121,7 +121,9 @@ vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close current buffer' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 -- yank and paste to system clipboard
 vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
--- vim.keymap.set({ 'n', 'v' }, '<leader>ps', '"+p', { desc = '[P]aste from [S]ystem clipboard', noremap = true, silent = true })
+-- set ctrl - [  with the same behavior as esc
+vim.keymap.set('', '<C-[>', '<Esc>', { noremap = true, silent = true })
+vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
