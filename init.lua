@@ -304,6 +304,7 @@ require('lazy').setup({
         -- pickers = {}
         defaults = {
           file_ignore_patterns = {
+            '**/target/**',
             '**/vendor/**',
             'storage/framework/**',
           },
@@ -449,11 +450,6 @@ require('lazy').setup({
           documentation = cmp.config.window.bordered(),
         },
         formatting = {
-          -- format = function(entry, vim_item)
-          --   -- Hide function parameters, only show function name, kind, and documentation
-          --   vim_item.menu = nil -- Remove extra info
-          --   return vim_item
-          -- end,
           fields = { 'abbr', 'kind' },
         },
 

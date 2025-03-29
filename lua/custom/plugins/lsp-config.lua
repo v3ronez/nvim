@@ -6,13 +6,7 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    -- 'hrsh7th/cmp-nvim-lsp',
-    -- 'hrsh7th/cmp-buffer',
-    -- 'hrsh7th/cmp-path',
-    -- 'hrsh7th/cmp-cmdline',
-    -- 'hrsh7th/nvim-cmp',
     'L3MON4D3/LuaSnip',
-    -- 'saadparwaiz1/cmp_luasnip',
     { 'j-hui/fidget.nvim', opts = {} },
     'hrsh7th/cmp-nvim-lsp',
   },
@@ -38,58 +32,16 @@ return {
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        map('<leader>th', function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+        end, '[T]oggle Inlay [H]ints')
 
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight) then
-          local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-          vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.document_highlight,
-          })
-
-          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.clear_references,
-          })
-
-          -- vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWinEnter' }, {
-          --   buffer = event.buf,
-          --   group = highlight_augroup,
-          --   callback = vim.lsp.codelens.refresh,
-          -- })
-          -- vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePre' }, {
-          --   buffer = event.buf,
-          --   group = highlight_augroup,
-          --   callback = vim.lsp.codelens.refresh,
-          -- })
-
-          -- vim.api.nvim_create_autocmd({ 'InsertLeave', 'BufWritePre', 'ModeChanged' }, {
-          --   buffer = event.buf,
-          --   group = highlight_augroup,
-          --   callback = function()
-          --     -- codelens above function
-          --     vim.lsp.codelens.refresh()
-          --     refresh_and_display(event)
-          --   end,
-          -- })
-
-          vim.api.nvim_create_autocmd('LspDetach', {
-            group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-            callback = function(event2)
-              vim.lsp.buf.clear_references()
-              vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-            end,
-          })
-        end
-
-        if client and client.supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-          map('<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-          end, '[T]oggle Inlay [H]ints')
+        if client:supports_method 'textDocument/completion' then
+          vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = false })
         end
       end,
     })
+
     local extend = function(name, key, values)
       local mod = require(string.format('lspconfig.configs.%s', name))
       local default = mod.default_config
