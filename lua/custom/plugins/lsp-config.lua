@@ -6,13 +6,13 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-path',
-    'hrsh7th/cmp-cmdline',
-    'hrsh7th/nvim-cmp',
+    -- 'hrsh7th/cmp-nvim-lsp',
+    -- 'hrsh7th/cmp-buffer',
+    -- 'hrsh7th/cmp-path',
+    -- 'hrsh7th/cmp-cmdline',
+    -- 'hrsh7th/nvim-cmp',
     'L3MON4D3/LuaSnip',
-    'saadparwaiz1/cmp_luasnip',
+    -- 'saadparwaiz1/cmp_luasnip',
     { 'j-hui/fidget.nvim', opts = {} },
     'hrsh7th/cmp-nvim-lsp',
   },
@@ -31,7 +31,9 @@ return {
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
         map('<leader>D', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-        map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
+        map('<leader>ds', function()
+          require('telescope.builtin').lsp_document_symbols()
+        end, '[D]ocument [S]ymbols')
         map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
@@ -143,24 +145,6 @@ return {
         directoryFilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules', '-.nvim' },
         semanticTokens = true,
         root_dir = require('lspconfig').util.root_pattern('go.work', 'go.mod', '.git'),
-
-        vim.api.nvim_create_autocmd('BufWritePre', {
-          pattern = '*.go',
-          callback = function()
-            local params = vim.lsp.util.make_range_params()
-            params.context = { only = { 'source.organizeImports' } }
-            local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
-            for cid, res in pairs(result or {}) do
-              for _, r in pairs(res.result or {}) do
-                if r.edit then
-                  local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or 'utf-16'
-                  vim.lsp.util.apply_workspace_edit(r.edit, enc)
-                end
-              end
-            end
-            vim.lsp.buf.format { async = false }
-          end,
-        }),
       },
       html = {
         capabilities = capabilities,
@@ -195,7 +179,7 @@ return {
           --   heex = 'phoenix-heex',
           -- },
         },
-        filetypes = extend('tailwindcss', 'filetypes', { 'ocaml.mlx', 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' }),
+        filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' }),
         settings = {
           tailwindCSS = {
             experimental = {
@@ -205,7 +189,6 @@ return {
               },
             },
             includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
-              -- ['ocaml.mlx'] = 'html',
               ['templ'] = 'html',
             }),
           },
