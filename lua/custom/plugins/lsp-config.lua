@@ -8,7 +8,6 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
-    'hrsh7th/cmp-nvim-lsp',
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -66,7 +65,7 @@ return {
     end
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
-    capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
+    capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
     local servers = {
       intelephense = {
         filetypes = { 'php', 'blade', 'php_only' },
