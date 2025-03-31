@@ -57,7 +57,7 @@ return {
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
       -- Adjusts spacing to ensure icons are aligned
-      nerd_font_variant = 'mono',
+      nerd_font_variant = 'normal',
     },
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
@@ -75,6 +75,30 @@ return {
 
           -- Components to render, grouped by column
           columns = { { 'kind_icon' }, { 'label' } },
+          components = {
+            label = {
+              width = { fill = true, max = 60 },
+              text = function(ctx)
+                return ctx.label .. ' ' .. ctx.label_detail
+              end,
+              highlight = function(ctx)
+                -- label and label details
+                local highlights = {
+                  { 0, #ctx.label, group = ctx.deprecated and 'BlinkCmpLabelDeprecated' or 'BlinkCmpLabel' },
+                }
+                if ctx.label_detail then
+                  table.insert(highlights, { #ctx.label, #ctx.label + #ctx.label_detail, group = 'BlinkCmpLabelDetail' })
+                end
+
+                -- characters matched on the label by the fuzzy matcher
+                for _, idx in ipairs(ctx.label_matched_indices) do
+                  table.insert(highlights, { idx, idx + 1, group = 'BlinkCmpLabelMatch' })
+                end
+
+                return highlights
+              end,
+            },
+          },
         },
       },
 
