@@ -143,9 +143,6 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 -- BUFFER NAVIGATION
 vim.keymap.set('n', '<C-,>', '<cmd>bnext<cr>', { desc = 'Next Buffer', noremap = true, silent = true })
 vim.keymap.set('n', '<C-.>', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', noremap = true, silent = true })
--- OLD NAVIGATION
--- vim.keymap.set('n', '<C-]>', '<cmd>bnext<cr>', { desc = 'Next Buffer' })
--- vim.keymap.set('n', '<C-[>', '<cmd>bprevious<cr>', { desc = 'Prev Buffer' })
 --
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
@@ -158,7 +155,7 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.highlight.on_yank {
-      timeout = 100,
+      timeout = 80,
     }
   end,
 })
