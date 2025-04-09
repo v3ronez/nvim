@@ -126,6 +126,8 @@ vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem
 vim.keymap.set('', '<C-[>', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
 
+vim.keymap.set('n', '<C-w>|', ':vsplit<CR>', { desc = 'Split window  vertically', noremap = true, silent = true })
+vim.keymap.set('n', '<C-w>-', ':split<CR>', { desc = 'Split window horizontally', noremap = true, silent = true })
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
