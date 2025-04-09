@@ -144,8 +144,8 @@ vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower win
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
 --
 -- BUFFER NAVIGATION
-vim.keymap.set('n', '<C-,>', '<cmd>bnext<cr>', { desc = 'Next Buffer', noremap = true, silent = true })
-vim.keymap.set('n', '<C-.>', '<cmd>bprevious<cr>', { desc = 'Prev Buffer', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>n', '<cmd>bnext<CR>', { desc = 'Next Buffer', noremap = true, silent = true })
+vim.keymap.set('n', '<leader>b', '<cmd>bprevious<CR>', { desc = 'Prev Buffer', noremap = true, silent = true })
 --
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
