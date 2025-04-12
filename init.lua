@@ -332,6 +332,8 @@ require('lazy').setup({
               '!**/node_modules/**',
               '--glob',
               '!**/storage/framework/**',
+              '--glob',
+              '!**/bin/**',
             },
           },
         },
