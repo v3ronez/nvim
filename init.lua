@@ -128,6 +128,15 @@ vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
 
 vim.keymap.set('n', '<C-w>|', ':vsplit<CR>', { desc = 'Split window  vertically', noremap = true, silent = true })
 vim.keymap.set('n', '<C-w>-', ':split<CR>', { desc = 'Split window horizontally', noremap = true, silent = true })
+
+-- move code block
+vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
+vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
+--
+--
+-- indent
+vim.keymap.set('v', '>', '>gv')
+vim.keymap.set('v', '<', '<gv')
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')

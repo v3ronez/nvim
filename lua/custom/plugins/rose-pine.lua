@@ -13,16 +13,16 @@ return {
       },
       highlight_groups = {
         --statusLine
-        StatusLine = { fg = '#f1f1f1', bg = 'base', blend = 10 },
-        StatusLineNC = { fg = 'subtle', bg = 'surface' },
+        -- StatusLine = { fg = '#f1f1f1', bg = 'base', blend = 10 },
+        -- StatusLineNC = { fg = 'subtle', bg = 'surface' },
         --statudLine end
         --telescope
-        TelescopeBorder = { fg = 'highlight_high', bg = 'none' },
-        TelescopeNormal = { bg = 'none' },
-        TelescopePromptNormal = { bg = 'base' },
-        TelescopeResultsNormal = { fg = 'subtle', bg = 'none' },
-        TelescopeSelection = { fg = 'text', bg = 'base' },
-        TelescopeSelectionCaret = { fg = 'iris', bg = 'iris' },
+        -- TelescopeBorder = { fg = 'highlight_high', bg = 'none' },
+        -- TelescopeNormal = { bg = 'none' },
+        -- TelescopePromptNormal = { bg = 'base' },
+        -- TelescopeResultsNormal = { fg = 'subtle', bg = 'none' },
+        -- TelescopeSelection = { fg = 'text', bg = 'base' },
+        -- TelescopeSelectionCaret = { fg = 'iris', bg = 'iris' },
         --telescope end
       },
     }
