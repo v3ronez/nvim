@@ -3,12 +3,12 @@ return {
     'stevearc/oil.nvim',
     dependencies = { 'echasnovski/mini.icons', opts = {} },
     config = function()
-      CustomOilBar = function()
-        local path = vim.fn.expand '%'
-        path = path:gsub('oil://', '')
-
-        return '  ' .. vim.fn.fnamemodify(path, ':.')
-      end
+      -- CustomOilBar = function()
+      --   local path = vim.fn.expand '%'
+      --   path = path:gsub('oil://', '')
+      --
+      --   return '  ' .. vim.fn.fnamemodify(path, ':.')
+      -- end
 
       require('oil').setup {
         columns = { 'icon' },
@@ -19,15 +19,15 @@ return {
           ['<C-j>'] = false,
           ['<M-h>'] = 'actions.select_split',
         },
-        win_options = {
-          winbar = '%{v:lua.CustomOilBar()}',
-        },
+        -- win_options = {
+        --   winbar = '%{v:lua.CustomOilBar()}',
+        -- },
         view_options = {
           show_hidden = true,
-          is_always_hidden = function(name, _)
-            local folder_skip = { 'dev-tools.locks', 'dune.lock', '_build', 'vendor', 'nodemodule', 'target' }
-            return vim.tbl_contains(folder_skip, name)
-          end,
+          -- is_always_hidden = function(name, _)
+          --   -- local folder_skip = { 'dev-tools.locks', 'dune.lock', '_build', 'vendor', 'node_module', 'target' }
+          --   -- return vim.tbl_contains(folder_skip, name)
+          -- end,
         },
       }
 

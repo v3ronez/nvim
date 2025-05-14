@@ -19,7 +19,10 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        map('K', vim.lsp.buf.hover, 'Hover details')
+        map('K', function()
+          vim.lsp.buf.hover()
+        end, 'Hover details')
+
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
@@ -67,6 +70,7 @@ return {
     local servers = {
       intelephense = {
         filetypes = { 'php', 'blade', 'php_only' },
+        capabilities = capabilities,
         default_config = {
           init_options = {
             licenceKey = '$HOME/intelephense/licence.txt',
@@ -223,6 +227,7 @@ return {
       'cmake',
       'gopls',
       'intelephense',
+      'ts_ls',
     })
 
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
