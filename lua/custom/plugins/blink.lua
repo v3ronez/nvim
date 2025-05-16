@@ -55,8 +55,8 @@ return {
       preset = 'default',
       ['<Tab>'] = { 'snippet_forward', 'fallback' },
       ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
-      ['<S-k>'] = { 'scroll_documentation_up', 'fallback' },
-      ['<S-j>'] = { 'scroll_documentation_down', 'fallback' },
+      ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
+      ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
     },
     signature = { enabled = true },
     snippets = { preset = 'luasnip' },
@@ -67,8 +67,8 @@ return {
     },
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
-      ghost_text = {
-        enabled = true,
+      documentation = {
+        auto_show = true,
       },
       list = {
         selection = {
@@ -116,16 +116,18 @@ return {
           },
         },
       },
-
-      documentation = { auto_show = true },
     },
 
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
+      default = { 'lsp', 'path', 'snippets', 'buffer', 'lazydev' },
       providers = {
-        lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
+        lazydev = {
+          name = 'LazyDev',
+          module = 'lazydev.integrations.blink',
+          score_offset = 100,
+        },
       },
     },
 
@@ -135,7 +137,6 @@ return {
     --
     -- See the fuzzy documentation for more information
     fuzzy = { implementation = 'prefer_rust_with_warning' },
-    -- fuzzy = { implementation = 'lua' },
   },
   opts_extend = { 'sources.default' },
 }

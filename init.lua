@@ -5,6 +5,7 @@ vim.o.hidden = true
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
 vim.o.pumheight = 10
+-- vim.o.winborder = 'rounded' -- all windows with border
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -20,7 +21,6 @@ vim.o.pumheight = 10
 --   max_width = 70,
 --   max_height = 8,
 -- })
--- vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' })
 
 -- OPTS
 vim.opt.laststatus = 3 -- Or 3 for global statusline
@@ -114,9 +114,8 @@ vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 --Switch to the previous buffer
 vim.keymap.set({ 'n', 'v' }, '<TAB>', '<cmd>b#<CR>')
 
--- LSP SIGNATURE
-vim.api.nvim_set_keymap('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>', { noremap = true, silent = true })
 -- vim.keymap.set({ 'i', 'n' }, '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, silent = true })
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close current buffer' })

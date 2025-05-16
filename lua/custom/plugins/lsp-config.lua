@@ -19,10 +19,9 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        map('K', function()
-          vim.lsp.buf.hover()
-        end, 'Hover details')
-
+        vim.keymap.set('n', 'K', function()
+          vim.lsp.buf.hover { border = 'rounded' }
+        end, { buffer = event.buf })
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
