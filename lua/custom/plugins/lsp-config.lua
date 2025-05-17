@@ -77,29 +77,6 @@ return {
       end,
     })
 
-    local extend = function(name, key, values)
-      local mod = require(string.format('lspconfig.configs.%s', name))
-      local default = mod.default_config
-      local keys = vim.split(key, '.', { plain = true })
-      while #keys > 0 do
-        local item = table.remove(keys, 1)
-        default = default[item]
-      end
-
-      if vim.islist(default) then
-        for _, value in ipairs(default) do
-          table.insert(values, value)
-        end
-      else
-        for item, value in pairs(default) do
-          if not vim.tbl_contains(values, item) then
-            values[item] = value
-          end
-        end
-      end
-      return values
-    end
-
     -- local capabilities = vim.lsp.protocol.make_client_capabilities()
     local capabilities = require('blink.cmp').get_lsp_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
@@ -201,12 +178,12 @@ return {
       },
       html = {
         capabilities = capabilities,
-        filetypes = { 'html', 'templ', 'htmx' },
-      },
-      htmx = {
-        capabilities = capabilities,
         filetypes = { 'html', 'templ' },
       },
+      -- htmx = {
+      --   capabilities = capabilities,
+      --   filetypes = { 'html', 'templ' },
+      -- },
       templ = {
         capabilities = capabilities,
         vim.filetype.add { extension = { templ = 'templ' } },
@@ -232,7 +209,8 @@ return {
           --   heex = 'phoenix-heex',
           -- },
         },
-        filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' }),
+        filetypes = 'filetypes',
+        { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' },
         settings = {
           tailwindCSS = {
             experimental = {
@@ -241,9 +219,9 @@ return {
                 [[className="([^"]*)]],
               },
             },
-            includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
+            includeLanguages = {
               ['templ'] = 'html',
-            }),
+            },
           },
         },
       },
@@ -267,7 +245,10 @@ return {
         },
         filetypes = { 'rust' },
       },
-      ts_ls = {},
+      ts_ls = {
+        capabilities = capabilities,
+        filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+      },
       lua_ls = {
         settings = {
           Lua = {
@@ -288,12 +269,12 @@ return {
       'html',
       'jsonls',
       'rust_analyzer',
-      'templ',
-      'htmx',
-      'cmake',
-      'gopls',
       'intelephense',
       'ts_ls',
+      'templ',
+      -- 'htmx',
+      'cmake',
+      'gopls',
     })
 
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -304,14 +285,10 @@ return {
       handlers = {
         function(server_name)
           local server = servers[server_name] or {}
-          -- This handles overriding only values explicitly passed
-          -- by the server configuration above. Useful when disabling
-          -- certain features of an LSP (for example, turning off formatting for ts_ls)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
           require('lspconfig')[server_name].setup(server)
         end,
       },
     }
   end,
-  -- vim.diagnostic.config { virtual_lines = true },
 }
