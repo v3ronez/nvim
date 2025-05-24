@@ -20,8 +20,9 @@ return {
           require('luasnip.loaders.from_snipmate').load { path = { './snippets/*' } },
         }
         luasnip.config.set_config {
+          history = true,
           region_check_events = 'InsertEnter',
-          delete_check_events = 'InsertLeave',
+          delete_check_events = 'TextChanged,InsertLeave',
         }
 
         luasnip.config.setup {}
@@ -52,11 +53,17 @@ return {
     --
     -- See :h blink-cmp-config-keymap for defining your own keymap
     keymap = {
-      preset = 'default',
+      preset = 'none',
+      ['<C-space>'] = { 'show', 'show_documentation', 'hide_documentation' },
+      ['<C-e>'] = { 'hide' },
+      ['<C-y>'] = { 'select_and_accept' },
+      ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+      ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
       ['<Tab>'] = { 'snippet_forward', 'fallback' },
       ['<S-Tab>'] = { 'snippet_backward', 'fallback' },
-      ['<C-u>'] = { 'scroll_documentation_up', 'fallback' },
-      ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
+      ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+      ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+      ['<C-h>'] = { 'show_signature', 'hide_signature', 'fallback' },
     },
     signature = { enabled = true },
     snippets = { preset = 'luasnip' },

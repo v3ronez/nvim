@@ -18,7 +18,7 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        vim.keymap.set('n', 'K', function()
+        vim.keymap.set('n', '<C-h>', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
