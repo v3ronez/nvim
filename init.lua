@@ -577,5 +577,8 @@ require('lazy').setup({
   },
 })
 
+vim.o.background = 'dark'
+vim.cmd.colorscheme 'rose-pine-moon'
+-- vim.cmd.colorscheme 'ayu'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

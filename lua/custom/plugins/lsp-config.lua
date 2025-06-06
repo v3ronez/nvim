@@ -6,6 +6,8 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
+    -- elixir
+    { 'elixir-tools/elixir-tools.nvim' },
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
   },
@@ -203,11 +205,11 @@ return {
       },
       tailwindcss = {
         init_options = {
-          -- userLanguages = {
-          --   elixir = 'phoenix-heex',
-          --   eruby = 'erb',
-          --   heex = 'phoenix-heex',
-          -- },
+          userLanguages = {
+            elixir = 'phoenix-heex',
+            eruby = 'erb',
+            heex = 'phoenix-heex',
+          },
         },
         filetypes = 'filetypes',
         { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' },
@@ -258,6 +260,15 @@ return {
             -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
             diagnostics = { disable = { 'missing-fields' } },
           },
+        },
+      },
+      lexical = {
+        cmd = { '/Users/veronez/.local/share/nvim/mason/bin/lexical', 'server' },
+        root_dir = require('lspconfig.util').root_pattern { 'mix.exs' },
+        filetypes = { 'elixir', 'eelixir', 'heex' },
+        server_capabilities = {
+          completionProvider = vim.NIL,
+          definitionProvider = true,
         },
       },
     }
