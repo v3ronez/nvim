@@ -6,8 +6,6 @@ return {
     { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    -- elixir
-    { 'elixir-tools/elixir-tools.nvim' },
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
   },
@@ -262,15 +260,15 @@ return {
           },
         },
       },
-      lexical = {
-        cmd = { '/Users/veronez/.local/share/nvim/mason/bin/lexical', 'server' },
-        root_dir = require('lspconfig.util').root_pattern { 'mix.exs' },
-        filetypes = { 'elixir', 'eelixir', 'heex' },
-        server_capabilities = {
-          completionProvider = vim.NIL,
-          definitionProvider = true,
-        },
-      },
+      -- lexical = {
+      --   cmd = { '$HOME/.local/share/nvim/mason/bin/lexical', 'server' },
+      --   root_dir = require('lspconfig.util').root_pattern { 'mix.exs' },
+      --   filetypes = { 'elixir', 'eelixir', 'heex' },
+      --   server_capabilities = {
+      --     completionProvider = vim.NIL,
+      --     definitionProvider = true,
+      --   },
+      -- },
     }
     require('mason').setup()
 

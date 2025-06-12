@@ -64,6 +64,10 @@ return {
       javascript = { 'prettierd', 'prettier', stop_after_first = true },
       ocaml = { 'ml-format' },
       ocaml_mlx = { 'ocamlformat_mlx' },
+      elixir = { 'mix' },
+      eelixir = { 'mix' },
+      heex = { 'mix' },
+      surface = { 'mix' },
     },
   },
 }
