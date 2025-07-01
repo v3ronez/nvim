@@ -126,6 +126,9 @@ return {
               associations = { '*.php', '*.blade.php' }, -- Associating .blade.php files as well
               maxSize = 5000000,
             },
+            format = {
+              braces = 'k&r',
+            },
           },
         },
       },
@@ -227,19 +230,24 @@ return {
       },
       rust_analyzer = {
         capabilities = capabilities,
-        flags = {
-          debounce_text_changes = 150,
-        },
         settings = {
           ['rust-analyzer'] = {
-            completion = {
-              postfix = {
-                enable = false,
+            imports = {
+              granularity = {
+                group = 'module',
               },
+              prefix = 'self',
+            },
+            checkOnSave = {
+              command = 'clippy',
             },
             cargo = {
-              features = 'all',
-              allFeatures = true,
+              buildScripts = {
+                enable = true,
+              },
+            },
+            procMacro = {
+              enable = true,
             },
           },
         },
