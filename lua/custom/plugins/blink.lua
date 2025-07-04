@@ -94,10 +94,20 @@ return {
           treesitter = { 'lsp' },
 
           -- Components to render, grouped by column
-          columns = { { 'kind_icon' }, { 'label' } },
+          columns = { { 'label' }, { 'kind' } },
           components = {
+            kind = {
+              ellipsis = false,
+              width = { fill = true },
+              text = function(ctx)
+                return ctx.kind
+              end,
+              highlight = function(ctx)
+                return ctx.kind_hl
+              end,
+            },
             label = {
-              width = { fill = true, max = 60 },
+              width = { fill = true, max = 30 },
               text = function(ctx)
                 return ctx.label .. ' ' .. ctx.label_detail
               end,
@@ -117,6 +127,13 @@ return {
 
                 return highlights
               end,
+            },
+            label_description = {
+              width = { max = 30 },
+              text = function(ctx)
+                return ctx.label_description
+              end,
+              highlight = 'BlinkCmpLabelDescription',
             },
           },
         },

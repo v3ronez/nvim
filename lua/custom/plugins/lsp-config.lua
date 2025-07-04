@@ -8,6 +8,7 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
+    'saghen/blink.cmp',
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -30,9 +31,7 @@ return {
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-        map('<leader>th', function()
-          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-        end, '[T]oggle Inlay [H]ints')
+
         -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
         ---@param client vim.lsp.Client
         ---@param method vim.lsp.protocol.Method
@@ -74,39 +73,74 @@ return {
             end,
           })
         end
+        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          map('<leader>th', function()
+            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+          end, '[T]oggle Inlay [H]ints')
+        end
       end,
     })
 
     -- local capabilities = vim.lsp.protocol.make_client_capabilities()
     local capabilities = require('blink.cmp').get_lsp_capabilities()
-    capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
-
+    -- capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
+    capabilities = vim.tbl_deep_extend('force', {}, vim.lsp.protocol.make_client_capabilities(), capabilities, {
+      fileOperations = {
+        didRename = true,
+        willRename = true,
+      },
+    })
     -- Diagnostic Config
     -- See :help vim.diagnostic.Opts
+    -- vim.diagnostic.config {
+    --   severity_sort = true,
+    --   float = { border = 'rounded', source = 'if_many' },
+    --   underline = { severity = vim.diagnostic.severity.ERROR },
+    --   signs = vim.g.have_nerd_font and {
+    --     text = {
+    --       [vim.diagnostic.severity.ERROR] = '󰅚 ',
+    --       [vim.diagnostic.severity.WARN] = '󰀪 ',
+    --       [vim.diagnostic.severity.INFO] = '󰋽 ',
+    --       [vim.diagnostic.severity.HINT] = '󰌶 ',
+    --     },
+    --   } or {},
+    --   virtual_text = {
+    --     source = 'if_many',
+    --     spacing = 2,
+    --     format = function(diagnostic)
+    --       local diagnostic_message = {
+    --         [vim.diagnostic.severity.ERROR] = diagnostic.message,
+    --         [vim.diagnostic.severity.WARN] = diagnostic.message,
+    --         [vim.diagnostic.severity.INFO] = diagnostic.message,
+    --         [vim.diagnostic.severity.HINT] = diagnostic.message,
+    --       }
+    --       return diagnostic_message[diagnostic.severity]
+    --     end,
+    --   },
+    -- }
+    --
+
+    --Test
     vim.diagnostic.config {
+      virtual_text = true,
+      underline = true,
+      update_in_insert = false,
       severity_sort = true,
-      float = { border = 'rounded', source = 'if_many' },
-      underline = { severity = vim.diagnostic.severity.ERROR },
-      signs = vim.g.have_nerd_font and {
+      float = {
+        border = 'rounded',
+        source = true,
+      },
+      signs = {
         text = {
           [vim.diagnostic.severity.ERROR] = '󰅚 ',
           [vim.diagnostic.severity.WARN] = '󰀪 ',
           [vim.diagnostic.severity.INFO] = '󰋽 ',
           [vim.diagnostic.severity.HINT] = '󰌶 ',
         },
-      } or {},
-      virtual_text = {
-        source = 'if_many',
-        spacing = 2,
-        format = function(diagnostic)
-          local diagnostic_message = {
-            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-            [vim.diagnostic.severity.WARN] = diagnostic.message,
-            [vim.diagnostic.severity.INFO] = diagnostic.message,
-            [vim.diagnostic.severity.HINT] = diagnostic.message,
-          }
-          return diagnostic_message[diagnostic.severity]
-        end,
+        numhl = {
+          [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
+          [vim.diagnostic.severity.WARN] = 'WarningMsg',
+        },
       },
     }
 
@@ -229,29 +263,20 @@ return {
         },
       },
       rust_analyzer = {
+        cmd = { 'rust-analyzer' },
+        root_markers = { 'Cargo.lock' },
+        filetypes = { 'rust' },
         capabilities = capabilities,
         settings = {
           ['rust-analyzer'] = {
-            imports = {
-              granularity = {
-                group = 'module',
-              },
-              prefix = 'self',
-            },
-            checkOnSave = {
+            check = {
               command = 'clippy',
             },
-            cargo = {
-              buildScripts = {
-                enable = true,
-              },
-            },
-            procMacro = {
+            diagnostics = {
               enable = true,
             },
           },
         },
-        filetypes = { 'rust' },
       },
       ts_ls = {
         capabilities = capabilities,
