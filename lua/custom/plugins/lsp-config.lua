@@ -22,7 +22,7 @@ return {
         vim.keymap.set('n', '<C-h>', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
-        map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        -- map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
         map('gT', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')

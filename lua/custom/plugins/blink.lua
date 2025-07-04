@@ -1,3 +1,7 @@
+vim.cmd 'highlight Pmenu guibg=none'
+vim.cmd 'highlight PmenuExtra guibg=none'
+vim.cmd 'highlight FloatBorder guibg=none'
+vim.cmd 'highlight NormalFloat guibg=none'
 return {
   'saghen/blink.cmp',
   -- optional: provides snippets for the snippet source
@@ -143,8 +147,12 @@ return {
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
     sources = {
-      default = { 'lsp', 'path', 'snippets', 'lazydev' },
+      default = { 'laravel', 'lsp', 'path', 'snippets', 'lazydev' },
       providers = {
+        laravel = {
+          name = 'laravel',
+          module = 'laravel.blink_source',
+        },
         lazydev = {
           name = 'LazyDev',
           module = 'lazydev.integrations.blink',

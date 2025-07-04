@@ -19,15 +19,7 @@ return {
 
     local map = vim.keymap.set
 
-    local ide_helper = require 'phptools.ide_helper' -- delete if you dont use it
-    -- Laravel IDE Helper keymaps
-    -- map('n', '<leader>lha', ide_helper.generate_all, { desc = 'Generate all IDE helpers' })
-    -- map('n', '<leader>lhm', ide_helper.generate_models, { desc = 'Generate model helpers' })
-    -- map('n', '<leader>lhf', ide_helper.generate_facades, { desc = 'Generate facade helpers' })
-    -- map('n', '<leader>lht', ide_helper.generate_meta, { desc = 'Generate meta helper' })
-    -- map('n', '<leader>lhi', ide_helper.install, { desc = 'Install IDE Helper package' })
-
-    --PhpStuffs
+    --Php Stuff
     map('n', '<Leader>pm', '<cmd>PhpTools Method<cr>', { desc = '[P]HP [M]ethod' })
     map('n', '<Leader>pc', '<cmd>PhpTools Class<cr>', { desc = '[P]HP [C]lass' })
     map('n', '<Leader>pf', '<cmd>PhpTools Create<cr>', { desc = '[P]HP [F]actory entity' })
