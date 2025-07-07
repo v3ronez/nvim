@@ -1,31 +1,6 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.opt.colorcolumn = '120'
-vim.o.hidden = true
--- Set to true if you have a Nerd Font installed and selected in the terminal
-vim.g.have_nerd_font = true
-vim.o.pumheight = 10
--- vim.o.winborder = 'rounded' -- all windows with border
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
--- vim.schedule(function()
---   vim.opt.clipboard = 'unnamedplus'
--- end)
-
--- hover space config
--- vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
---   border = 'rounded',
---   max_width = 70,
---   max_height = 8,
--- })
-
--- OPTS
-vim.opt.laststatus = 3 -- Or 3 for global statusline
--- vim.opt.statusline = '   %f %m %= %l:%c λ    '
-
 -- Function to get the current Git branch
 local function get_git_branch()
   local branch = vim.fn.system('git branch --show-current 2>/dev/null'):gsub('\n', '')
@@ -52,7 +27,6 @@ vim.opt.timeoutlen = 300
 vim.opt.autoindent = true
 vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
 -- Set the status line
-vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
 
 -- test
 --local function lsp_status_short()
@@ -158,31 +132,6 @@ vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
 -- }, " ")
 
 vim.opt.ignorecase = true
-vim.opt.wildignore:append {
-  '*.o',
-  '*.obj',
-  '*.exe',
-  '*.dll',
-  '*.pyc',
-  '*.pyo',
-  '*.so',
-  '*.jpg',
-  '*.jpeg',
-  '*.png',
-  '*.gif',
-  '*.zip',
-  '*.tar.gz',
-  '*.rar',
-  '*.tar.bz2',
-  '***/node_modules/*',
-  '*.DS_Store',
-  '*.git',
-  '*.hg',
-  '*.svn',
-  '***/vendor/*',
-  'target/*', -- Rust's build directory
-  '*.rs.bk', -- Rust backup files, if any
-}
 vim.opt.autoread = true
 vim.cmd.hi 'Comment gui=none'
 vim.opt.mouse = 'a'
@@ -209,6 +158,31 @@ vim.g.have_nerd_font = true
 vim.opt.breakindent = true
 vim.opt.inccommand = 'split'
 vim.opt.splitright = true
+vim.opt.timeoutlen = 1000
+vim.opt.conceallevel = 0
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.clipboard = 'unnamedplus'
+vim.o.hidden = true
+-- Set to true if you have a Nerd Font installed and selected in the terminal
+vim.g.have_nerd_font = true
+vim.o.pumheight = 10
+vim.filetype.add {
+  extension = {
+    env = 'dotenv',
+  },
+  filename = {
+    ['.env'] = 'dotenv',
+    ['env'] = 'dotenv',
+  },
+  pattern = {
+    ['[jt]sconfig.*.json'] = 'jsonc',
+    ['%.env%.[%w_.-]+'] = 'dotenv',
+  },
+}
+vim.opt.laststatus = 3 -- Or 3 for global statusline
+vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
+-- vim.opt.statusline = '   %f %m %= %l:%c λ    '
 -- vim.opt.list = true
 -- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
@@ -680,9 +654,28 @@ require('lazy').setup({
 
 vim.o.background = 'dark'
 -- vim.cmd.colorscheme 'rose-pine-moon'
--- vim.cmd.colorscheme 'melange'
-vim.cmd.colorscheme 'mellifluous'
+vim.cmd.colorscheme 'melange'
+-- vim.cmd.colorscheme 'mellifluous'
 
 -- vim.cmd.colorscheme 'ayu'
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+local function load_custom_functions()
+  local path = vim.fn.stdpath("config") .. "/lua/custom/functions"
+  local handle = vim.loop.fs_scandir(path)
+  if not handle then return end
+
+  while true do
+    local name, typ = vim.loop.fs_scandir_next(handle)
+    if not name then break end
+    if typ == "file" and name:match("%.lua$") then
+      local mod = "custom.functions." .. name:gsub("%.lua$", "")
+      local ok, err = pcall(require, mod)
+      if not ok then
+        vim.notify("Failed to load " .. mod .. ": " .. err, vim.log.levels.ERROR)
+      end
+    end
+  end
+end
+
+load_custom_functions()

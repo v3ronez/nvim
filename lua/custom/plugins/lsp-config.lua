@@ -22,6 +22,34 @@ return {
         vim.keymap.set('n', '<C-h>', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
+
+        map('gd', function()
+          local clients = vim.lsp.get_clients { bufnr = 0 }
+          if #clients == 0 then
+            vim.cmd 'LaravelGoto'
+            return
+          end
+
+          local encoding = clients[1].offset_encoding or 'utf-16'
+          local params = vim.lsp.util.make_position_params(0, encoding)
+          local results = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
+          local has_result = false
+
+          if results then
+            for _, res in pairs(results) do
+              if res.result and not vim.tbl_isempty(res.result) then
+                has_result = true
+                break
+              end
+            end
+          end
+
+          if has_result then
+            require('telescope.builtin').lsp_definitions()
+          else
+            vim.cmd 'LaravelGoto'
+          end
+        end, '[G]oto [D]efinition (LSP or Laravel)')
         -- map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
@@ -118,7 +146,6 @@ return {
     --     end,
     --   },
     -- }
-    --
 
     --Test
     vim.diagnostic.config {
@@ -263,21 +290,48 @@ return {
         },
       },
       rust_analyzer = {
-        cmd = { 'rust-analyzer' },
-        root_markers = { 'Cargo.lock' },
-        filetypes = { 'rust' },
         capabilities = capabilities,
         settings = {
           ['rust-analyzer'] = {
+            cargo = {
+              features = 'all',
+            },
+            -- checkOnSave = {
+            --   enable = true,
+            -- },
             check = {
               command = 'clippy',
             },
-            diagnostics = {
-              enable = true,
+            imports = {
+              group = {
+                enable = false,
+              },
+            },
+            completion = {
+              postfix = {
+                enable = false,
+              },
             },
           },
         },
+        filetypes = { 'rust' },
       },
+      -- rust_analyzer = {
+      --   cmd = { 'rust-analyzer' },
+      --   root_markers = { 'Cargo.lock' },
+      --   filetypes = { 'rust' },
+      --   capabilities = capabilities,
+      --   settings = {
+      --     ['rust-analyzer'] = {
+      --       check = {
+      --         command = 'clippy',
+      --       },
+      --       diagnostics = {
+      --         enable = true,
+      --       },
+      --     },
+      --   },
+      -- },
       ts_ls = {
         capabilities = capabilities,
         filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
