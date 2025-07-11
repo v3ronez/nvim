@@ -8,7 +8,6 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
-    'saghen/blink.cmp',
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -22,35 +21,7 @@ return {
         vim.keymap.set('n', '<C-h>', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
-
-        map('gd', function()
-          local clients = vim.lsp.get_clients { bufnr = 0 }
-          if #clients == 0 then
-            vim.cmd 'LaravelGoto'
-            return
-          end
-
-          local encoding = clients[1].offset_encoding or 'utf-16'
-          local params = vim.lsp.util.make_position_params(0, encoding)
-          local results = vim.lsp.buf_request_sync(0, 'textDocument/definition', params, 1000)
-          local has_result = false
-
-          if results then
-            for _, res in pairs(results) do
-              if res.result and not vim.tbl_isempty(res.result) then
-                has_result = true
-                break
-              end
-            end
-          end
-
-          if has_result then
-            require('telescope.builtin').lsp_definitions()
-          else
-            vim.cmd 'LaravelGoto'
-          end
-        end, '[G]oto [D]efinition (LSP or Laravel)')
-        -- map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
+        map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
         map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
         map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
         map('gT', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
@@ -59,7 +30,9 @@ return {
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-
+        map('<leader>th', function()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
+        end, '[T]oggle Inlay [H]ints')
         -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
         ---@param client vim.lsp.Client
         ---@param method vim.lsp.protocol.Method
@@ -101,73 +74,39 @@ return {
             end,
           })
         end
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-          map('<leader>th', function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-          end, '[T]oggle Inlay [H]ints')
-        end
       end,
     })
 
     -- local capabilities = vim.lsp.protocol.make_client_capabilities()
     local capabilities = require('blink.cmp').get_lsp_capabilities()
-    -- capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
-    capabilities = vim.tbl_deep_extend('force', {}, vim.lsp.protocol.make_client_capabilities(), capabilities, {
-      fileOperations = {
-        didRename = true,
-        willRename = true,
-      },
-    })
+    capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
+
     -- Diagnostic Config
     -- See :help vim.diagnostic.Opts
-    -- vim.diagnostic.config {
-    --   severity_sort = true,
-    --   float = { border = 'rounded', source = 'if_many' },
-    --   underline = { severity = vim.diagnostic.severity.ERROR },
-    --   signs = vim.g.have_nerd_font and {
-    --     text = {
-    --       [vim.diagnostic.severity.ERROR] = '󰅚 ',
-    --       [vim.diagnostic.severity.WARN] = '󰀪 ',
-    --       [vim.diagnostic.severity.INFO] = '󰋽 ',
-    --       [vim.diagnostic.severity.HINT] = '󰌶 ',
-    --     },
-    --   } or {},
-    --   virtual_text = {
-    --     source = 'if_many',
-    --     spacing = 2,
-    --     format = function(diagnostic)
-    --       local diagnostic_message = {
-    --         [vim.diagnostic.severity.ERROR] = diagnostic.message,
-    --         [vim.diagnostic.severity.WARN] = diagnostic.message,
-    --         [vim.diagnostic.severity.INFO] = diagnostic.message,
-    --         [vim.diagnostic.severity.HINT] = diagnostic.message,
-    --       }
-    --       return diagnostic_message[diagnostic.severity]
-    --     end,
-    --   },
-    -- }
-
-    --Test
     vim.diagnostic.config {
-      virtual_text = true,
-      underline = true,
-      update_in_insert = false,
       severity_sort = true,
-      float = {
-        border = 'rounded',
-        source = true,
-      },
-      signs = {
+      float = { border = 'rounded', source = 'if_many' },
+      underline = { severity = vim.diagnostic.severity.ERROR },
+      signs = vim.g.have_nerd_font and {
         text = {
           [vim.diagnostic.severity.ERROR] = '󰅚 ',
           [vim.diagnostic.severity.WARN] = '󰀪 ',
           [vim.diagnostic.severity.INFO] = '󰋽 ',
           [vim.diagnostic.severity.HINT] = '󰌶 ',
         },
-        numhl = {
-          [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
-          [vim.diagnostic.severity.WARN] = 'WarningMsg',
-        },
+      } or {},
+      virtual_text = {
+        source = 'if_many',
+        spacing = 2,
+        format = function(diagnostic)
+          local diagnostic_message = {
+            [vim.diagnostic.severity.ERROR] = diagnostic.message,
+            [vim.diagnostic.severity.WARN] = diagnostic.message,
+            [vim.diagnostic.severity.INFO] = diagnostic.message,
+            [vim.diagnostic.severity.HINT] = diagnostic.message,
+          }
+          return diagnostic_message[diagnostic.severity]
+        end,
       },
     }
 
@@ -296,9 +235,9 @@ return {
             cargo = {
               features = 'all',
             },
-            -- checkOnSave = {
-            --   enable = true,
-            -- },
+            checkOnSave = {
+              enable = true,
+            },
             check = {
               command = 'clippy',
             },
@@ -316,22 +255,6 @@ return {
         },
         filetypes = { 'rust' },
       },
-      -- rust_analyzer = {
-      --   cmd = { 'rust-analyzer' },
-      --   root_markers = { 'Cargo.lock' },
-      --   filetypes = { 'rust' },
-      --   capabilities = capabilities,
-      --   settings = {
-      --     ['rust-analyzer'] = {
-      --       check = {
-      --         command = 'clippy',
-      --       },
-      --       diagnostics = {
-      --         enable = true,
-      --       },
-      --     },
-      --   },
-      -- },
       ts_ls = {
         capabilities = capabilities,
         filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
