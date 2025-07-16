@@ -16,17 +16,18 @@ return {
       },
       filter = 'spectrum',
       overridePalette = function(filter)
-        return { -- "spectrum
+        return {
+          -- "spectrum
           dark2 = '#131313',
           dark1 = '#191919',
           background = '#222222',
           text = '#f7f1ff',
           accent1 = '#fc618d',
           accent2 = '#fd9353',
-          accent3 = '#7bd88f',
+          accent3 = '#C3E88D',
           accent4 = '#8AA9F9',
-          accent5 = '#E99273',
-          accent6 = '#948ae3',
+          accent5 = '#F78E67',
+          accent6 = '#C792EB',
           dimmed1 = '#bab6c0',
           dimmed2 = '#8b888f',
           dimmed3 = '#69676c',
@@ -34,6 +35,23 @@ return {
           dimmed5 = '#363537',
         }
       end,
+      -- overrideScheme = function(cs, p, config, hp)
+      --   local cs_override = {}
+      --
+      --   cs_override.editor = {}
+      --   return cs_override
+      -- end,
     }
+    vim.api.nvim_create_autocmd('ColorScheme', {
+      pattern = 'monokai-pro',
+      callback = function()
+        vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = '#69676c' })
+        vim.api.nvim_set_hl(0, 'LineNr', { fg = '#F88B64' })
+        vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#69676c' })
+
+        vim.api.nvim_set_hl(0, 'TSType', { italic = false })
+        vim.api.nvim_set_hl(0, '@type.builtin', { italic = false })
+      end,
+    })
   end,
 }

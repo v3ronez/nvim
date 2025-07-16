@@ -572,6 +572,7 @@ load_custom_functions()
 vim.o.background = 'dark'
 -- vim.cmd.colorscheme 'melange'
 vim.cmd.colorscheme 'monokai-pro'
+-- vim.cmd.colorscheme 'kanagawa-wave'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
