@@ -51,6 +51,9 @@ return {
 
         vim.api.nvim_set_hl(0, 'TSType', { italic = false })
         vim.api.nvim_set_hl(0, '@type.builtin', { italic = false })
+        vim.api.nvim_set_hl(0, '@keyword.function', { fg = '#F78E67', italic = false })
+        vim.api.nvim_set_hl(0, '@variable.parameter', { fg = '#F78E67', italic = false })
+        vim.api.nvim_set_hl(0, '@keyword.type', { fg = '#F78E67', italic = false })
       end,
     })
   end,
