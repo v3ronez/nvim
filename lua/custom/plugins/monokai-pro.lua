@@ -49,11 +49,13 @@ return {
         vim.api.nvim_set_hl(0, 'LineNr', { fg = '#F88B64' })
         vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#69676c' })
 
-        vim.api.nvim_set_hl(0, 'TSType', { italic = false })
-        vim.api.nvim_set_hl(0, '@type.builtin', { italic = false })
+        vim.api.nvim_set_hl(0, '@type.builtin', { fg = '#9586E1', italic = false })
+        vim.api.nvim_set_hl(0, '@type', { fg = '#F78E67', italic = false })
         vim.api.nvim_set_hl(0, '@keyword.function', { fg = '#F78E67', italic = false })
-        vim.api.nvim_set_hl(0, '@variable.parameter', { fg = '#F78E67', italic = false })
+        vim.api.nvim_set_hl(0, '@variable.parameter', { fg = '#f7f1ff', italic = false })
         vim.api.nvim_set_hl(0, '@keyword.type', { fg = '#F78E67', italic = false })
+        vim.api.nvim_set_hl(0, '@keyword', { fg = '#F78E67', italic = false })
+        vim.api.nvim_set_hl(0, '@variable.builtin', { fg = '#8AA9F9', italic = false })
       end,
     })
   end,

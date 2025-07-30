@@ -20,12 +20,12 @@ function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
--- vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
+vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
 vim.opt.autoindent = true
-vim.opt.completeopt = { 'menu', 'menuone', 'noselect' }
+vim.opt.completeopt = { 'menuone', 'noselect' }
 vim.opt.ignorecase = true
 vim.opt.autoread = true
 vim.cmd.hi 'Comment gui=none'
@@ -84,15 +84,17 @@ vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 --Switch to the previous buffer
 vim.keymap.set({ 'n', 'v' }, '<TAB>', '<cmd>b#<CR>')
-
--- vim.keymap.set({ 'i', 'n' }, '<C-h>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', { noremap = true, silent = true })
-
+-- open new file adjacent to current file
+vim.keymap.set('n', '<leader>of', ':e <C-R>=expand("%:p:h") . "/" <cr>')
+-- let the left and right arrows be useful: they can switch buffers
+vim.keymap.set('n', '<left>', ':bp<cr>')
+vim.keymap.set('n', '<right>', ':bn<cr>')
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close current buffer' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 -- yank and paste to system clipboard
-vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
+-- vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
 -- set ctrl - [  with the same behavior as esc
 vim.keymap.set('', '<C-[>', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
@@ -108,15 +110,6 @@ vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv")
 -- indent
 vim.keymap.set('v', '>', '>gv')
 vim.keymap.set('v', '<', '<gv')
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
@@ -239,6 +232,7 @@ require('lazy').setup({
         { '<leader>t', group = '[T]oggle' },
         { '<leader>p', group = '[P]HP tools' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>o', group = 'Utils', mode = { 'n', 'v' } },
       },
     },
   },
@@ -570,8 +564,9 @@ end
 load_custom_functions()
 
 vim.o.background = 'dark'
--- vim.cmd.colorscheme 'melange'
-vim.cmd.colorscheme 'monokai-pro'
+vim.cmd.colorscheme 'melange'
+-- vim.cmd.colorscheme 'monokai-pro'
+-- vim.cmd.colorscheme 'vague'
 -- vim.cmd.colorscheme 'kanagawa-wave'
 
 -- The line beneath this is called `modeline`. See `:help modeline`

@@ -18,7 +18,7 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        vim.keymap.set('n', '<C-h>', function()
+        vim.keymap.set('n', '<C-k>', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
         map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
@@ -282,25 +282,36 @@ return {
         capabilities = capabilities,
         settings = {
           ['rust-analyzer'] = {
-            cargo = {
-              features = 'all',
-            },
-            checkOnSave = {
-              enable = true,
-            },
             check = {
-              command = 'clippy',
+              allTargets = false,
             },
-            imports = {
-              group = {
-                enable = false,
-              },
+            cargo = {
+              targetDir = true,
             },
-            completion = {
-              postfix = {
-                enable = false,
-              },
+            files = {
+              excludeDirs = { 'target', 'node_modules', '.git', '.sl' },
             },
+            -- old config
+
+            -- cargo = {
+            --   features = 'all',
+            -- },
+            -- checkOnSave = {
+            --   enable = true,
+            -- },
+            -- check = {
+            --   command = 'clippy',
+            -- },
+            -- imports = {
+            --   group = {
+            --     enable = false,
+            --   },
+            -- },
+            -- completion = {
+            --   postfix = {
+            --     enable = false,
+            --   },
+            -- },
           },
         },
         filetypes = { 'rust' },
@@ -332,7 +343,6 @@ return {
       'intelephense',
       'ts_ls',
       'templ',
-      -- 'htmx',
       'cmake',
       'gopls',
     })
