@@ -8,6 +8,35 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
+    {
+      'rachartier/tiny-code-action.nvim',
+      dependencies = {
+        { 'nvim-lua/plenary.nvim' },
+      },
+      event = 'LspAttach',
+      opts = {
+        backend = 'difftastic',
+        picker = {
+          'snacks',
+          opts = {
+            layout = {
+              preset = 'ivy',
+              layout = {
+                box = 'vertical',
+                position = 'bottom',
+                backdrop = false,
+                border = 'rounded',
+                title = ' {title} {live} {flags}',
+                title_pos = 'left',
+                { win = 'input', height = 1, border = 'bottom' },
+                { win = 'list', border = 'none' },
+                { win = 'preview', title = '{preview}', height = 0.5, border = 'top' },
+              },
+            },
+          },
+        },
+      },
+    },
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -21,12 +50,16 @@ return {
         vim.keymap.set('n', '<C-k>', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
-        map('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-        map('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
-        map('gI', require('telescope.builtin').lsp_implementations, '[G]oto [I]mplementation')
-        map('gT', require('telescope.builtin').lsp_type_definitions, 'Type [D]efinition')
-        map('<leader>ds', require('telescope.builtin').lsp_document_symbols, '[D]ocument [S]ymbols')
-        map('<leader>ws', require('telescope.builtin').lsp_dynamic_workspace_symbols, '[W]orkspace [S]ymbols')
+
+        map('gD', vim.lsp.buf.definition, 'Goto Declaration')
+        map('gi', vim.lsp.buf.implementation, 'Goto Implementation')
+
+        map('gd', '<C-]>', '[G]oto [D]efinition')
+        map('gr', Snacks.picker.lsp_references, '[G]oto [R]eferences')
+        map('gi', Snacks.picker.lsp_implementations, '[G]oto [I]mplementation')
+        map('gt', Snacks.picker.lsp_type_definitions, 'Type [D]efinition')
+        map('<leader>ds', Snacks.picker.lsp_symbols, '[D]ocument [S]ymbols')
+        map('<leader>ws', Snacks.picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
@@ -77,10 +110,6 @@ return {
       end,
     })
 
-    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
-    local capabilities = require('blink.cmp').get_lsp_capabilities()
-    capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities())
-
     -- Diagnostic Config
     -- See :help vim.diagnostic.Opts
     vim.diagnostic.config {
@@ -109,6 +138,12 @@ return {
         end,
       },
     }
+
+    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
+    local capabilities = vim.lsp.protocol.make_client_capabilities()
+    capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
+    -- optimizes cpu usage source https://github.com/neovim/neovim/issues/23291
+    capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
     local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
     local vue_plugin = {
       name = '@vue/typescript-plugin',
