@@ -53,7 +53,8 @@ vim.g.have_nerd_font = true
 vim.opt.breakindent = true
 vim.opt.inccommand = 'split'
 vim.opt.splitright = true
-vim.opt.timeoutlen = 1000
+vim.opt.timeout = true
+vim.opt.timeoutlen = 250
 vim.opt.conceallevel = 0
 vim.opt.splitright = true
 vim.opt.splitbelow = true
@@ -265,9 +266,9 @@ require('lazy').setup({
       },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-telescope/telescope-ui-select.nvim' },
+      -- { 'nvim-telescope/telescope-ui-select.nvim' },
       -- { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
-      -- { 'echasnovski/mini.icons', opts = {} }, --better icons,
+      { 'echasnovski/mini.icons', opts = {} }, --better icons,
     },
     config = function()
       require('telescope').setup {

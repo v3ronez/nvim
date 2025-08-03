@@ -47,7 +47,7 @@ return {
           vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        vim.keymap.set('n', '<C-k>', function()
+        vim.keymap.set('n', 'K', function()
           vim.lsp.buf.hover { border = 'rounded' }
         end, { buffer = 0 })
 
