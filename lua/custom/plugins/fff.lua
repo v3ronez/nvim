@@ -25,7 +25,7 @@ return {
     require('fff').setup {
       -- UI dimensions and appearance
       width = 0.8, -- Window width as fraction of screen
-      height = 0.8, -- Window height as fraction of screen
+      height = 0.9, -- Window height as fraction of screen
       prompt = 'λ ',
       preview = {
         enabled = true,
@@ -49,20 +49,8 @@ return {
         preview_scroll_up = '<C-u>',
         preview_scroll_down = '<C-d>',
       },
-
-      hl = {
-        border = 'FloatBorder',
-        normal = 'Normal',
-        cursor = 'CursorLine',
-        matched = 'IncSearch',
-        title = 'Title',
-        prompt = 'Question',
-        active_file = 'Visual',
-        frecency = 'Number',
-        debug = 'Comment',
-      },
       debug = {
-        show_scores = false, -- Toggle with F2 or :FFFDebug
+        show_scores = true, -- Toggle with F2 or :FFFDebug
       },
     }
   end,

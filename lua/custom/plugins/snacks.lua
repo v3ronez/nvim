@@ -8,8 +8,8 @@ return {
     -- or leave it empty to use the default settings
     -- refer to the configuration section below
     bigfile = { enabled = true },
-    dashboard = { enabled = true },
-    explorer = { enabled = true },
+    dashboard = { enabled = false },
+    explorer = { enabled = false },
     indent = { enabled = false },
     input = { enabled = true },
     picker = { enabled = true },
@@ -17,10 +17,10 @@ return {
       enabled = true,
       timeout = 800,
     },
-    quickfile = { enabled = true },
-    scope = { enabled = true },
+    quickfile = { enabled = false },
+    scope = { enabled = false },
     scroll = {
-      enabled = true,
+      enabled = false,
       animate = {
         duration = { step = 15, total = 250 },
         easing = 'linear',
