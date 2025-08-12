@@ -1,10 +1,10 @@
 return {
   'dmtrKovalenko/fff.nvim',
   build = 'cargo build --release',
-  opts = {},
   dependencies = {
     { 'nvim-tree/nvim-web-devicons', opts = {} },
   },
+  opts = {},
   keys = {
     {
       '<leader>ff', -- try it if you didn't it is a banger keybinding for a picker
@@ -33,7 +33,7 @@ return {
         max_lines = 100,
         max_size = 1024 * 1024, -- 1MB
       },
-      title = 'Finding...',
+      title = 'FFF Files',
       max_results = 60, -- Maximum search results to display
       max_threads = 4, -- Maximum threads for fuzzy search
 

@@ -36,7 +36,7 @@ return {
         return vim.g.snacks_scroll ~= false and vim.b[buf].snacks_scroll ~= false and vim.bo[buf].buftype ~= 'terminal'
       end,
     },
-    statuscolumn = { enabled = true },
+    statuscolumn = { enabled = false },
     words = { enabled = true },
   },
 }

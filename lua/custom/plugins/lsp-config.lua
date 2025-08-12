@@ -8,35 +8,6 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
-    {
-      'rachartier/tiny-code-action.nvim',
-      dependencies = {
-        { 'nvim-lua/plenary.nvim' },
-      },
-      event = 'LspAttach',
-      opts = {
-        backend = 'difftastic',
-        picker = {
-          'snacks',
-          opts = {
-            layout = {
-              preset = 'ivy',
-              layout = {
-                box = 'vertical',
-                position = 'bottom',
-                backdrop = false,
-                border = 'rounded',
-                title = ' {title} {live} {flags}',
-                title_pos = 'left',
-                { win = 'input', height = 1, border = 'bottom' },
-                { win = 'list', border = 'none' },
-                { win = 'preview', title = '{preview}', height = 0.5, border = 'top' },
-              },
-            },
-          },
-        },
-      },
-    },
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
@@ -55,17 +26,25 @@ return {
         map('gi', vim.lsp.buf.implementation, 'Goto Implementation')
 
         map('gd', '<C-]>', '[G]oto [D]efinition')
-        map('gr', Snacks.picker.lsp_references, '[G]oto [R]eferences')
-        map('gi', Snacks.picker.lsp_implementations, '[G]oto [I]mplementation')
-        map('gt', Snacks.picker.lsp_type_definitions, 'Type [D]efinition')
-        map('<leader>ds', Snacks.picker.lsp_symbols, '[D]ocument [S]ymbols')
-        map('<leader>ws', Snacks.picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
+        map('gr', require('snacks').picker.lsp_references, '[G]oto [R]eferences')
+        map('gi', require('snacks').picker.lsp_implementations, '[G]oto [I]mplementation')
+        map('gt', require('snacks').picker.lsp_type_definitions, 'Type [D]efinition')
+        map('<leader>ds', require('snacks').picker.lsp_symbols, '[D]ocument [S]ymbols')
+        map('<leader>ws', require('snacks').picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-        map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction', { 'n', 'x' })
+        map('<leader>ca', require('tiny-code-action').code_action, '[C]ode [A]ction', { 'n', 'x' })
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        map('<leader>li', function()
+          vim.cmd 'LspInfo'
+        end, '[L]sp [I]nfo')
+        map('<leader>lr', function()
+          vim.cmd 'LspRestart'
+        end, '[L]sp [R]estart')
+
         map('<leader>th', function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
         end, '[T]oggle Inlay [H]ints')
+
         -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
         ---@param client vim.lsp.Client
         ---@param method vim.lsp.protocol.Method
@@ -137,6 +116,16 @@ return {
           return diagnostic_message[diagnostic.severity]
         end,
       },
+    }
+    local border = {
+      { '╭', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╮', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+      { '╯', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╰', 'FloatBorder' },
+      { '│', 'FloatBorder' },
     }
 
     -- local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -268,10 +257,6 @@ return {
         capabilities = capabilities,
         filetypes = { 'html', 'templ' },
       },
-      -- htmx = {
-      --   capabilities = capabilities,
-      --   filetypes = { 'html', 'templ' },
-      -- },
       templ = {
         capabilities = capabilities,
         vim.filetype.add { extension = { templ = 'templ' } },
@@ -389,7 +374,17 @@ return {
       automatic_installation = true,
       handlers = {
         function(server_name)
+          local handlers = {
+            ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+              border = border,
+            }),
+            ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+              border = border,
+            }),
+          }
+
           local server = servers[server_name] or {}
+          server.handlers = handlers
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
           require('lspconfig')[server_name].setup(server)
         end,

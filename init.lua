@@ -22,6 +22,10 @@ function _G.set_terminal_keymaps()
 end
 vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
+vim.keymap.set('n', '<leader>dS', function()
+  vim.cmd 'noautocmd write'
+end, { desc = '[D]ocument [S]ave (no formatting)' })
+
 vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
 vim.opt.autoindent = true
@@ -365,9 +369,6 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>fn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[F]ind [N]eovim files' })
-      vim.keymap.set('n', '<leader>dS', function()
-        vim.cmd 'noautocmd write'
-      end, { desc = '[D]ocument [S]ave (no formatting)' })
     end,
   },
 
