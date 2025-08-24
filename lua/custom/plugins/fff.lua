@@ -24,14 +24,18 @@ return {
   config = function()
     require('fff').setup {
       -- UI dimensions and appearance
-      width = 0.8, -- Window width as fraction of screen
-      height = 0.9, -- Window height as fraction of screen
       prompt = 'λ ',
       preview = {
         enabled = true,
-        width = 0.5,
         max_lines = 100,
         max_size = 1024 * 1024, -- 1MB
+      },
+      layout = {
+        height = 0.8,
+        width = 0.8,
+        prompt_position = 'bottom', -- or 'top'
+        preview_position = 'right', -- or 'left', 'right', 'top', 'bottom'
+        preview_size = 0.5,
       },
       title = 'FFF Files',
       max_results = 60, -- Maximum search results to display
@@ -50,6 +54,7 @@ return {
         preview_scroll_down = '<C-d>',
       },
       debug = {
+        enabled = true,
         show_scores = true, -- Toggle with F2 or :FFFDebug
       },
     }
