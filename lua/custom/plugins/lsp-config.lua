@@ -8,42 +8,39 @@ return {
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'L3MON4D3/LuaSnip',
     { 'j-hui/fidget.nvim', opts = {} },
+    -- Autoformatting
+    'stevearc/conform.nvim',
+
+    -- Schema information
+    'b0o/SchemaStore.nvim',
   },
   config = function()
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
-        local map = function(keys, func, desc, mode)
-          mode = mode or 'n'
-          vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
-        end
+        -- vim.keymap.set('n', 'K', function()
+        --   vim.lsp.buf.hover { border = 'rounded' }
+        -- end, { buffer = 0 })
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
 
-        vim.keymap.set('n', 'K', function()
-          vim.lsp.buf.hover { border = 'rounded' }
-        end, { buffer = 0 })
-
-        map('gD', vim.lsp.buf.definition, 'Goto Declaration')
-        map('gi', vim.lsp.buf.implementation, 'Goto Implementation')
-
-        map('gd', '<C-]>', '[G]oto [D]efinition')
-        map('gr', require('snacks').picker.lsp_references, '[G]oto [R]eferences')
-        map('gi', require('snacks').picker.lsp_implementations, '[G]oto [I]mplementation')
-        map('gt', require('snacks').picker.lsp_type_definitions, 'Type [D]efinition')
-        map('<leader>ds', require('snacks').picker.lsp_symbols, '[D]ocument [S]ymbols')
-        map('<leader>ws', require('snacks').picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
-        map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-        map('<leader>ca', require('tiny-code-action').code_action, '[C]ode [A]ction', { 'n', 'x' })
-        map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
-        map('<leader>li', function()
+        local builtin = require 'telescope.builtin'
+        vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = 0, desc = '[G]oto [D]efinition' })
+        vim.keymap.set('n', 'gi', builtin.lsp_implementations, { buffer = 0, desc = '[G]oto [I]mplementation' })
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0, desc = '[G]oto [D]eclaration' })
+        vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = 0, desc = '[G]oto [R]eferences' })
+        vim.keymap.set('n', '<space>ws', builtin.lsp_workspace_symbols, { buffer = 0, desc = '[W]orkspace [S]ymbols' })
+        vim.keymap.set('n', '<space>ds', builtin.lsp_document_symbols, { buffer = 0, desc = '[D]ocument [S]ymbols' })
+        vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { buffer = 0, desc = '[C]ode [A]ction' })
+        vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { buffer = 0, desc = '[R]e[n]ame' })
+        vim.keymap.set('n', '<space>li', function()
           vim.cmd 'LspInfo'
-        end, '[L]sp [I]nfo')
-        map('<leader>lr', function()
+        end, { buffer = 0, desc = '[L]sp [I]nfo' })
+        vim.keymap.set('n', '<space>lr', function()
           vim.cmd 'LspRestart'
-        end, '[L]sp [R]estart')
-
-        map('<leader>th', function()
+        end, { buffer = 0, desc = '[L]sp [R]estart' })
+        vim.keymap.set('n', '<space>th', function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-        end, '[T]oggle Inlay [H]ints')
+        end, { buffer = 0, desc = '[T]oggle Inlay [H]ints' })
 
         -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
         ---@param client vim.lsp.Client
@@ -243,6 +240,33 @@ return {
           },
         },
       },
+      yamlls = {
+        settings = {
+          yaml = {
+            schemaStore = {
+              enable = false,
+              url = '',
+            },
+            -- schemas = require("schemastore").yaml.schemas(),
+          },
+        },
+      },
+      jsonls = {
+        settings = {
+          json = {
+            schemas = require('schemastore').json.schemas(),
+            validate = { enable = true },
+          },
+        },
+      },
+      ocamllsp = {
+        cmd = { 'ocamllsp' },
+        settings = {
+          codelens = { enable = true },
+          inlayHints = { enable = false },
+          syntaxDocumentation = { enable = true },
+        },
+      },
       gopls = {
         analyses = {
           modernize = true,
@@ -316,14 +340,7 @@ return {
         filetypes = { 'yaml', 'docker-compose' },
       },
       tailwindcss = {
-        init_options = {
-          -- userLanguages = {
-          --   elixir = 'phoenix-heex',
-          --   eruby = 'erb',
-          --   heex = 'phoenix-heex',
-          -- },
-        },
-        filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' }),
+        filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade', 'ocaml.mlx' }),
         settings = {
           tailwindCSS = {
             experimental = {
@@ -334,6 +351,7 @@ return {
             },
             includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
               ['templ'] = 'html',
+              ['ocaml.mlx'] = 'html',
             }),
           },
         },
