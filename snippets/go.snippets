@@ -1,8 +1,6 @@
 snippet pd "print with debug"
-    fmt.Printf("\n${0:debug -> }: %+v\n", ${1})
+    fmt.Printf("\nDebug ->  %+v\r\nType  ->  %T\r\n\n",${0})
     os.Exit(0)
-
-
 snippet eh "Error handler"
     if err != nil {
         return ${0:err}

@@ -179,10 +179,47 @@ return {
         end
       end,
     }
+
+    local templ_format = function()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local filename = vim.api.nvim_buf_get_name(bufnr)
+      local cmd = 'templ fmt ' .. vim.fn.shellescape(filename)
+
+      vim.fn.jobstart(cmd, {
+        on_exit = function()
+          if vim.api.nvim_get_current_buf() == bufnr then
+            vim.cmd 'e!'
+          end
+        end,
+      })
+    end
     -- nvim 0.11 or above
     vim.lsp.config('vtsls', vtsls_config)
     vim.lsp.config('vue_ls', vue_ls_config)
     vim.lsp.enable { 'vtsls', 'vue_ls' }
+
+    local extend = function(name, key, values)
+      local mod = require(string.format('lspconfig.configs.%s', name))
+      local default = mod.default_config
+      local keys = vim.split(key, '.', { plain = true })
+      while #keys > 0 do
+        local item = table.remove(keys, 1)
+        default = default[item]
+      end
+
+      if vim.islist(default) then
+        for _, value in ipairs(default) do
+          table.insert(values, value)
+        end
+      else
+        for item, value in pairs(default) do
+          if not vim.tbl_contains(values, item) then
+            values[item] = value
+          end
+        end
+      end
+      return values
+    end
 
     local servers = {
       intelephense = {
@@ -260,7 +297,11 @@ return {
       templ = {
         capabilities = capabilities,
         vim.filetype.add { extension = { templ = 'templ' } },
-        vim.api.nvim_create_autocmd({ 'BufWritePre' }, { pattern = { '*.templ' }, callback = vim.lsp.buf.format }),
+        vim.api.nvim_create_autocmd('FileType', {
+          pattern = 'templ',
+          command = 'setlocal commentstring=<!--\\ %s\\ -->',
+        }),
+        vim.api.nvim_create_autocmd({ 'BufWritePre' }, { pattern = { '*.templ' }, callback = templ_format }),
       },
       cssls = {
         capabilities = capabilities,
@@ -276,14 +317,13 @@ return {
       },
       tailwindcss = {
         init_options = {
-          userLanguages = {
-            elixir = 'phoenix-heex',
-            eruby = 'erb',
-            heex = 'phoenix-heex',
-          },
+          -- userLanguages = {
+          --   elixir = 'phoenix-heex',
+          --   eruby = 'erb',
+          --   heex = 'phoenix-heex',
+          -- },
         },
-        filetypes = 'filetypes',
-        { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' },
+        filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade' }),
         settings = {
           tailwindCSS = {
             experimental = {
@@ -292,9 +332,9 @@ return {
                 [[className="([^"]*)]],
               },
             },
-            includeLanguages = {
+            includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
               ['templ'] = 'html',
-            },
+            }),
           },
         },
       },
@@ -311,27 +351,6 @@ return {
             files = {
               excludeDirs = { 'target', 'node_modules', '.git', '.sl' },
             },
-            -- old config
-
-            -- cargo = {
-            --   features = 'all',
-            -- },
-            -- checkOnSave = {
-            --   enable = true,
-            -- },
-            -- check = {
-            --   command = 'clippy',
-            -- },
-            -- imports = {
-            --   group = {
-            --     enable = false,
-            --   },
-            -- },
-            -- completion = {
-            --   postfix = {
-            --     enable = false,
-            --   },
-            -- },
           },
         },
         filetypes = { 'rust' },

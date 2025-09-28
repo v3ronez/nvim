@@ -83,8 +83,8 @@ vim.filetype.add {
 vim.opt.laststatus = 3 -- Or 3 for global statusline
 vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
 -- vim.opt.statusline = '   %f %m %= %l:%c λ    '
-vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+-- vim.opt.list = true
+-- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- endOPTS-
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 --Switch to the previous buffer
