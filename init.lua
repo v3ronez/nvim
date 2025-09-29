@@ -62,7 +62,7 @@ vim.opt.timeoutlen = 250
 vim.opt.conceallevel = 0
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.clipboard = 'unnamedplus'
+-- vim.opt.clipboard = 'unnamedplus'
 vim.o.hidden = true
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
@@ -99,7 +99,7 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close current buffer' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 -- yank and paste to system clipboard
--- vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
+vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
 -- set ctrl - [  with the same behavior as esc
 vim.keymap.set('', '<C-[>', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
