@@ -402,6 +402,7 @@ return {
       'templ',
       'cmake',
       'gopls',
+      'ocamlformat',
     })
 
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }

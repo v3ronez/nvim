@@ -35,12 +35,6 @@ return {
           dimmed5 = '#363537',
         }
       end,
-      -- overrideScheme = function(cs, p, config, hp)
-      --   local cs_override = {}
-      --
-      --   cs_override.editor = {}
-      --   return cs_override
-      -- end,
     }
     vim.api.nvim_create_autocmd('ColorScheme', {
       pattern = 'monokai-pro',

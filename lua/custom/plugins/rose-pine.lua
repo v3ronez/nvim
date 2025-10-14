@@ -4,7 +4,7 @@ return {
   priority = 1000,
   config = function()
     require('rose-pine').setup {
-      disable_background = true,
+      disable_background = false,
       styles = {
         italic = false,
         -- base = '#000000', -- Define o fundo como preto

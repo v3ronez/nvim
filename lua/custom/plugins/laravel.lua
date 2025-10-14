@@ -10,27 +10,109 @@ return {
     opts = { adapters = { 'neotest-phpunit' } },
   },
   {
-    -- Add the Laravel.nvim plugin which gives the ability to run Artisan commands
-    -- from Neovim.
     'adalessa/laravel.nvim',
     dependencies = {
       'tpope/vim-dotenv',
-      'nvim-telescope/telescope.nvim',
       'MunifTanjim/nui.nvim',
-      'kevinhwang91/promise-async',
+      'nvim-lua/plenary.nvim',
+      'nvim-neotest/nvim-nio',
+      'ravitemer/mcphub.nvim', -- optional
+    },
+    cmd = { 'Laravel' },
+    keys = {
+      {
+        '<leader>pll',
+        function()
+          Laravel.pickers.laravel()
+        end,
+        desc = 'Laravel: Open Laravel Picker',
+      },
+      {
+        '<c-g>',
+        function()
+          Laravel.commands.run 'view:finder'
+        end,
+        desc = 'Laravel: Open View Finder',
+      },
+      {
+        '<leader>pla',
+        function()
+          Laravel.pickers.artisan()
+        end,
+        desc = 'Laravel: Open Artisan Picker',
+      },
+      {
+        '<leader>plt',
+        function()
+          Laravel.commands.run 'actions'
+        end,
+        desc = 'Laravel: Open Actions Picker',
+      },
+      {
+        '<leader>plr',
+        function()
+          Laravel.pickers.routes()
+        end,
+        desc = 'Laravel: Open Routes Picker',
+      },
+      {
+        '<leader>plh',
+        function()
+          Laravel.run 'artisan docs'
+        end,
+        desc = 'Laravel: Open Documentation',
+      },
+      {
+        '<leader>plm',
+        function()
+          Laravel.pickers.make()
+        end,
+        desc = 'Laravel: Open Make Picker',
+      },
+      {
+        '<leader>plc',
+        function()
+          Laravel.pickers.commands()
+        end,
+        desc = 'Laravel: Open Commands Picker',
+      },
+      {
+        '<leader>plo',
+        function()
+          Laravel.pickers.resources()
+        end,
+        desc = 'Laravel: Open Resources Picker',
+      },
+      {
+        '<leader>plp',
+        function()
+          Laravel.commands.run 'command_center'
+        end,
+        desc = 'Laravel: Open Command Center',
+      },
+      {
+        'gf',
+        function()
+          local ok, res = pcall(function()
+            if Laravel.app('gf').cursorOnResource() then
+              return "<cmd>lua Laravel.commands.run('gf')<cr>"
+            end
+          end)
+          if not ok or not res then
+            return 'gf'
+          end
+          return res
+        end,
+        expr = true,
+        noremap = true,
+      },
     },
     event = { 'VeryLazy' },
-    cmd = { 'Sail', 'Artisan', 'Composer', 'Npm', 'Yarn', 'Laravel' },
-    config = true,
     opts = {
-      lsp_server = 'intelephense',
-      features = { null_ls = { enable = true } },
-      route_info = {
-        enable = true,
-        position = 'right',
-        middlewares = true,
-        method = true,
-        uri = true,
+      features = {
+        pickers = {
+          provider = 'telescope', -- "snacks | telescope | fzf-lua | ui-select"
+        },
       },
     },
   },

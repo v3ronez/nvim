@@ -30,6 +30,12 @@ return {
         luasnip.config.setup {}
       end,
     },
+    {
+      'saghen/blink.compat',
+      version = '2.*',
+      lazy = true,
+      opts = {},
+    },
   },
 
   -- use a release tag to download pre-built binaries
@@ -135,12 +141,17 @@ return {
     -- elsewhere in your config, without redefining it, due to `opts_extend`
 
     sources = {
-      default = { 'lsp', 'snippets', 'path', 'lazydev' },
+      default = { 'lsp', 'laravel', 'snippets', 'path', 'lazydev' },
       providers = {
         lazydev = {
           name = 'LazyDev',
           module = 'lazydev.integrations.blink',
           score_offset = 100,
+        },
+        laravel = {
+          name = 'laravel',
+          module = 'blink.compat.source',
+          score_offset = 95, -- show at a higher priority than lsp
         },
       },
     },

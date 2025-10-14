@@ -100,6 +100,7 @@ vim.keymap.set('n', '<leader>x', ':bd<CR>', { desc = 'Close current buffer' })
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 -- yank and paste to system clipboard
 vim.keymap.set({ 'n', 'v' }, '<leader>ys', '"+y', { desc = '[Y]ank from [S]ystem clipboard', noremap = true, silent = true })
+vim.api.nvim_set_keymap('v', 'p', 'pgvy', { noremap = true })
 -- set ctrl - [  with the same behavior as esc
 vim.keymap.set('', '<C-[>', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
@@ -566,7 +567,11 @@ end
 load_custom_functions()
 
 vim.o.background = 'dark'
-vim.cmd.colorscheme 'melange'
+if vim.o.background == 'dark' then
+  vim.cmd.colorscheme 'melange'
+else
+  vim.cmd.colorscheme 'melange'
+end
 -- vim.cmd.colorscheme 'monokai-pro'
 -- vim.cmd.colorscheme 'gruber-darker'
 
