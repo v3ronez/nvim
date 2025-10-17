@@ -3,13 +3,6 @@ local map = vim.keymap.set
 map('n', '<Leader>pl', '<cmd>:Laravel <cr>', { desc = '[P]HP [L]aravel commands' })
 return {
   {
-    -- Add neotest-pest plugin for running PHP tests.
-    -- A package is also available for PHPUnit if needed.
-    'nvim-neotest/neotest',
-    dependencies = { 'olimorris/neotest-phpunit', 'nvim-neotest/nvim-nio' },
-    opts = { adapters = { 'neotest-phpunit' } },
-  },
-  {
     'adalessa/laravel.nvim',
     dependencies = {
       'tpope/vim-dotenv',

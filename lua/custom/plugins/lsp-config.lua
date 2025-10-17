@@ -18,9 +18,6 @@ return {
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
-        -- vim.keymap.set('n', 'K', function()
-        --   vim.lsp.buf.hover { border = 'rounded' }
-        -- end, { buffer = 0 })
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
 
         local builtin = require 'telescope.builtin'
@@ -114,18 +111,17 @@ return {
         end,
       },
     }
-    local border = {
-      { '╭', 'FloatBorder' },
-      { '─', 'FloatBorder' },
-      { '╮', 'FloatBorder' },
-      { '│', 'FloatBorder' },
-      { '╯', 'FloatBorder' },
-      { '─', 'FloatBorder' },
-      { '╰', 'FloatBorder' },
-      { '│', 'FloatBorder' },
-    }
+    -- local border = {
+    --   { '╭', 'FloatBorder' },
+    --   { '─', 'FloatBorder' },
+    --   { '╮', 'FloatBorder' },
+    --   { '│', 'FloatBorder' },
+    --   { '╯', 'FloatBorder' },
+    --   { '─', 'FloatBorder' },
+    --   { '╰', 'FloatBorder' },
+    --   { '│', 'FloatBorder' },
+    -- }
 
-    -- local capabilities = vim.lsp.protocol.make_client_capabilities()
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
     -- optimizes cpu usage source https://github.com/neovim/neovim/issues/23291
@@ -412,17 +408,17 @@ return {
       automatic_installation = true,
       handlers = {
         function(server_name)
-          local handlers = {
-            ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-              border = border,
-            }),
-            ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-              border = border,
-            }),
-          }
+          -- local handlers = {
+          --   ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+          --     border = border,
+          --   }),
+          --   ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+          --     border = border,
+          --   }),
+          -- }
 
           local server = servers[server_name] or {}
-          server.handlers = handlers
+          -- server.handlers = handlers
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
           require('lspconfig')[server_name].setup(server)
         end,

@@ -1,6 +1,10 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-vim.opt.colorcolumn = '120'
+vim.opt.colorcolumn = '80'
+
+--in rust set to 100
+vim.api.nvim_create_autocmd('Filetype', { pattern = 'rust', command = 'set colorcolumn=100' })
+
 -- Function to get the current Git branch
 local function get_git_branch()
   local branch = vim.fn.system('git branch --show-current 2>/dev/null'):gsub('\n', '')
@@ -42,7 +46,6 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 vim.opt.smartindent = true
 vim.opt.smartcase = true
-vim.opt.ignorecase = true
 vim.opt.wrap = false
 vim.opt.swapfile = false
 vim.opt.backup = false
@@ -52,6 +55,7 @@ vim.opt.incsearch = true
 vim.opt.termguicolors = true
 vim.opt.scrolloff = 10
 vim.opt.isfname:append '@-@'
+vim.opt.diffopt:append 'iwhite'
 vim.opt.updatetime = 50
 vim.g.have_nerd_font = true
 vim.opt.breakindent = true
@@ -83,7 +87,8 @@ vim.filetype.add {
 vim.opt.laststatus = 3 -- Or 3 for global statusline
 vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
 -- vim.opt.statusline = '   %f %m %= %l:%c λ    '
--- vim.opt.list = true
+vim.opt.list = true
+vim.opt.listchars = 'tab:^ ,nbsp:¬,extends:»,precedes:«,trail:•'
 -- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 -- endOPTS-
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
@@ -107,6 +112,33 @@ vim.keymap.set('t', '<C-[>', '<C-\\><C-n>', { noremap = true, silent = true })
 
 vim.keymap.set('n', '<C-w>|', ':vsplit<CR>', { desc = 'Split window  vertically', noremap = true, silent = true })
 vim.keymap.set('n', '<C-w>-', ':split<CR>', { desc = 'Split window horizontally', noremap = true, silent = true })
+
+--extra (test)
+vim.opt.diffopt:append 'algorithm:histogram'
+vim.opt.diffopt:append 'indent-heuristic'
+
+-- always center search results
+vim.keymap.set('n', 'n', 'nzz', { silent = true })
+vim.keymap.set('n', 'N', 'Nzz', { silent = true })
+vim.keymap.set('n', '*', '*zz', { silent = true })
+vim.keymap.set('n', '#', '#zz', { silent = true })
+vim.keymap.set('n', 'g*', 'g*zz', { silent = true })
+
+-- jump to last edit position on opening file
+vim.api.nvim_create_autocmd('BufReadPost', {
+  pattern = '*',
+  callback = function(ev)
+    if vim.fn.line '\'"' > 1 and vim.fn.line '\'"' <= vim.fn.line '$' then
+      -- except for in git commit messages
+      -- https://stackoverflow.com/questions/31449496/vim-ignore-specifc-file-in-autocommand
+      if not vim.fn.expand('%:p'):find('.git', 1, true) then
+        vim.cmd 'exe "normal! g\'\\""'
+      end
+    end
+  end,
+})
+
+--end extra
 
 -- move code block
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv")
@@ -282,7 +314,7 @@ require('lazy').setup({
           file_ignore_patterns = {
             '**/target/**',
             '**/vendor/**',
-            -- 'storage/framework/**',
+            '**/node_modules/**',
           },
         },
         pickers = {
@@ -311,10 +343,6 @@ require('lazy').setup({
               '--glob',
               '!**/node_modules/**',
               '--glob',
-              '!**/storage/framework/**',
-              '--glob',
-              '!**/storage/app/**',
-              '--glob',
               '!**/bin/**',
               '--glob',
               '!**.elixir_ls/**',
@@ -329,14 +357,13 @@ require('lazy').setup({
       }
 
       -- Enable Telescope extensions if they are installed
-      pcall(require('telescope').load_extension, 'fzf')
-      pcall(require('telescope').load_extension, 'ui-select')
+      -- pcall(require('telescope').load_extension, 'fzf')
+      -- pcall(require('telescope').load_extension, 'ui-select')
 
       -- See `:help telescope.builtin`
       local builtin = require 'telescope.builtin'
       vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[F]ind [H]elp' })
       vim.keymap.set('n', '<leader>fk', builtin.keymaps, { desc = '[F]ind [K]eymaps' })
-      -- vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
       vim.keymap.set('n', '<leader>fs', builtin.builtin, { desc = '[F]ind [F]elect Telescope' })
       vim.keymap.set('n', '<leader>fw', builtin.grep_string, { desc = '[F]ind current [W]ord' })
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = '[F]ind by [G]rep' })
@@ -569,6 +596,8 @@ load_custom_functions()
 vim.o.background = 'dark'
 if vim.o.background == 'dark' then
   vim.cmd.colorscheme 'melange'
+  -- vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'cyberdream'
 else
   vim.cmd.colorscheme 'melange'
 end
