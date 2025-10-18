@@ -1,25 +1,36 @@
 return {
   'ellisonleao/gruvbox.nvim',
-  lazy = false, -- load at start
-  priority = 1000, -- load first
+  priority = 1000,
   config = function()
-    vim.api.nvim_create_autocmd('ColorScheme', {
-      pattern = 'gruvbox',
-      callback = function()
-        vim.api.nvim_set_hl(0, 'WinSeparator', { fg = 1250067 })
-        --
-        -- local bools = vim.api.nvim_get_hl(0, { name = 'Boolean' })
-        -- vim.api.nvim_set_hl(0, 'Comment', bools)
-
-        vim.cmd 'hi Normal guibg=#111122'
-
-        vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = 'grey' })
-        vim.api.nvim_set_hl(0, 'LineNr', { fg = '#F5C056' })
-        vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = 'grey' })
-        vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#383430' })
-        vim.api.nvim_set_hl(0, 'LspReferenceRead', { bg = '#383430' })
-        vim.api.nvim_set_hl(0, 'LspReferenceWrite', { bg = '#383430' })
-      end,
-    })
+    require('gruvbox').setup {
+      terminal_colors = true,
+      undercurl = true,
+      underline = true,
+      bold = true,
+      italic = {
+        strings = false,
+        emphasis = false,
+        comments = true,
+        operators = false,
+        folds = false,
+      },
+      strikethrough = true,
+      invert_selection = false,
+      invert_signs = false,
+      invert_tabline = false,
+      inverse = true, -- invert background for search, diffs, statuslines and errors
+      contrast = 'hard', -- can be "hard", "soft" or empty string
+      palette_overrides = {},
+      overrides = {
+        -- Background = { bg = '#1f2022' },
+        Background = { bg = '#1c1916' },
+        LspReferenceText = { fg = 'None', bg = '#49433E' },
+        LspReferenceWrite = { fg = 'None', bg = '#49433E' },
+        LspReferenceRead = { fg = 'None', bg = '#49433E' },
+        Operator = { fg = '#cf5c48' },
+      },
+      dim_inactive = false,
+      transparent_mode = true,
+    }
   end,
 }

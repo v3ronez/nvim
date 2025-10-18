@@ -595,8 +595,8 @@ load_custom_functions()
 
 vim.o.background = 'dark'
 if vim.o.background == 'dark' then
-  vim.cmd.colorscheme 'melange'
-  -- vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'melange'
+  vim.cmd.colorscheme 'gruvbox'
   -- vim.cmd.colorscheme 'cyberdream'
 else
   vim.cmd.colorscheme 'melange'
