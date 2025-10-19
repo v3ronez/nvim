@@ -18,16 +18,17 @@ return {
       invert_selection = false,
       invert_signs = false,
       invert_tabline = false,
-      inverse = true, -- invert background for search, diffs, statuslines and errors
+      inverse = false, -- invert background for search, diffs, statuslines and errors
       contrast = 'hard', -- can be "hard", "soft" or empty string
       palette_overrides = {},
       overrides = {
-        -- Background = { bg = '#1f2022' },
         Background = { bg = '#1c1916' },
         LspReferenceText = { fg = 'None', bg = '#49433E' },
         LspReferenceWrite = { fg = 'None', bg = '#49433E' },
         LspReferenceRead = { fg = 'None', bg = '#49433E' },
         Operator = { fg = '#cf5c48' },
+        Search = { fg = '#1d2021', bg = '#fabd2f' },
+        IncSearch = { fg = '#1d2021', bg = '#fabd2f' },
       },
       dim_inactive = false,
       transparent_mode = true,
