@@ -10,7 +10,7 @@ return {
       italic = {
         strings = false,
         emphasis = false,
-        comments = true,
+        comments = false,
         operators = false,
         folds = false,
       },
@@ -22,7 +22,7 @@ return {
       contrast = 'hard', -- can be "hard", "soft" or empty string
       palette_overrides = {},
       overrides = {
-        Background = { bg = '#1c1916' },
+        Normal = { bg = '#111022' },
         LspReferenceText = { fg = 'None', bg = '#49433E' },
         LspReferenceWrite = { fg = 'None', bg = '#49433E' },
         LspReferenceRead = { fg = 'None', bg = '#49433E' },
@@ -35,7 +35,7 @@ return {
         LineNrBelow = { fg = '#7c6f64' },
       },
       dim_inactive = false,
-      transparent_mode = true,
+      transparent_mode = false,
     }
   end,
 }

@@ -73,15 +73,15 @@ vim.g.have_nerd_font = true
 vim.o.pumheight = 10
 vim.filetype.add {
   extension = {
-    env = 'dotenv',
+    env = 'sh',
   },
   filename = {
-    ['.env'] = 'dotenv',
-    ['env'] = 'dotenv',
+    ['.env'] = 'sh',
+    ['env'] = 'sh',
   },
   pattern = {
     ['[jt]sconfig.*.json'] = 'jsonc',
-    ['%.env%.[%w_.-]+'] = 'dotenv',
+    ['%.env%.[%w_.-]+'] = 'sh',
   },
 }
 vim.opt.laststatus = 3 -- Or 3 for global statusline
@@ -597,6 +597,7 @@ vim.o.background = 'dark'
 if vim.o.background == 'dark' then
   -- vim.cmd.colorscheme 'melange'
   vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'gruber-darker'
   -- vim.cmd.colorscheme 'cyberdream'
 else
   vim.cmd.colorscheme 'melange'
