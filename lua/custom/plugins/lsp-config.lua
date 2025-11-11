@@ -21,6 +21,7 @@ return {
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
 
         local builtin = require 'telescope.builtin'
+
         vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = 0, desc = '[G]oto [D]efinition' })
         vim.keymap.set('n', 'gi', builtin.lsp_implementations, { buffer = 0, desc = '[G]oto [I]mplementation' })
         vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0, desc = '[G]oto [D]eclaration' })
