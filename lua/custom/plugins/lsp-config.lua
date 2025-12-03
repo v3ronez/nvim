@@ -18,18 +18,34 @@ return {
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
+        local map = function(keys, func, desc, mode)
+          mode = mode or 'n'
+          vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+        end
+
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
 
         local builtin = require 'telescope.builtin'
 
-        vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = 0, desc = '[G]oto [D]efinition' })
-        vim.keymap.set('n', 'gi', builtin.lsp_implementations, { buffer = 0, desc = '[G]oto [I]mplementation' })
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0, desc = '[G]oto [D]eclaration' })
-        vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = 0, desc = '[G]oto [R]eferences' })
-        vim.keymap.set('n', '<space>ws', builtin.lsp_workspace_symbols, { buffer = 0, desc = '[W]orkspace [S]ymbols' })
-        vim.keymap.set('n', '<space>ds', builtin.lsp_document_symbols, { buffer = 0, desc = '[D]ocument [S]ymbols' })
-        vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { buffer = 0, desc = '[C]ode [A]ction' })
-        vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { buffer = 0, desc = '[R]e[n]ame' })
+        -- vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = 0, desc = '[G]oto [D]efinition' })
+        -- vim.keymap.set('n', 'gi', builtin.lsp_implementations, { buffer = 0, desc = '[G]oto [I]mplementation' })
+        -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0, desc = '[G]oto [D]eclaration' })
+        -- vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = 0, desc = '[G]oto [R]eferences' })
+        -- vim.keymap.set('n', '<space>ws', builtin.lsp_workspace_symbols, { buffer = 0, desc = '[W]orkspace [S]ymbols' })
+        -- vim.keymap.set('n', '<space>ds', builtin.lsp_document_symbols, { buffer = 0, desc = '[D]ocument [S]ymbols' })
+        -- vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { buffer = 0, desc = '[C]ode [A]ction' })
+        -- vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { buffer = 0, desc = '[R]e[n]ame' })
+
+        map('gd', '<C-]>', '[G]oto [D]efinition')
+        map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+        map('gr', require('snacks').picker.lsp_references, '[G]oto [R]eferences')
+        map('gi', require('snacks').picker.lsp_implementations, '[G]oto [I]mplementation')
+        map('gt', require('snacks').picker.lsp_type_definitions, 'Type [D]efinition')
+        map('<leader>ds', require('snacks').picker.lsp_symbols, '[D]ocument [S]ymbols')
+        map('<leader>ws', require('snacks').picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
+        map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
+        map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
+
         vim.keymap.set('n', '<space>li', function()
           vim.cmd 'LspInfo'
         end, { buffer = 0, desc = '[L]sp [I]nfo' })
@@ -86,32 +102,32 @@ return {
 
     -- Diagnostic Config
     -- See :help vim.diagnostic.Opts
-    vim.diagnostic.config {
-      severity_sort = true,
-      float = { border = 'rounded', source = 'if_many' },
-      underline = { severity = vim.diagnostic.severity.ERROR },
-      signs = vim.g.have_nerd_font and {
-        text = {
-          [vim.diagnostic.severity.ERROR] = '󰅚 ',
-          [vim.diagnostic.severity.WARN] = '󰀪 ',
-          [vim.diagnostic.severity.INFO] = '󰋽 ',
-          [vim.diagnostic.severity.HINT] = '󰌶 ',
-        },
-      } or {},
-      virtual_text = {
-        source = 'if_many',
-        spacing = 2,
-        format = function(diagnostic)
-          local diagnostic_message = {
-            [vim.diagnostic.severity.ERROR] = diagnostic.message,
-            [vim.diagnostic.severity.WARN] = diagnostic.message,
-            [vim.diagnostic.severity.INFO] = diagnostic.message,
-            [vim.diagnostic.severity.HINT] = diagnostic.message,
-          }
-          return diagnostic_message[diagnostic.severity]
-        end,
-      },
-    }
+    -- vim.diagnostic.config {
+    --   severity_sort = true,
+    --   float = { border = 'rounded', source = 'if_many' },
+    --   underline = { severity = vim.diagnostic.severity.ERROR },
+    --   signs = vim.g.have_nerd_font and {
+    --     text = {
+    --       [vim.diagnostic.severity.ERROR] = '󰅚 ',
+    --       [vim.diagnostic.severity.WARN] = '󰀪 ',
+    --       [vim.diagnostic.severity.INFO] = '󰋽 ',
+    --       [vim.diagnostic.severity.HINT] = '󰌶 ',
+    --     },
+    --   } or {},
+    --   virtual_text = {
+    --     source = 'if_many',
+    --     spacing = 2,
+    --     format = function(diagnostic)
+    --       local diagnostic_message = {
+    --         [vim.diagnostic.severity.ERROR] = diagnostic.message,
+    --         [vim.diagnostic.severity.WARN] = diagnostic.message,
+    --         [vim.diagnostic.severity.INFO] = diagnostic.message,
+    --         [vim.diagnostic.severity.HINT] = diagnostic.message,
+    --       }
+    --       return diagnostic_message[diagnostic.severity]
+    --     end,
+    --   },
+    -- }
     -- local border = {
     --   { '╭', 'FloatBorder' },
     --   { '─', 'FloatBorder' },
@@ -122,58 +138,62 @@ return {
     --   { '╰', 'FloatBorder' },
     --   { '│', 'FloatBorder' },
     -- }
+    --
+    --
+    --
+    vim.diagnostic.config {
+      signs = {
+        text = {
+          [vim.diagnostic.severity.ERROR] = '󰚌 ',
+          [vim.diagnostic.severity.WARN] = ' ',
+          [vim.diagnostic.severity.INFO] = ' ',
+          [vim.diagnostic.severity.HINT] = '󱧡 ',
+        },
+        numhl = {
+          [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+          [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+          [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+        },
+        texthl = {
+          [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
+          [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
+          [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
+          [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
+        },
+      },
+    }
+
+    local border = {
+      { '╭', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╮', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+      { '╯', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╰', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+    }
+
+    local handlers = {
+      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = border,
+      }),
+      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = border,
+      }),
+    }
+    local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
+    function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
+      opts = opts or {}
+      opts.border = opts.border or border
+      return orig_util_open_floating_preview(contents, syntax, opts, ...)
+    end
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
     -- optimizes cpu usage source https://github.com/neovim/neovim/issues/23291
     capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-    local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
-    local vue_plugin = {
-      name = '@vue/typescript-plugin',
-      location = vue_language_server_path,
-      languages = { 'vue' },
-      configNamespace = 'typescript',
-    }
-    local vtsls_config = {
-      settings = {
-        vtsls = {
-          tsserver = {
-            globalPlugins = {
-              vue_plugin,
-            },
-          },
-        },
-      },
-      filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
-    }
-    local vue_ls_config = {
-      on_init = function(client)
-        client.handlers['tsserver/request'] = function(_, result, context)
-          local clients = vim.lsp.get_clients { bufnr = context.bufnr, name = 'vtsls' }
-          if #clients == 0 then
-            vim.notify('Could not find `vtsls` lsp client, `vue_ls` would not work without it.', vim.log.levels.ERROR)
-            return
-          end
-          local ts_client = clients[1]
-
-          local param = unpack(result)
-          local id, command, payload = unpack(param)
-          ts_client:exec_cmd({
-            title = 'vue_request_forward', -- You can give title anything as it's used to represent a command in the UI, `:h Client:exec_cmd`
-            command = 'typescript.tsserverRequest',
-            arguments = {
-              command,
-              payload,
-            },
-          }, { bufnr = context.bufnr }, function(_, r)
-            local response_data = { { id, r.body } }
-            ---@diagnostic disable-next-line: param-type-mismatch
-            client:notify('tsserver/response', response_data)
-          end)
-        end
-      end,
-    }
-
     local templ_format = function()
       local bufnr = vim.api.nvim_get_current_buf()
       local filename = vim.api.nvim_buf_get_name(bufnr)
@@ -187,10 +207,6 @@ return {
         end,
       })
     end
-    -- nvim 0.11 or above
-    vim.lsp.config('vtsls', vtsls_config)
-    vim.lsp.config('vue_ls', vue_ls_config)
-    vim.lsp.enable { 'vtsls', 'vue_ls' }
 
     local extend = function(name, key, values)
       local mod = require(string.format('lspconfig.configs.%s', name))
@@ -214,6 +230,15 @@ return {
       end
       return values
     end
+
+    local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
+    local vue_plugin = {
+      name = '@vue/typescript-plugin',
+      location = vue_language_server_path,
+      languages = { 'vue' },
+      configNamespace = 'typescript',
+      enableForWorkspaceTypeScriptVersions = true,
+    }
 
     local servers = {
       intelephense = {
@@ -372,8 +397,21 @@ return {
       },
       ts_ls = {
         capabilities = capabilities,
-        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue' },
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
       },
+      vtsls = {
+        -- Only handle non-Vue TypeScript/JavaScript files
+        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
+      },
+      vue_ls = {
+        filetypes = { 'vue' },
+        init_options = {
+          typescript = {
+            tsdk = vim.fn.stdpath 'data' .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
+          },
+        },
+      },
+
       lua_ls = {
         settings = {
           Lua = {
@@ -400,6 +438,8 @@ return {
       'cmake',
       'gopls',
       'ocamlformat',
+      'vue-language-server',
+      'vtsls',
     })
 
     require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -409,15 +449,6 @@ return {
       automatic_installation = true,
       handlers = {
         function(server_name)
-          -- local handlers = {
-          --   ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-          --     border = border,
-          --   }),
-          --   ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-          --     border = border,
-          --   }),
-          -- }
-
           local server = servers[server_name] or {}
           -- server.handlers = handlers
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
