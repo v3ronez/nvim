@@ -54,8 +54,8 @@ return {
         preview_scroll_down = '<C-d>',
       },
       debug = {
-        enabled = false,
-        show_scores = false, -- Toggle with F2 or :FFFDebug
+        enabled = true,
+        show_scores = true, -- Toggle with F2 or :FFFDebug
       },
     }
   end,

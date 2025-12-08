@@ -1,41 +1,25 @@
+local plugins = require 'custom.plugins'
 return {
   -- Main LSP Configuration
   'neovim/nvim-lspconfig',
   dependencies = {
-    -- Automatically install LSPs and related tools to stdpath for Neovim
-    { 'williamboman/mason.nvim', config = true }, -- NOTE: Must be loaded before dependants
+    'williamboman/mason.nvim',
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
-    'L3MON4D3/LuaSnip',
-    { 'j-hui/fidget.nvim', opts = {} },
-    -- Autoformatting
     'stevearc/conform.nvim',
-
-    -- Schema information
     'b0o/SchemaStore.nvim',
   },
   config = function()
+    -- LspAttach autocommand for keymaps
     vim.api.nvim_create_autocmd('LspAttach', {
-      group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
+      group = vim.api.nvim_create_augroup('lsp-attach', { clear = true }),
       callback = function(event)
-        local map = function(keys, func, desc, mode)
-          mode = mode or 'n'
-          vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
+        local map = function(keys, func, desc)
+          vim.keymap.set('n', keys, func, { buffer = event.buf, desc = 'LSP: ' .. desc })
         end
 
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = 0 })
-
-        local builtin = require 'telescope.builtin'
-
-        -- vim.keymap.set('n', 'gd', builtin.lsp_definitions, { buffer = 0, desc = '[G]oto [D]efinition' })
-        -- vim.keymap.set('n', 'gi', builtin.lsp_implementations, { buffer = 0, desc = '[G]oto [I]mplementation' })
-        -- vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = 0, desc = '[G]oto [D]eclaration' })
-        -- vim.keymap.set('n', 'gr', builtin.lsp_references, { buffer = 0, desc = '[G]oto [R]eferences' })
-        -- vim.keymap.set('n', '<space>ws', builtin.lsp_workspace_symbols, { buffer = 0, desc = '[W]orkspace [S]ymbols' })
-        -- vim.keymap.set('n', '<space>ds', builtin.lsp_document_symbols, { buffer = 0, desc = '[D]ocument [S]ymbols' })
-        -- vim.keymap.set('n', '<space>ca', vim.lsp.buf.code_action, { buffer = 0, desc = '[C]ode [A]ction' })
-        -- vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, { buffer = 0, desc = '[R]e[n]ame' })
-
+        -- Keymaps
+        map('K', vim.lsp.buf.hover, 'Hover Documentation')
         map('gd', '<C-]>', '[G]oto [D]efinition')
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
         map('gr', require('snacks').picker.lsp_references, '[G]oto [R]eferences')
@@ -45,122 +29,75 @@ return {
         map('<leader>ws', require('snacks').picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-
-        vim.keymap.set('n', '<space>li', function()
-          vim.cmd 'LspInfo'
-        end, { buffer = 0, desc = '[L]sp [I]nfo' })
-        vim.keymap.set('n', '<space>lr', function()
-          vim.cmd 'LspRestart'
-        end, { buffer = 0, desc = '[L]sp [R]estart' })
-        vim.keymap.set('n', '<space>th', function()
+        map('<space>li', '<cmd>LspInfo<cr>', '[L]sp [I]nfo')
+        map('<space>lr', '<cmd>LspRestart<cr>', '[L]sp [R]estart')
+        map('<space>th', function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-        end, { buffer = 0, desc = '[T]oggle Inlay [H]ints' })
+        end, '[T]oggle Inlay [H]ints')
 
-        -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-        ---@param client vim.lsp.Client
-        ---@param method vim.lsp.protocol.Method
-        ---@param bufnr? integer some lsp support methods only in specific files
-        ---@return boolean
-        local function client_supports_method(client, method, bufnr)
-          if vim.fn.has 'nvim-0.11' == 1 then
-            return client:supports_method(method, bufnr)
-          else
-            return client.supports_method(method, { bufnr = bufnr })
-          end
-        end
-
-        -- The following two autocommands are used to highlight references of the
-        -- word under your cursor when your cursor rests there for a little while.
-        --    See `:help CursorHold` for information about when this is executed
-        --
-        -- When you move your cursor, the highlights will be cleared (the second autocommand).
+        -- Document highlight
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
-          local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
-          vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.document_highlight,
-          })
+        if client then
+          local supports_highlight = false
 
-          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-            buffer = event.buf,
-            group = highlight_augroup,
-            callback = vim.lsp.buf.clear_references,
-          })
+          -- Check if client supports document highlight (Neovim 0.10 and 0.11 compatible)
+          if vim.fn.has 'nvim-0.11' == 1 then
+            supports_highlight = client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
+          else
+            supports_highlight = client.supports_method and client.supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight)
+          end
 
-          vim.api.nvim_create_autocmd('LspDetach', {
-            group = vim.api.nvim_create_augroup('kickstart-lsp-detach', { clear = true }),
-            callback = function(event2)
-              vim.lsp.buf.clear_references()
-              vim.api.nvim_clear_autocmds { group = 'kickstart-lsp-highlight', buffer = event2.buf }
-            end,
-          })
+          if supports_highlight then
+            local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
+            vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.document_highlight,
+            })
+
+            vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+              buffer = event.buf,
+              group = highlight_augroup,
+              callback = vim.lsp.buf.clear_references,
+            })
+
+            vim.api.nvim_create_autocmd('LspDetach', {
+              group = vim.api.nvim_create_augroup('lsp-detach', { clear = true }),
+              callback = function(event2)
+                vim.lsp.buf.clear_references()
+                vim.api.nvim_clear_autocmds { group = 'lsp-highlight', buffer = event2.buf }
+              end,
+            })
+          end
         end
       end,
     })
-
     -- Diagnostic Config
     -- See :help vim.diagnostic.Opts
-    -- vim.diagnostic.config {
-    --   severity_sort = true,
-    --   float = { border = 'rounded', source = 'if_many' },
-    --   underline = { severity = vim.diagnostic.severity.ERROR },
-    --   signs = vim.g.have_nerd_font and {
-    --     text = {
-    --       [vim.diagnostic.severity.ERROR] = '󰅚 ',
-    --       [vim.diagnostic.severity.WARN] = '󰀪 ',
-    --       [vim.diagnostic.severity.INFO] = '󰋽 ',
-    --       [vim.diagnostic.severity.HINT] = '󰌶 ',
-    --     },
-    --   } or {},
-    --   virtual_text = {
-    --     source = 'if_many',
-    --     spacing = 2,
-    --     format = function(diagnostic)
-    --       local diagnostic_message = {
-    --         [vim.diagnostic.severity.ERROR] = diagnostic.message,
-    --         [vim.diagnostic.severity.WARN] = diagnostic.message,
-    --         [vim.diagnostic.severity.INFO] = diagnostic.message,
-    --         [vim.diagnostic.severity.HINT] = diagnostic.message,
-    --       }
-    --       return diagnostic_message[diagnostic.severity]
-    --     end,
-    --   },
-    -- }
-    -- local border = {
-    --   { '╭', 'FloatBorder' },
-    --   { '─', 'FloatBorder' },
-    --   { '╮', 'FloatBorder' },
-    --   { '│', 'FloatBorder' },
-    --   { '╯', 'FloatBorder' },
-    --   { '─', 'FloatBorder' },
-    --   { '╰', 'FloatBorder' },
-    --   { '│', 'FloatBorder' },
-    -- }
-    --
-    --
-    --
     vim.diagnostic.config {
-      signs = {
+      severity_sort = true,
+      float = { border = 'rounded', source = 'if_many' },
+      underline = { severity = vim.diagnostic.severity.ERROR },
+      signs = vim.g.have_nerd_font and {
         text = {
-          [vim.diagnostic.severity.ERROR] = '󰚌 ',
-          [vim.diagnostic.severity.WARN] = ' ',
-          [vim.diagnostic.severity.INFO] = ' ',
-          [vim.diagnostic.severity.HINT] = '󱧡 ',
+          [vim.diagnostic.severity.ERROR] = '󰅚 ',
+          [vim.diagnostic.severity.WARN] = '󰀪 ',
+          [vim.diagnostic.severity.INFO] = '󰋽 ',
+          [vim.diagnostic.severity.HINT] = '󰌶 ',
         },
-        numhl = {
-          [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
-          [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
-          [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
-          [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
-        },
-        texthl = {
-          [vim.diagnostic.severity.ERROR] = 'DiagnosticSignError',
-          [vim.diagnostic.severity.WARN] = 'DiagnosticSignWarn',
-          [vim.diagnostic.severity.INFO] = 'DiagnosticSignInfo',
-          [vim.diagnostic.severity.HINT] = 'DiagnosticSignHint',
-        },
+      } or {},
+      virtual_text = {
+        source = 'if_many',
+        spacing = 2,
+        format = function(diagnostic)
+          local diagnostic_message = {
+            [vim.diagnostic.severity.ERROR] = diagnostic.message,
+            [vim.diagnostic.severity.WARN] = diagnostic.message,
+            [vim.diagnostic.severity.INFO] = diagnostic.message,
+            [vim.diagnostic.severity.HINT] = diagnostic.message,
+          }
+          return diagnostic_message[diagnostic.severity]
+        end,
       },
     }
 
@@ -183,6 +120,8 @@ return {
         border = border,
       }),
     }
+
+    -- Apply borders to all LSP floating windows
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
       opts = opts or {}
@@ -190,30 +129,21 @@ return {
       return orig_util_open_floating_preview(contents, syntax, opts, ...)
     end
 
+    -- Setup capabilities
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     capabilities = vim.tbl_deep_extend('force', capabilities, require('blink.cmp').get_lsp_capabilities({}, false))
-    -- optimizes cpu usage source https://github.com/neovim/neovim/issues/23291
     capabilities.workspace.didChangeWatchedFiles.dynamicRegistration = false
-    local templ_format = function()
-      local bufnr = vim.api.nvim_get_current_buf()
-      local filename = vim.api.nvim_buf_get_name(bufnr)
-      local cmd = 'templ fmt ' .. vim.fn.shellescape(filename)
 
-      vim.fn.jobstart(cmd, {
-        on_exit = function()
-          if vim.api.nvim_get_current_buf() == bufnr then
-            vim.cmd 'e!'
-          end
-        end,
-      })
-    end
+    -- Helper function to extend filetypes/settings
+    local extend = function(server_name, key, values)
+      local ok, mod = pcall(require, string.format('lspconfig.configs.%s', server_name))
+      if not ok then
+        return values
+      end
 
-    local extend = function(name, key, values)
-      local mod = require(string.format('lspconfig.configs.%s', name))
       local default = mod.default_config
       local keys = vim.split(key, '.', { plain = true })
-      while #keys > 0 do
-        local item = table.remove(keys, 1)
+      for _, item in ipairs(keys) do
         default = default[item]
       end
 
@@ -231,6 +161,21 @@ return {
       return values
     end
 
+    -- Templ formatter
+    local function templ_format()
+      local bufnr = vim.api.nvim_get_current_buf()
+      local filename = vim.api.nvim_buf_get_name(bufnr)
+      local cmd = 'templ fmt ' .. vim.fn.shellescape(filename)
+
+      vim.fn.jobstart(cmd, {
+        on_exit = function()
+          if vim.api.nvim_get_current_buf() == bufnr then
+            vim.cmd 'e!'
+          end
+        end,
+      })
+    end
+
     local vue_language_server_path = vim.fn.stdpath 'data' .. '/mason/packages/vue-language-server/node_modules/@vue/language-server'
     local vue_plugin = {
       name = '@vue/typescript-plugin',
@@ -240,221 +185,252 @@ return {
       enableForWorkspaceTypeScriptVersions = true,
     }
 
-    local servers = {
-      intelephense = {
-        filetypes = { 'php', 'blade', 'php_only' },
-        capabilities = capabilities,
-        default_config = {
-          init_options = {
-            licenceKey = '$HOME/intelephense/licence.txt',
-          },
-        },
-        settings = {
-          intelephense = {
-            filetypes = { 'php', 'blade', 'php_only' },
-            files = {
-              associations = { '*.php', '*.blade.php' }, -- Associating .blade.php files as well
-              maxSize = 5000000,
-            },
-            format = {
-              braces = 'k&r',
-            },
+    vim.lsp.config('*', {
+      capabilities = capabilities,
+      handlers = handlers,
+    })
+    -- Server configurations using Neovim 0.11 API
+    vim.lsp.config('intelephense', {
+      cmd = { 'intelephense', '--stdio' },
+      filetypes = { 'php', 'blade', 'php_only' },
+      root_markers = { 'composer.json', '.git' },
+      capabilities = capabilities,
+      settings = {
+        intelephense = {
+          files = {
+            associations = { '*.php', '*.blade.php' },
+            maxSize = 5000000,
           },
         },
       },
-      yamlls = {
-        settings = {
-          yaml = {
-            schemaStore = {
-              enable = false,
-              url = '',
-            },
-            -- schemas = require("schemastore").yaml.schemas(),
-          },
-        },
-      },
-      jsonls = {
-        settings = {
-          json = {
-            schemas = require('schemastore').json.schemas(),
-            validate = { enable = true },
-          },
-        },
-      },
-      ocamllsp = {
-        cmd = { 'ocamllsp' },
-        settings = {
-          codelens = { enable = true },
-          inlayHints = { enable = false },
-          syntaxDocumentation = { enable = true },
-        },
-      },
-      gopls = {
-        analyses = {
-          modernize = true,
-          unusedparams = true,
-          shadow = true,
-          unusedwrite = true,
-          unusedvariable = true,
-        },
-        hints = {
-          assignVariableTypes = true,
-          compositeLiteralFields = true,
-          compositeLiteralTypes = true,
-          constantValues = true,
-          functionTypeParameters = true,
-          parameterNames = true,
-          rangeVariableTypes = true,
-        },
-        staticcheck = true,
-        gofumpt = true,
-        cmd = { 'gopls' },
-        filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
-        directoryFilters = { '-.git', '-.vscode', '-.idea', '-.vscode-test', '-node_modules', '-.nvim' },
-        semanticTokens = true,
-        vim.api.nvim_create_autocmd({ 'BufWritePre' }, {
-          pattern = '*.go',
-          callback = function()
-            local params = vim.lsp.util.make_range_params(0, 'utf-8')
-            params.context = { only = { 'source.organizeImports' } }
-            -- buf_request_sync defaults to a 1000ms timeout. Depending on your
-            -- machine and codebase, you may want longer. Add an additional
-            -- argument after params if you find that you have to write the file
-            -- twice for changes to be saved.
-            -- E.g., vim.lsp.buf_request_sync(0, "textDocument/codeAction", params, 3000)
-            local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params)
-            for cid, res in pairs(result or {}) do
-              for _, r in pairs(res.result or {}) do
-                if r.edit then
-                  local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or 'utf-16'
-                  vim.lsp.util.apply_workspace_edit(r.edit, enc)
-                end
-              end
-            end
-            vim.lsp.buf.format { async = false }
-          end,
-        }),
-        root_dir = require('lspconfig').util.root_pattern('go.work', 'go.mod', '.git'),
-      },
-      html = {
-        capabilities = capabilities,
-        filetypes = { 'html', 'templ' },
-      },
-      templ = {
-        capabilities = capabilities,
-        vim.filetype.add { extension = { templ = 'templ' } },
-        vim.api.nvim_create_autocmd('FileType', {
-          pattern = 'templ',
-          command = 'setlocal commentstring=<!--\\ %s\\ -->',
-        }),
-        vim.api.nvim_create_autocmd({ 'BufWritePre' }, { pattern = { '*.templ' }, callback = templ_format }),
-      },
-      cssls = {
-        capabilities = capabilities,
-        filetypes = { 'css' },
-      },
-      dockerls = {
-        capabilities = capabilities,
-        filetypes = { 'dockerfile' },
-      },
-      docker_compose_language_service = {
-        capabilities = capabilities,
-        filetypes = { 'yaml', 'docker-compose' },
-      },
-      tailwindcss = {
-        filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade', 'ocaml.mlx' }),
-        settings = {
-          tailwindCSS = {
-            experimental = {
-              classRegex = {
-                [[class: "([^"]*)]],
-                [[className="([^"]*)]],
-              },
-            },
-            includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
-              ['templ'] = 'html',
-              ['ocaml.mlx'] = 'html',
-            }),
-          },
-        },
-      },
-      rust_analyzer = {
-        capabilities = capabilities,
-        settings = {
-          ['rust-analyzer'] = {
-            check = {
-              allTargets = false,
-            },
-            cargo = {
-              targetDir = true,
-            },
-            files = {
-              excludeDirs = { 'target', 'node_modules', '.git', '.sl' },
-            },
-          },
-        },
-        filetypes = { 'rust' },
-      },
-      ts_ls = {
-        capabilities = capabilities,
-        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
-      },
-      vtsls = {
-        -- Only handle non-Vue TypeScript/JavaScript files
-        filetypes = { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' },
-      },
-      vue_ls = {
-        filetypes = { 'vue' },
-        init_options = {
-          typescript = {
-            tsdk = vim.fn.stdpath 'data' .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
-          },
-        },
-      },
-
-      lua_ls = {
-        settings = {
-          Lua = {
-            completion = {
-              callSnippet = 'Replace',
-            },
-            -- You can toggle below to ignore Lua_LS's noisy `missing-fields` warnings
-            diagnostics = { disable = { 'missing-fields' } },
-          },
-        },
-      },
-    }
-    require('mason').setup()
-
-    local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, {
-      'stylua', -- Used to format Lua code,
-      'html',
-      'jsonls',
-      'rust_analyzer',
-      'intelephense',
-      'ts_ls',
-      'templ',
-      'cmake',
-      'gopls',
-      'ocamlformat',
-      'vue-language-server',
-      'vtsls',
     })
 
-    require('mason-tool-installer').setup { ensure_installed = ensure_installed }
-
-    require('mason-lspconfig').setup {
-      ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-      automatic_installation = true,
-      handlers = {
-        function(server_name)
-          local server = servers[server_name] or {}
-          -- server.handlers = handlers
-          server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
-        end,
+    vim.lsp.config('gopls', {
+      cmd = { 'gopls' },
+      filetypes = { 'go', 'gomod', 'gowork', 'gotmpl' },
+      root_markers = { 'go.work', 'go.mod', '.git' },
+      capabilities = capabilities,
+      settings = {
+        gopls = {
+          analyses = {
+            unusedparams = true,
+            shadow = true,
+          },
+          staticcheck = true,
+          gofumpt = true,
+        },
       },
+    })
+
+    vim.lsp.config('html', {
+      cmd = { 'vscode-html-language-server', '--stdio' },
+      filetypes = { 'html', 'templ' },
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config('templ', {
+      cmd = { 'templ', 'lsp' },
+      filetypes = { 'templ' },
+      root_markers = { 'go.mod', '.git' },
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config('cssls', {
+      cmd = { 'vscode-css-language-server', '--stdio' },
+      filetypes = { 'css', 'scss', 'less' },
+      capabilities = capabilities,
+    })
+
+    vim.lsp.config('tailwindcss', {
+      cmd = { 'tailwindcss-language-server', '--stdio' },
+      filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade', 'ocaml.mlx', 'vue' }),
+      capabilities = capabilities,
+      settings = {
+        tailwindCSS = {
+          experimental = {
+            classRegex = {
+              [[class: "([^"]*)"]],
+              [[className="([^"]*)"]],
+            },
+          },
+          includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
+            ['templ'] = 'html',
+            ['ocaml.mlx'] = 'html',
+          }),
+        },
+      },
+    })
+
+    vim.lsp.config('rust_analyzer', {
+      cmd = { 'rust-analyzer' },
+      filetypes = { 'rust' },
+      root_markers = { 'Cargo.toml', '.git' },
+      capabilities = capabilities,
+      settings = {
+        ['rust-analyzer'] = {
+          cargo = {
+            targetDir = true,
+          },
+        },
+      },
+    })
+
+    vim.lsp.config('ts_ls', {
+      cmd = { 'typescript-language-server', '--stdio' },
+      filetypes = {
+        'javascript',
+        'javascriptreact',
+        'javascript.jsx',
+        'typescript',
+        'typescriptreact',
+        'typescript.tsx',
+        'vue',
+      },
+      root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
+      init_options = {
+        plugins = { vue_plugin },
+      },
+      settings = {
+        typescript = {
+          tsserver = {
+            useSyntaxServer = false,
+          },
+          inlayHints = {
+            includeInlayParameterNameHints = 'all',
+            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+            includeInlayFunctionParameterTypeHints = true,
+            includeInlayVariableTypeHints = true,
+            includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+            includeInlayPropertyDeclarationTypeHints = true,
+            includeInlayFunctionLikeReturnTypeHints = true,
+            includeInlayEnumMemberValueHints = true,
+          },
+        },
+      },
+    })
+
+    -- vim.lsp.config('vuels', {
+    --   cmd = { 'vue-language-server', '--stdio' },
+    --   filetypes = { 'vue', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
+    --   root_markers = { 'package.json', '.git' },
+    --   capabilities = capabilities,
+    --   init_options = {
+    --     typescript = {
+    --       tsdk = vim.fn.stdpath 'data' .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
+    --     },
+    --   },
+    -- })
+
+    vim.lsp.config('jsonls', {
+      cmd = { 'vscode-json-language-server', '--stdio' },
+      filetypes = { 'json', 'jsonc' },
+      capabilities = capabilities,
+      settings = {
+        json = {
+          schemas = require('schemastore').json.schemas(),
+          validate = { enable = true },
+        },
+      },
+    })
+
+    vim.lsp.config('yamlls', {
+      cmd = { 'yaml-language-server', '--stdio' },
+      filetypes = { 'yaml', 'yaml.docker-compose' },
+      capabilities = capabilities,
+      settings = {
+        yaml = {
+          schemaStore = {
+            enable = false,
+            url = '',
+          },
+          schemas = require('schemastore').yaml.schemas(),
+        },
+      },
+    })
+
+    vim.lsp.config('lua_ls', {
+      cmd = { 'lua-language-server' },
+      filetypes = { 'lua' },
+      root_markers = { '.luarc.json', '.luarc.jsonc', '.luacheckrc', '.stylua.toml', 'stylua.toml', 'selene.toml', 'selene.yml', '.git' },
+      capabilities = capabilities,
+      settings = {
+        Lua = {
+          completion = {
+            callSnippet = 'Replace',
+          },
+          diagnostics = {
+            disable = { 'missing-fields' },
+            globals = { 'vim' },
+          },
+        },
+      },
+    })
+    vim.lsp.enable 'intelephense'
+    vim.lsp.enable 'gopls'
+    vim.lsp.enable 'html'
+    vim.lsp.enable 'templ'
+    vim.lsp.enable 'cssls'
+    vim.lsp.enable 'tailwindcss'
+    vim.lsp.enable 'rust_analyzer'
+    vim.lsp.enable 'ts_ls'
+    vim.lsp.enable 'vuels'
+    vim.lsp.enable 'jsonls'
+    vim.lsp.enable 'yamlls'
+    vim.lsp.enable 'lua_ls'
+
+    -- Templ filetype setup
+    vim.filetype.add { extension = { templ = 'templ' } }
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'templ',
+      command = 'setlocal commentstring=<!--\\ %s\\ -->',
+    })
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      pattern = '*.templ',
+      callback = templ_format,
+    })
+
+    -- Go organize imports on save
+    vim.api.nvim_create_autocmd('BufWritePre', {
+      pattern = '*.go',
+      callback = function()
+        local params = vim.lsp.util.make_range_params(0, 'utf-8')
+        params.context = { only = { 'source.organizeImports' } }
+        local result = vim.lsp.buf_request_sync(0, 'textDocument/codeAction', params, 3000)
+        for cid, res in pairs(result or {}) do
+          for _, r in pairs(res.result or {}) do
+            if r.edit then
+              local enc = (vim.lsp.get_client_by_id(cid) or {}).offset_encoding or 'utf-16'
+              vim.lsp.util.apply_workspace_edit(r.edit, enc)
+            end
+          end
+        end
+        vim.lsp.buf.format { async = false }
+      end,
+    })
+
+    -- Mason setup for automatic installation
+    require('mason').setup()
+
+    local ensure_installed = {
+      'stylua',
+      'html-lsp',
+      'json-lsp',
+      'rust-analyzer',
+      'intelephense',
+      'typescript-language-server',
+      'templ',
+      'gopls',
+      'vue-language-server',
+      'tailwindcss-language-server',
+      'css-lsp',
+      'yaml-language-server',
+      'lua-language-server',
+      'vtsls',
+      'vue-language-server',
+    }
+
+    require('mason-tool-installer').setup {
+      ensure_installed = ensure_installed,
     }
   end,
 }
