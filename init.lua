@@ -508,6 +508,7 @@ require('lazy').setup({
       },
       -- Autoinstall languages that are not installed
       auto_install = true,
+      ignore_install = { 'oil' },
       highlight = {
         enable = true,
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
@@ -595,8 +596,8 @@ load_custom_functions()
 
 vim.o.background = 'dark'
 if vim.o.background == 'dark' then
-  -- vim.cmd.colorscheme 'melange'
-  vim.cmd.colorscheme 'gruvbox'
+  vim.cmd.colorscheme 'melange'
+  -- vim.cmd.colorscheme 'gruvbox'
   -- vim.cmd.colorscheme 'gruber-darker'
   -- vim.cmd.colorscheme 'cyberdream'
 else

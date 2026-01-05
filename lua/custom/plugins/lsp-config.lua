@@ -7,6 +7,7 @@ return {
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'stevearc/conform.nvim',
+    'ocaml-mlx/ocaml_mlx.nvim',
     'b0o/SchemaStore.nvim',
   },
   config = function()
@@ -274,7 +275,6 @@ return {
         },
       },
     })
-
     vim.lsp.config('ts_ls', {
       cmd = { 'typescript-language-server', '--stdio' },
       filetypes = {
@@ -308,18 +308,6 @@ return {
         },
       },
     })
-
-    -- vim.lsp.config('vuels', {
-    --   cmd = { 'vue-language-server', '--stdio' },
-    --   filetypes = { 'vue', 'typescript', 'javascript', 'typescriptreact', 'javascriptreact' },
-    --   root_markers = { 'package.json', '.git' },
-    --   capabilities = capabilities,
-    --   init_options = {
-    --     typescript = {
-    --       tsdk = vim.fn.stdpath 'data' .. '/mason/packages/typescript-language-server/node_modules/typescript/lib',
-    --     },
-    --   },
-    -- })
 
     vim.lsp.config('jsonls', {
       cmd = { 'vscode-json-language-server', '--stdio' },
@@ -377,6 +365,7 @@ return {
     vim.lsp.enable 'jsonls'
     vim.lsp.enable 'yamlls'
     vim.lsp.enable 'lua_ls'
+    vim.lsp.enable 'ocamllsp'
 
     -- Templ filetype setup
     vim.filetype.add { extension = { templ = 'templ' } }
@@ -427,6 +416,8 @@ return {
       'lua-language-server',
       'vtsls',
       'vue-language-server',
+      'ocaml-lsp',
+      'ocamlformat',
     }
 
     require('mason-tool-installer').setup {

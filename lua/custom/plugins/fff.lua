@@ -14,11 +14,18 @@ return {
       desc = '[F]ind [F]ile',
     },
     {
-      '<leader>hf', -- try it if you didn't it is a banger keybinding for a picker
+      '<leader>hf',
       function()
         require('fff').find_in_git_root()
       end,
       desc = 'Find files in the current git repository',
+    },
+    {
+      '<leader>fs',
+      function()
+        require('fff').scan_files()
+      end,
+      desc = '[F]iles [S]can',
     },
   },
   config = function()
