@@ -19,23 +19,23 @@ return {
       invert_signs = false,
       invert_tabline = false,
       inverse = false, -- invert background for search, diffs, statuslines and errors
-      contrast = 'hard', -- can be "hard", "soft" or empty string
+      contrast = '', -- can be "hard", "soft" or empty string
       palette_overrides = {},
       overrides = {
-        Normal = { bg = '#111022' },
+        -- Normal = { bg = '#111022' },
         LspReferenceText = { fg = 'None', bg = '#49433E' },
         LspReferenceWrite = { fg = 'None', bg = '#49433E' },
         LspReferenceRead = { fg = 'None', bg = '#49433E' },
-        Operator = { fg = '#cf5c48' },
+        -- Operator = { fg = '#cf5c48' },
         Search = { fg = '#1d2021', bg = '#fabd2f' },
         IncSearch = { fg = '#1d2021', bg = '#fabd2f' },
-        String = { fg = '#bee289' },
+        -- String = { fg = '#bee289' },
         LineNrAbove = { fg = '#7c6f64' },
         LineNr = { fg = '#EBC06D' },
         LineNrBelow = { fg = '#7c6f64' },
       },
       dim_inactive = false,
-      transparent_mode = false,
+      transparent_mode = true,
     }
   end,
 }
