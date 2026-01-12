@@ -294,13 +294,36 @@ return {
       },
     })
 
+    -- ocaml setup
     vim.lsp.config('ocamllsp', {
       filetypes = { 'ocaml', 'menhir', 'ocamlinterface', 'ocamlocamllex', 'reason', 'dune' },
+      cmd = { 'dune', 'exec', 'ocamllsp' },
       capabilities = capabilities,
       settings = {
         codelens = { enable = true },
       },
     })
+    vim.lsp.config('sqls', {
+      cmd = { 'sqls' },
+      filetypes = { 'sql' },
+      capabilities = capabilities,
+    })
+
+    vim.filetype.add {
+      extension = {
+        mli = 'ocaml.interface',
+        mly = 'ocaml.menhir',
+        mll = 'ocaml.ocamllex',
+        mlx = 'ocaml',
+        t = 'ocaml.cram',
+      },
+    }
+    -- If you have `ocaml_interface` parser installed, it will use it for `ocaml.interface` files
+    vim.treesitter.language.register('ocaml_interface', 'ocaml.interface')
+    vim.treesitter.language.register('menhir', 'ocaml.menhir')
+    vim.treesitter.language.register('ocaml_interface', 'ocaml.interface')
+    vim.treesitter.language.register('cram', 'ocaml.cram')
+    vim.treesitter.language.register('ocamllex', 'ocaml.ocamllex')
 
     vim.lsp.config('ts_ls', {
       cmd = { 'typescript-language-server', '--stdio' },
@@ -394,6 +417,7 @@ return {
     vim.lsp.enable 'yamlls'
     vim.lsp.enable 'lua_ls'
     vim.lsp.enable 'ocamllsp'
+    vim.lsp.enable 'sqls'
 
     -- Templ filetype setup
     vim.filetype.add { extension = { templ = 'templ' } }
@@ -437,6 +461,7 @@ return {
       'typescript-language-server',
       'templ',
       'gopls',
+      'sqls',
       'vue-language-server',
       'tailwindcss-language-server',
       'css-lsp',

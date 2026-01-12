@@ -82,7 +82,17 @@ return {
       ['<C-d>'] = { 'scroll_documentation_down', 'fallback' },
       ['<C-h>'] = { 'show_signature', 'hide_signature', 'fallback' },
     },
-    signature = { enabled = true },
+    signature = {
+      enabled = true,
+      trigger = {
+        show_on_trigger_character = false,
+        show_on_insert_on_trigger_character = false,
+      },
+      window = {
+        border = 'rounded',
+        show_documentation = true,
+      },
+    },
     snippets = { preset = 'luasnip' },
     appearance = {
       -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
@@ -91,89 +101,77 @@ return {
     },
     -- (Default) Only show the documentation popup when manually triggered
     completion = {
-      documentation = {
+      trigger = {
+        show_on_trigger_character = true,
+      },
+      menu = {
+        border = 'rounded',
+        max_height = 10,
+        draw = {
+          columns = {
+            { 'kind_icon' },
+            { 'label', 'label_description', gap = 1 },
+            { 'source_name' },
+          },
+          components = {
+            -- Native icon support (no lspkind needed)
+            source_name = {
+              text = function(ctx)
+                local source_names = {
+                  lsp = '[LSP]',
+                  buffer = '[Buffer]',
+                  path = '[Path]',
+                  snippets = '[Snippet]',
+                }
+                return (source_names[ctx.source_name] or '[') .. ctx.source_name .. ']'
+              end,
+              highlight = 'CmpItemMenu',
+            },
+          },
+        },
         auto_show = true,
       },
-      -- list = {
-      --   selection = {
-      --     preselect = true,
-      --     auto_insert = true,
-      --   },
-      -- },
-      --   menu = {
-      --     draw = {
-      --       -- Controls how the completion items are rendered on the popup window
-      --       -- Aligns the keyword you've typed to a component in the menu
-      --       align_to = 'label', -- or 'none' to disable, or 'cursor' to align to the cursor
-      --       -- Left and right padding, optionally { left, right } for different padding on each side
-      --       padding = 1,
-      --       -- Gap between columns
-      --       -- gap = 1,
-      --       -- Use treesitter to highlight the label text for the given list of sources
-      --       treesitter = { 'lsp' },
-      --
-      --       -- Components to render, grouped by column
-      --       -- columns = { { 'kind_icon', gap = 1 }, { 'label' }, { 'kind' } },
-      --       -- components = {
-      --       --   kind = {
-      --       --     ellipsis = false,
-      --       --     width = { fill = true },
-      --       --     text = function(ctx)
-      --       --       return ctx.kind
-      --       --     end,
-      --       --     highlight = function(ctx)
-      --       --       return ctx.kind_hl
-      --       --     end,
-      --       --   },
-      --       --   label = {
-      --       --     width = { fill = true, max = 30 },
-      --       --     text = function(ctx)
-      --       --       return ctx.label .. ' ' .. ctx.label_detail
-      --       --     end,
-      --       --     highlight = function(ctx)
-      --       --       -- label and label details
-      --       --       local highlights = {
-      --       --         { 0, #ctx.label, group = ctx.deprecated and 'BlinkCmpLabelDeprecated' or 'BlinkCmpLabel' },
-      --       --       }
-      --       --       if ctx.label_detail then
-      --       --         table.insert(highlights, { #ctx.label, #ctx.label + #ctx.label_detail, group = 'BlinkCmpLabelDetail' })
-      --       --       end
-      --       --
-      --       --       -- characters matched on the label by the fuzzy matcher
-      --       --       for _, idx in ipairs(ctx.label_matched_indices) do
-      --       --         table.insert(highlights, { idx, idx + 1, group = 'BlinkCmpLabelMatch' })
-      --       --       end
-      --       --
-      --       --       return highlights
-      --       --     end,
-      --       --   },
-      --       --   label_description = {
-      --       --     width = { max = 30 },
-      --       --     text = function(ctx)
-      --       --       return ctx.label_description
-      --       --     end,
-      --       --     highlight = 'BlinkCmpLabelDescription',
-      --       --   },
-      --       -- },
-      --     },
-      --   },
+      documentation = {
+        auto_show = true,
+        window = {
+          border = 'rounded',
+        },
+      },
+      ghost_text = {
+        enabled = true,
+      },
+      list = {
+        selection = {
+          preselect = true,
+        },
+      },
     },
     --
     -- Default list of enabled providers defined so that you can extend it
     -- elsewhere in your config, without redefining it, due to `opts_extend`
 
     sources = {
-      default = { 'lsp', 'laravel', 'snippets', 'path', 'lazydev' },
+      default = { 'lsp', 'laravel', 'snippets', 'path' },
       providers = {
-        lazydev = {
-          name = 'LazyDev',
-          module = 'lazydev.integrations.blink',
-          score_offset = 100,
+        lsp = {
+          score_offset = 1000, -- Extreme priority to override fuzzy matching
         },
         laravel = {
           name = 'laravel',
           module = 'blink.compat.source',
-          score_offset = 95, -- show at a higher priority than lsp
+          score_offset = 100, -- show at a higher priority than lsp
+        },
+        path = {
+          score_offset = 60, -- File paths moderate priority
+        },
+        snippets = {
+          score_offset = -100, -- Much lower priority
+          max_items = 2, -- Limit snippet suggestions
+          min_keyword_length = 3, -- Don't show for single chars
+        },
+        buffer = {
+          score_offset = -150, -- Lowest priority
+          min_keyword_length = 3, -- Only show after 3 chars
         },
       },
     },

@@ -1,15 +1,15 @@
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'oil',
+  callback = function()
+    vim.opt_local.colorcolumn = ''
+  end,
+})
+
 return {
   {
     'stevearc/oil.nvim',
     dependencies = { 'echasnovski/mini.icons', opts = {} },
     config = function()
-      CustomOilBar = function()
-        local path = vim.fn.expand '%'
-        path = path:gsub('oil://', '')
-
-        return '  ' .. vim.fn.fnamemodify(path, ':.')
-      end
-
       require('oil').setup {
         columns = { 'icon' },
         keymaps = {
@@ -17,10 +17,8 @@ return {
           ['<C-l>'] = false,
           ['<C-k>'] = false,
           ['<C-j>'] = false,
+          ['<C-r>'] = 'actions.refresh',
           ['<M-h>'] = 'actions.select_split',
-        },
-        win_options = {
-          winbar = '%{v:lua.CustomOilBar()}',
         },
         view_options = {
           show_hidden = true,
