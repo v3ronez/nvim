@@ -11,13 +11,26 @@ return {
     dashboard = { enabled = false },
     explorer = { enabled = false },
     indent = { enabled = false },
-    input = { enabled = false },
+    input = {
+      enabled = true,
+      icon = '',
+      win = {
+        relative = 'editor',
+        border = 'none', -- igual ao nativo
+        width = vim.o.columns,
+        row = vim.o.lines - 3,
+        col = 0,
+      },
+    },
     picker = { enabled = true },
     notifier = {
       enabled = false,
       timeout = 800,
     },
     quickfile = { enabled = false },
+    image = {
+      enabled = true,
+    },
     scope = { enabled = false },
     scroll = {
       enabled = false,

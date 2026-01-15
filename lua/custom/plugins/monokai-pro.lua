@@ -50,6 +50,7 @@ return {
         vim.api.nvim_set_hl(0, '@keyword.type', { fg = '#F78E67', italic = false })
         vim.api.nvim_set_hl(0, '@keyword', { fg = '#F78E67', italic = false })
         vim.api.nvim_set_hl(0, '@variable.builtin', { fg = '#8AA9F9', italic = false })
+        vim.api.nvim_set_hl(0, '@comment', { fg = '#E2C765', italic = false })
       end,
     })
   end,

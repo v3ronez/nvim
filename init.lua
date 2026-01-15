@@ -475,15 +475,6 @@ require('lazy').setup({
       }
     end,
   },
-  {
-    'catppuccin/nvim',
-    name = 'catppuccin',
-    priority = 1000,
-    config = function()
-      -- vim.cmd.colorscheme 'catppuccin-mocha'
-    end,
-  },
-
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -599,14 +590,16 @@ end
 
 load_custom_functions()
 
-vim.o.background = 'dark'
+vim.o.background = 'light'
 if vim.o.background == 'dark' then
   -- vim.cmd.colorscheme 'melange'
-  vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'gruvbox'
+  vim.cmd.colorscheme 'catppuccin-macchiato'
   -- vim.cmd.colorscheme 'gruber-darker'
   -- vim.cmd.colorscheme 'cyberdream'
 else
-  vim.cmd.colorscheme 'melange'
+  vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'melange'
 end
 -- vim.cmd.colorscheme 'monokai-pro'
 -- vim.cmd.colorscheme 'gruber-darker'
