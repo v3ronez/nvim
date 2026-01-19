@@ -66,7 +66,10 @@ vim.opt.timeoutlen = 250
 vim.opt.conceallevel = 0
 vim.opt.splitright = true
 vim.opt.splitbelow = true
--- vim.opt.clipboard = 'unnamedplus'
+vim.opt.scrolloff = 99999
+vim.opt.sidescrolloff = 99999
+vim.opt.clipboard = { 'unnamed', 'unnamedplus' }
+
 vim.o.hidden = true
 -- Set to true if you have a Nerd Font installed and selected in the terminal
 vim.g.have_nerd_font = true
