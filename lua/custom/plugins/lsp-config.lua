@@ -301,8 +301,10 @@ return {
       capabilities = capabilities,
       settings = {
         codelens = { enable = true },
+        syntaxDocumentation = { enable = true },
       },
     })
+
     vim.lsp.config('sqls', {
       cmd = { 'sqls' },
       filetypes = { 'sql' },

@@ -594,14 +594,15 @@ end
 load_custom_functions()
 
 vim.o.background = 'light'
-if vim.o.background == 'dark' then
+if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'melange'
-  -- vim.cmd.colorscheme 'gruvbox'
-  vim.cmd.colorscheme 'catppuccin-macchiato'
+  vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'catppuccin-macchiato'
   -- vim.cmd.colorscheme 'gruber-darker'
   -- vim.cmd.colorscheme 'cyberdream'
 else
-  vim.cmd.colorscheme 'gruvbox'
+  vim.cmd.colorscheme 'rose-pine'
+  -- vim.cmd.colorscheme 'gruvbox'
   -- vim.cmd.colorscheme 'melange'
 end
 -- vim.cmd.colorscheme 'monokai-pro'

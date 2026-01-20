@@ -28,7 +28,7 @@ return {
         vim.api.nvim_set_hl(0, 'LineNr', { fg = yellow })
         vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = 'grey' })
 
-        vim.api.nvim_set_hl(0, 'Comment', { fg = red_soft, italic = false })
+        vim.api.nvim_set_hl(0, 'Comment', { fg = red_soft, italic = true })
         vim.api.nvim_set_hl(0, 'LspSignatureActiveParameter', { fg = yellow, bg = soft_dark, bold = true })
         --Lsp References
         vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#443F3B' })
