@@ -595,18 +595,11 @@ load_custom_functions()
 
 vim.o.background = 'light'
 if vim.o.background == 'light' then
-  -- vim.cmd.colorscheme 'melange'
-  vim.cmd.colorscheme 'gruvbox'
-  -- vim.cmd.colorscheme 'catppuccin-macchiato'
-  -- vim.cmd.colorscheme 'gruber-darker'
-  -- vim.cmd.colorscheme 'cyberdream'
+  -- vim.cmd.colorscheme 'gruvbox'
+  vim.cmd.colorscheme 'solarized'
 else
   vim.cmd.colorscheme 'rose-pine'
-  -- vim.cmd.colorscheme 'gruvbox'
-  -- vim.cmd.colorscheme 'melange'
 end
--- vim.cmd.colorscheme 'monokai-pro'
--- vim.cmd.colorscheme 'gruber-darker'
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
