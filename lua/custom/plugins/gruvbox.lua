@@ -56,16 +56,22 @@ return {
             vim.api.nvim_set_hl(0, '@keyword', { fg = '#F78E67', italic = false })
             vim.api.nvim_set_hl(0, '@variable.builtin', { fg = '#8AA9F9', italic = false })
             vim.api.nvim_set_hl(0, '@comment', { fg = '#E2C765', italic = false })
+
+            vim.api.nvim_set_hl(0, 'LspReferenceText', { fg = 'None', bg = '#49433E' })
+            vim.api.nvim_set_hl(0, 'LspReferenceWrite', { fg = 'None', bg = '#49433E' })
+            vim.api.nvim_set_hl(0, 'LspReferenceRead', { fg = 'None', bg = '#49433E' })
+            vim.api.nvim_set_hl(0, 'Search', { fg = '#1d2021', bg = '#fabd2f' })
+            vim.api.nvim_set_hl(0, 'IncSearch', { link = 'Search' })
+            vim.api.nvim_set_hl(0, '@variable.builtin', { link = 'GruvboxRed' })
           else
             vim.api.nvim_set_hl(0, 'LineNrAbove', { fg = '#DC8F58' })
             vim.api.nvim_set_hl(0, 'LineNr', { fg = '#D17A3A' })
             vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#DC8F58' })
 
-            vim.api.nvim_set_hl(0, '@comment', { fg = '#D14C8C', italic = true })
+            vim.api.nvim_set_hl(0, '@comment', { fg = '#D14C8C', italic = false })
             vim.api.nvim_set_hl(0, '@variable', { fg = '#3D3D3D', italic = false })
-            vim.api.nvim_set_hl(0, 'IncSearch', {
-              bg = '#5B9FB5',
-            })
+            vim.api.nvim_set_hl(0, 'Visual', { fg = 'NONE', bg = '#E1DBC8' })
+            vim.api.nvim_set_hl(0, 'IncSearch', { fg = '#1d2021', bg = '#fabd2f' })
           end
         end,
       }),

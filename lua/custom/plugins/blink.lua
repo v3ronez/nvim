@@ -159,7 +159,7 @@ return {
         laravel = {
           name = 'laravel',
           module = 'blink.compat.source',
-          score_offset = 100, -- show at a higher priority than lsp
+          score_offset = 100,
         },
         path = {
           score_offset = 60, -- File paths moderate priority
@@ -167,7 +167,7 @@ return {
         snippets = {
           score_offset = -100, -- Much lower priority
           max_items = 2, -- Limit snippet suggestions
-          min_keyword_length = 3, -- Don't show for single chars
+          min_keyword_length = 2, -- Don't show for single chars
         },
         buffer = {
           score_offset = -150, -- Lowest priority

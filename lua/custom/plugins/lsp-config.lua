@@ -37,24 +37,24 @@ return {
 
         -- Document highlight
         local client = vim.lsp.get_client_by_id(event.data.client_id)
-
-        --code Lens
-        if client and client.server_capabilities.codeLensProvider then
-          local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
-          vim.lsp.codelens.refresh { bufnr = event.buf }
-          vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
-            buffer = event.buf,
-            group = codelens_augroup,
-            callback = vim.lsp.codelens.refresh,
-          })
-
-          vim.api.nvim_create_autocmd('LspDetach', {
-            buffer = event.buf,
-            callback = function()
-              vim.api.nvim_clear_autocmds { group = codelens_augroup }
-            end,
-          })
-        end
+        --
+        -- --code Lens
+        -- if client and client.server_capabilities.codeLensProvider then
+        --   local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
+        --   vim.lsp.codelens.refresh { bufnr = event.buf }
+        --   vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
+        --     buffer = event.buf,
+        --     group = codelens_augroup,
+        --     callback = vim.lsp.codelens.refresh,
+        --   })
+        --
+        --   vim.api.nvim_create_autocmd('LspDetach', {
+        --     buffer = event.buf,
+        --     callback = function()
+        --       vim.api.nvim_clear_autocmds { group = codelens_augroup }
+        --     end,
+        --   })
+        -- end
 
         if client then
           local supports_highlight = false

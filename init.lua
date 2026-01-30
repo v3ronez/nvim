@@ -69,6 +69,7 @@ vim.opt.splitbelow = true
 vim.opt.scrolloff = 99999
 vim.opt.sidescrolloff = 99999
 vim.opt.clipboard = { 'unnamed', 'unnamedplus' }
+vim.opt.inccommand = 'split'
 
 vim.o.hidden = true
 -- Set to true if you have a Nerd Font installed and selected in the terminal
@@ -594,10 +595,12 @@ end
 load_custom_functions()
 
 vim.o.background = 'light'
+-- vim.o.background = 'dark'
 if vim.o.background == 'light' then
-  -- vim.cmd.colorscheme 'gruvbox'
-  vim.cmd.colorscheme 'solarized'
+  vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'solarized'
 else
+  -- vim.cmd.colorscheme 'gruvbox'
   vim.cmd.colorscheme 'rose-pine'
 end
 
