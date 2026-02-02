@@ -49,6 +49,13 @@ return {
         desc = 'Laravel: Open Routes Picker',
       },
       {
+        '<leader>ple',
+        function()
+          Laravel.commands.run 'env:configure'
+        end,
+        desc = 'Laravel: Configure Environment',
+      },
+      {
         '<leader>plh',
         function()
           Laravel.run 'artisan docs'
@@ -104,7 +111,7 @@ return {
     opts = {
       features = {
         pickers = {
-          provider = 'telescope', -- "snacks | telescope | fzf-lua | ui-select"
+          provider = 'snacks', -- "snacks | telescope | fzf-lua | ui-select"
         },
       },
     },

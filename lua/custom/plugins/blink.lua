@@ -154,23 +154,23 @@ return {
       default = { 'lsp', 'laravel', 'snippets', 'path' },
       providers = {
         lsp = {
-          score_offset = 1000, -- Extreme priority to override fuzzy matching
+          score_offset = 90, -- Extreme priority to override fuzzy matching
         },
         laravel = {
           name = 'laravel',
           module = 'blink.compat.source',
-          score_offset = 100,
+          score_offset = 95,
         },
         path = {
           score_offset = 60, -- File paths moderate priority
         },
         snippets = {
-          score_offset = -100, -- Much lower priority
-          max_items = 2, -- Limit snippet suggestions
-          min_keyword_length = 2, -- Don't show for single chars
+          score_offset = 50, -- Much lower priority
+          max_items = 2,
+          min_keyword_length = 2,
         },
         buffer = {
-          score_offset = -150, -- Lowest priority
+          score_offset = 40, -- Lowest priority
           min_keyword_length = 3, -- Only show after 3 chars
         },
       },
