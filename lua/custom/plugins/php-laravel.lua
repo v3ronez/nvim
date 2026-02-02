@@ -1,8 +1,6 @@
-local map = vim.keymap.set
 return {
   {
     -- Add neotest-pest plugin for running PHP tests.
-    -- A package is also available for PHPUnit if needed.
     'nvim-neotest/neotest',
     dependencies = { 'olimorris/neotest-phpunit', 'nvim-neotest/nvim-nio' },
     opts = { adapters = { 'neotest-phpunit' } },
@@ -12,10 +10,10 @@ return {
     'nvim-treesitter/nvim-treesitter',
     opts = function(_, opts)
       vim.list_extend(opts.ensure_installed, {
-        'blade',
         'php_only',
         'php',
       })
+      return opts
     end,
     config = function(_, opts)
       vim.filetype.add {
@@ -24,9 +22,9 @@ return {
         },
       }
 
-      require('nvim-treesitter.configs').setup(opts)
-      local parser_config = require('nvim-treesitter.parsers').get_parser_configs()
-      parser_config.blade = {
+      -- Register Blade parser for nvim-treesitter v1.0+ (get_parser_configs removed)
+      local parsers = require 'nvim-treesitter.parsers'
+      parsers.blade = {
         install_info = {
           url = 'https://github.com/EmranMR/tree-sitter-blade',
           files = { 'src/parser.c' },
@@ -34,6 +32,8 @@ return {
         },
         filetype = 'blade',
       }
+
+      require('nvim-treesitter').setup(opts)
     end,
   },
   {

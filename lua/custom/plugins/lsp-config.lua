@@ -6,7 +6,6 @@ return {
     'williamboman/mason-lspconfig.nvim',
     'WhoIsSethDaniel/mason-tool-installer.nvim',
     'stevearc/conform.nvim',
-    'ocaml-mlx/ocaml_mlx.nvim',
     'b0o/SchemaStore.nvim',
   },
   config = function()
@@ -214,6 +213,11 @@ return {
       filetypes = { 'php', 'blade', 'php_only' },
       root_markers = { 'composer.json', '.git' },
       capabilities = capabilities,
+      default_config = {
+        init_options = {
+          licenceKey = '$HOME/intelephense/licence.txt',
+        },
+      },
       settings = {
         intelephense = {
           files = {
@@ -262,7 +266,7 @@ return {
 
     vim.lsp.config('tailwindcss', {
       cmd = { 'tailwindcss-language-server', '--stdio' },
-      filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade', 'ocaml.mlx', 'vue' }),
+      filetypes = extend('tailwindcss', 'filetypes', { 'templ', 'html', 'astro', 'javascript', 'typescript', 'react', 'blade', 'vue' }),
       capabilities = capabilities,
       settings = {
         tailwindCSS = {
@@ -274,7 +278,6 @@ return {
           },
           includeLanguages = extend('tailwindcss', 'settings.tailwindCSS.includeLanguages', {
             ['templ'] = 'html',
-            ['ocaml.mlx'] = 'html',
           }),
         },
       },
@@ -294,38 +297,11 @@ return {
       },
     })
 
-    -- ocaml setup
-    vim.lsp.config('ocamllsp', {
-      filetypes = { 'ocaml', 'menhir', 'ocamlinterface', 'ocamlocamllex', 'reason', 'dune' },
-      cmd = { 'dune', 'exec', 'ocamllsp' },
-      capabilities = capabilities,
-      settings = {
-        codelens = { enable = true },
-        syntaxDocumentation = { enable = true },
-      },
-    })
-
     vim.lsp.config('sqls', {
       cmd = { 'sqls' },
       filetypes = { 'sql' },
       capabilities = capabilities,
     })
-
-    vim.filetype.add {
-      extension = {
-        mli = 'ocaml.interface',
-        mly = 'ocaml.menhir',
-        mll = 'ocaml.ocamllex',
-        mlx = 'ocaml',
-        t = 'ocaml.cram',
-      },
-    }
-    -- If you have `ocaml_interface` parser installed, it will use it for `ocaml.interface` files
-    vim.treesitter.language.register('ocaml_interface', 'ocaml.interface')
-    vim.treesitter.language.register('menhir', 'ocaml.menhir')
-    vim.treesitter.language.register('ocaml_interface', 'ocaml.interface')
-    vim.treesitter.language.register('cram', 'ocaml.cram')
-    vim.treesitter.language.register('ocamllex', 'ocaml.ocamllex')
 
     vim.lsp.config('ts_ls', {
       cmd = { 'typescript-language-server', '--stdio' },
@@ -418,7 +394,6 @@ return {
     vim.lsp.enable 'jsonls'
     vim.lsp.enable 'yamlls'
     vim.lsp.enable 'lua_ls'
-    vim.lsp.enable 'ocamllsp'
     vim.lsp.enable 'sqls'
 
     -- Templ filetype setup
@@ -471,8 +446,6 @@ return {
       'lua-language-server',
       'vtsls',
       'vue-language-server',
-      'ocaml-lsp',
-      'ocamlformat',
     }
 
     require('mason-tool-installer').setup {
