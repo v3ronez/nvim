@@ -595,12 +595,10 @@ end
 load_custom_functions()
 
 vim.o.background = 'light'
--- vim.o.background = 'dark'
 if vim.o.background == 'light' then
   vim.cmd.colorscheme 'gruvbox'
   -- vim.cmd.colorscheme 'solarized'
 else
-  -- vim.cmd.colorscheme 'gruvbox'
   vim.cmd.colorscheme 'rose-pine'
 end
 

@@ -203,6 +203,26 @@ return {
       enableForWorkspaceTypeScriptVersions = true,
     }
 
+    local border = {
+      { '╭', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╮', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+      { '╯', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╰', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+    }
+
+    local handlers = {
+      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = border,
+      }),
+      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = border,
+      }),
+    }
+
     vim.lsp.config('*', {
       capabilities = capabilities,
       handlers = handlers,
@@ -390,7 +410,6 @@ return {
     vim.lsp.enable 'tailwindcss'
     vim.lsp.enable 'rust_analyzer'
     vim.lsp.enable 'ts_ls'
-    vim.lsp.enable 'vuels'
     vim.lsp.enable 'jsonls'
     vim.lsp.enable 'yamlls'
     vim.lsp.enable 'lua_ls'
@@ -439,7 +458,6 @@ return {
       'templ',
       'gopls',
       'sqls',
-      'vue-language-server',
       'tailwindcss-language-server',
       'css-lsp',
       'yaml-language-server',
