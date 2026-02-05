@@ -5,5 +5,6 @@ return {
   ---@type render.md.UserConfig
   opts = {
     render_modes = { 'n', 'c', 't' },
+    completions = { lsp = { enabled = true } },
   },
 }

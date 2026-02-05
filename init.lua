@@ -24,7 +24,7 @@ function _G.set_terminal_keymaps()
   vim.keymap.set('t', '<C-l>', [[<Cmd>wincmd l<CR>]], opts)
   vim.keymap.set('t', '<C-w>', [[<C-\><C-n><C-w>]], opts)
 end
-vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
+-- vim.cmd 'autocmd! TermOpen term://* lua set_terminal_keymaps()'
 
 vim.keymap.set('n', '<leader>dS', function()
   vim.cmd 'noautocmd write'
@@ -101,12 +101,12 @@ vim.keymap.set({ 'n', 'v' }, '<TAB>', '<cmd>b#<CR>')
 -- open new file adjacent to current file
 vim.keymap.set('n', '<leader>of', ':e <C-R>=expand("%:p:h") . "/" <cr>')
 -- let the left and right arrows be useful: they can switch buffers (build-in switch)
--- vim.keymap.set('n', '<left>', ':bp<cr>')
--- vim.keymap.set('n', '<right>', ':bn<cr>')
+vim.keymap.set('n', '<left>', ':bp<cr>')
+vim.keymap.set('n', '<right>', ':bn<cr>')
 
 -- let the left and right arrows be useful: they can switch buffers (USING BARBAR command
-vim.keymap.set('n', '<left>', '<CMD>BufferPrevious<CR>')
-vim.keymap.set('n', '<right>', '<CMD>BufferNext<CR>')
+-- vim.keymap.set('n', '<left>', '<CMD>BufferPrevious<CR>')
+-- vim.keymap.set('n', '<right>', '<CMD>BufferNext<CR>')
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
