@@ -1,0 +1,18 @@
+{
+    "Console log": {
+        "prefix": "log",
+        "description": "console.log",
+        "body": [
+            "console.log(${1:expression});"
+        ]
+    },
+    "Arrow function": {
+        "prefix": "ar",
+        "description": "arrow function",
+        "body": [
+            "${1:param} => {",
+            "\t${2:body}",
+            "}"
+        ]
+    }
+}

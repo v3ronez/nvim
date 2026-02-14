@@ -199,8 +199,6 @@ return {
       name = '@vue/typescript-plugin',
       location = vue_language_server_path,
       languages = { 'vue' },
-      configNamespace = 'typescript',
-      enableForWorkspaceTypeScriptVersions = true,
     }
 
     local border = {
@@ -323,6 +321,26 @@ return {
       capabilities = capabilities,
     })
 
+    vim.lsp.config('vue_ls', {
+      cmd = { 'vue-language-server', '--stdio' },
+      filetypes = { 'vue' },
+      root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
+      capabilities = capabilities,
+      init_options = {
+        typescript = {
+          tsdk = vim.fn.getcwd() .. '/node_modules/typescript/lib',
+        },
+      },
+      settings = {
+        vue = {
+          complete = {
+            props = true,
+            events = true,
+          },
+        },
+      },
+    })
+
     vim.lsp.config('ts_ls', {
       cmd = { 'typescript-language-server', '--stdio' },
       filetypes = {
@@ -342,16 +360,6 @@ return {
         typescript = {
           tsserver = {
             useSyntaxServer = false,
-          },
-          inlayHints = {
-            includeInlayParameterNameHints = 'all',
-            includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-            includeInlayFunctionParameterTypeHints = true,
-            includeInlayVariableTypeHints = true,
-            includeInlayVariableTypeHintsWhenTypeMatchesName = true,
-            includeInlayPropertyDeclarationTypeHints = true,
-            includeInlayFunctionLikeReturnTypeHints = true,
-            includeInlayEnumMemberValueHints = true,
           },
         },
       },
@@ -403,6 +411,7 @@ return {
     })
 
     vim.lsp.enable 'intelephense'
+    vim.lsp.enable 'vuels'
     vim.lsp.enable 'gopls'
     vim.lsp.enable 'html'
     vim.lsp.enable 'templ'
@@ -414,6 +423,7 @@ return {
     vim.lsp.enable 'yamlls'
     vim.lsp.enable 'lua_ls'
     vim.lsp.enable 'sqls'
+    vim.lsp.enable 'vue_ls'
 
     -- Templ filetype setup
     vim.filetype.add { extension = { templ = 'templ' } }
@@ -424,6 +434,11 @@ return {
     vim.api.nvim_create_autocmd('BufWritePre', {
       pattern = '*.templ',
       callback = templ_format,
+    })
+    -- Vue commaentstring
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'vue',
+      command = 'setlocal commentstring=<!--\\ %s\\ -->',
     })
 
     -- Go organize imports on save

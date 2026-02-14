@@ -40,11 +40,11 @@ return {
       layout = {
         height = 0.8,
         width = 0.8,
-        prompt_position = 'bottom', -- or 'top'
+        prompt_position = 'top', -- or 'top'
         preview_position = 'right', -- or 'left', 'right', 'top', 'bottom'
         preview_size = 0.5,
       },
-      title = 'FFF Files',
+      title = 'Searching...',
       max_results = 60, -- Maximum search results to display
       max_threads = 4, -- Maximum threads for fuzzy search
 
@@ -63,6 +63,7 @@ return {
       debug = {
         enabled = true,
         show_scores = true, -- Toggle with F2 or :FFFDebug
+        show_file_info = true,
       },
     }
   end,

@@ -1,0 +1,26 @@
+{
+    "Print with debug": {
+        "prefix": "pd",
+        "description": "print with debug",
+        "body": [
+            "fmt.Printf(\"\\nDebug ->  %+v\\r\\nType  ->  %T\\r\\n\\n\", ${1})",
+            "os.Exit(0)"
+        ]
+    },
+    "Error handler": {
+        "prefix": "eh",
+        "description": "Error handler",
+        "body": [
+            "if err != nil {",
+            "\treturn ${1:err}",
+            "}"
+        ]
+    },
+    "HTTP handler": {
+        "prefix": "wr",
+        "description": "http handler",
+        "body": [
+            "w http.ResponseWriter, r *http.Request"
+        ]
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "extends": [
+        "javascript"
+    ],
+    "Setup TS": {
+        "prefix": "set",
+        "description": "Vue template with script setup TS and empty body",
+        "body": [
+            "<script setup lang=\"ts\">",
+            "${1}",
+            "</script>",
+            "<template>",
+            "\t<div>",
+            "\t\t${2}",
+            "\t</div>",
+            "</template>",
+            ""
+        ]
+    }
+}

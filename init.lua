@@ -596,10 +596,12 @@ load_custom_functions()
 
 vim.o.background = 'light'
 if vim.o.background == 'light' then
-  vim.cmd.colorscheme 'gruvbox'
+  -- vim.cmd.colorscheme 'gruvbox'
   -- vim.cmd.colorscheme 'solarized'
+  -- vim.cmd.colorscheme 'solarized8'
+  vim.cmd.colorscheme 'rose-pine-dawn'
 else
-  vim.cmd.colorscheme 'rose-pine'
+  vim.cmd.colorscheme 'gruber-darker'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`

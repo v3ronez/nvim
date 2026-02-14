@@ -1,0 +1,44 @@
+{
+    "Declare strict types": {
+        "prefix": "st",
+        "description": "declare strict type",
+        "body": [
+            "declare(strict_types=1);"
+        ]
+    },
+    "Pretty array/json log": {
+        "prefix": "pe",
+        "description": "pretty array/json log",
+        "body": [
+            "print_r(json_encode([${1}], JSON_PRETTY_PRINT));exit;"
+        ]
+    },
+    "Constructor": {
+        "prefix": "__c",
+        "description": "construct",
+        "body": [
+            "public function __construct(${1}) {}"
+        ]
+    },
+    "New function": {
+        "prefix": "func",
+        "description": "new function",
+        "body": [
+            "public function ${1:functionName}()",
+            "{",
+            "\t${2://}",
+            "}"
+        ]
+    },
+    "Try catch block": {
+        "prefix": "tryb",
+        "description": "try catch block",
+        "body": [
+            "try {",
+            "\t${1://}",
+            "} catch (${2:\\Throwable} ${3:\\$e}) {",
+            "\t${4://}",
+            "}"
+        ]
+    }
+}

@@ -4,6 +4,7 @@ return {
   dependencies = {
     {
       'L3MON4D3/LuaSnip',
+      dependencies = { 'rafamadriz/friendly-snippets' },
       build = (function()
         if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
           return
@@ -12,35 +13,10 @@ return {
       end)(),
       config = function()
         local luasnip = require 'luasnip'
-        local s = luasnip.snippet
-        local i = luasnip.insert_node
-        local t = luasnip.text_node
-        local c = luasnip.choice_node
-
-        local default_js_snippets = {
-          s('log', {
-            t 'console.log(',
-            i(1, 'expression'),
-            t ');',
-          }),
-          s('ar', {
-            i(1, 'param'),
-            t ' => {',
-            i(2, 'body'),
-            t '\n}',
-          }),
-        }
-
-        luasnip.add_snippets('vue', default_js_snippets)
-        luasnip.add_snippets('javascript', default_js_snippets)
-        luasnip.add_snippets('typescript', default_js_snippets)
 
         -- Loads all the snippets installed by extensions in vscode.
         -- require('luasnip.loaders.from_vscode').lazy_load()
-        require('luasnip.loaders.from_vscode').lazy_load {
-          exclude = { 'css' },
-          require('luasnip.loaders.from_snipmate').load { path = { './snippets/*' } },
-        }
+        require('luasnip.loaders.from_vscode').lazy_load()
         luasnip.config.set_config {
           region_check_events = 'InsertEnter',
           delete_check_events = 'InsertLeave',

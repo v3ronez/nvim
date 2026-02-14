@@ -1,0 +1,14 @@
+{
+    "Derive debug": {
+        "prefix": "drdb",
+        "body": [
+            "#[derive(Debug$1)]"
+        ]
+    },
+    "Derive clone & debug": {
+        "prefix": "drcdb",
+        "body": [
+            "#[derive(Debug, Clone$1)]"
+        ]
+    }
+}
