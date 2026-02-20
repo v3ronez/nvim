@@ -27,6 +27,13 @@ return {
       end,
       desc = '[F]iles [S]can',
     },
+    {
+      '<leader>fg',
+      function()
+        require('fff').live_grep()
+      end,
+      desc = '[F]iles [S]can',
+    },
   },
   config = function()
     require('fff').setup {
@@ -61,9 +68,9 @@ return {
         preview_scroll_down = '<C-d>',
       },
       debug = {
-        enabled = true,
-        show_scores = true, -- Toggle with F2 or :FFFDebug
-        show_file_info = true,
+        enabled = false,
+        show_scores = false, -- Toggle with F2 or :FFFDebug
+        show_file_info = false,
       },
     }
   end,

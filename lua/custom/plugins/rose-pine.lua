@@ -4,6 +4,8 @@ return {
   priority = 1000,
   config = function()
     require('rose-pine').setup {
+      variant = 'auto',
+      dark_variant = 'moon',
       disable_background = false,
       styles = {
         italic = false,
@@ -12,10 +14,9 @@ return {
         -- surface = '#000000',
       },
       highlight_groups = {
-        -- --statusLine
+        --statusLine
         -- StatusLine = { fg = '#f1f1f1', bg = 'base', blend = 10 },
         -- StatusLineNC = { fg = 'subtle', bg = 'surface' },
-        -- --statudLine end
         -- --telescope
         -- TelescopeBorder = { fg = 'highlight_high', bg = 'none' },
         -- TelescopeNormal = { bg = 'none' },

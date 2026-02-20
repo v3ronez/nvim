@@ -5,6 +5,7 @@ return {
     priority = 1000,
     config = function()
       require('catppuccin').setup {
+        flavour = 'frappe',
         -- float = {
         -- 	-- transparent = true,
         -- 	-- solid = false,
@@ -29,27 +30,23 @@ return {
           ufo = true,
           which_key = true,
         },
+        highlight_overrides = {
+          all = function(colors)
+            local orange = '#DC8F58'
+            return {
+              ['LineNrAbove'] = { fg = colors.surface1 },
+              ['LineNr'] = { fg = orange },
+              ['LineNrBelow'] = { fg = colors.surface1 },
+            }
+          end,
+          frappe = function()
+            local pink = '#DC67A0'
+            return {
+              ['@comment'] = { fg = pink },
+            }
+          end,
+        },
       }
-      local palette = require('catppuccin.palettes').get_palette 'macchiato'
-
-      -- Telescope highlights to match editor background
-      -- vim.api.nvim_set_hl(0, 'TelescopeNormal', { bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopeBorder', { fg = palette.blue, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopePromptNormal', { bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopePromptBorder', { fg = palette.blue, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopeResultsNormal', { bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopeResultsBorder', { fg = palette.blue, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopePreviewNormal', { bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopePreviewBorder', { fg = palette.blue, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopeTitle', { fg = palette.mauve, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopePromptTitle', { fg = palette.mauve, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopeResultsTitle', { fg = palette.mauve, bg = palette.base })
-      -- vim.api.nvim_set_hl(0, 'TelescopePreviewTitle', { fg = palette.mauve, bg = palette.base })
-
-      -- -- Hide all semantic highlights until upstream issues are resolved (https://github.com/catppuccin/nvim/issues/480)
-      -- for _, group in ipairs(vim.fn.getcompletion('@lsp', 'highlight')) do
-      --   vim.api.nvim_set_hl(0, group, {})
-      -- end
     end,
   },
 }
