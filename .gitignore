@@ -4,4 +4,5 @@ test.sh
 nvim
 .DS_Store
 spell/
+tmp
 lazy-lock.json

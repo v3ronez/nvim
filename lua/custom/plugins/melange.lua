@@ -8,7 +8,7 @@ return {
       pattern = 'melange',
       callback = function()
         --     -- local orange_color = '#CB7A54'
-        -- local red_soft = '#bd8183'
+        local red_soft = '#bd8183'
         --     local soft_dark = '#47403C'
         local yellow = '#EBC06D'
         --     -- background
@@ -25,10 +25,13 @@ return {
         vim.api.nvim_set_hl(0, 'LineNr', { fg = yellow })
         vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = '#867462' })
         --
-        -- vim.api.nvim_set_hl(0, 'Comment', { fg = red_soft, italic = true })
         vim.api.nvim_set_hl(0, 'LspSignatureActiveParameter', { fg = yellow, bg = soft_dark, bold = true })
         --     --Lsp References
         vim.api.nvim_set_hl(0, 'LspReferenceText', { bg = '#443F3B' })
+        vim.cmd [[
+            hi  String cterm=NONE gui=NONE
+            hi  Comment  cterm=NONE gui=NONE
+          ]]
       end,
     })
   end,

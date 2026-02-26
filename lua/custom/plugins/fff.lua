@@ -34,6 +34,13 @@ return {
       end,
       desc = '[F]iles [S]can',
     },
+    {
+      'fw',
+      function()
+        require('fff').live_grep { query = vim.fn.expand '<cword>' }
+      end,
+      desc = 'Search current word',
+    },
   },
   config = function()
     require('fff').setup {
