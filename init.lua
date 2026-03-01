@@ -596,16 +596,14 @@ load_custom_functions()
 
 vim.o.background = 'light'
 if vim.o.background == 'light' then
-  vim.cmd.colorscheme 'gruvbox-material'
-  -- vim.cmd.colorscheme 'solarized'
+  -- vim.cmd.colorscheme 'gruvbox-material'
+  vim.cmd.colorscheme 'solarized'
   -- vim.cmd.colorscheme 'solarized8'
   -- vim.cmd.colorscheme 'zenbones'
 else
-  vim.cmd.colorscheme 'zenbones'
-  -- vim.cmd.colorscheme 'melange'
+  -- vim.cmd.colorscheme 'gruber-darker'
+  vim.cmd.colorscheme 'melange'
   -- vim.cmd.colorscheme 'rose-pine'
-  -- vim.cmd.colorscheme 'cyberdream'
-  -- vim.cmd.colorscheme 'catppuccin'
 end
 
 -- vim.cmd [[

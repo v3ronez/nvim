@@ -12,7 +12,6 @@ return {
     variant = 'summer', -- "spring" | "summer" | "autumn" | "winter" (default)
     on_highlights = function(colors, color)
       local groups = {
-        Comment = { fg = '#DC67A0' },
         LineNr = { fg = '#D17A3A', bg = '#FDF6E3' },
         LineNrAbove = { fg = '#D17A3A', bg = colors.base3 },
         LineNrBelow = { fg = '#D17A3A', bg = colors.base3 },
@@ -35,6 +34,11 @@ return {
         LspReferenceRead = { fg = colors.base00, bg = '#E1DBC8' },
         Visual = { fg = 'NONE', bg = '#E1DBC8' },
       }
+
+      vim.cmd [[
+            hi  String cterm=NONE gui=NONE
+            hi  Comment  cterm=NONE gui=NONE
+      ]]
       return groups
     end,
   },

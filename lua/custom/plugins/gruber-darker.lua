@@ -17,6 +17,10 @@ return {
         vim.api.nvim_set_hl(0, 'LineNr', { link = 'GruberDarkerYellowBold' })
         vim.api.nvim_set_hl(0, 'LineNrBelow', { fg = 'grey' })
         vim.api.nvim_set_hl(0, 'javaScript', { link = 'NONE' })
+        vim.cmd [[
+              hi  String cterm=NONE gui=NONE
+              hi  Comment  cterm=NONE gui=NONE
+        ]]
       end,
     })
   end,
