@@ -38,6 +38,7 @@ return {
       vim.cmd [[
             hi  String cterm=NONE gui=NONE
             hi  Comment  cterm=NONE gui=NONE
+            hi  Parameters cterm=NONE gui=NONE
       ]]
       return groups
     end,
