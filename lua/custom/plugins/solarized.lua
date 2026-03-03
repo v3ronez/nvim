@@ -10,9 +10,20 @@ return {
       variables = { italic = false },
     },
     variant = 'summer', -- "spring" | "summer" | "autumn" | "winter" (default)
+    on_colors = function(colors, color)
+      return {
+        base3 = '#FFF3D0',
+        base00 = '#5F737A',
+        -- yellow = '#A77F07',a
+        yellow = '#B37100',
+        -- green = '#767A02',
+        green = '#6B7A09',
+      }
+    end,
     on_highlights = function(colors, color)
       local groups = {
-        LineNr = { fg = '#D17A3A', bg = '#FDF6E3' },
+        -- local normal_color = '#FFF3D0'
+        LineNr = { fg = '#D17A3A', bg = colors.base3 },
         LineNrAbove = { fg = '#D17A3A', bg = colors.base3 },
         LineNrBelow = { fg = '#D17A3A', bg = colors.base3 },
         CursorLineNr = { fg = '#FDF6E3', bg = colors.base3 },
@@ -32,13 +43,14 @@ return {
         LspReferenceText = { fg = colors.base00, bg = '#E1DBC8' },
         LspReferenceWrite = { fg = colors.base00, bg = '#E1DBC8' },
         LspReferenceRead = { fg = colors.base00, bg = '#E1DBC8' },
+        TelescopeNormal = { bg = colors.base3 },
         Visual = { fg = 'NONE', bg = '#E1DBC8' },
       }
 
       vim.cmd [[
             hi  String cterm=NONE gui=NONE
             hi  Comment  cterm=NONE gui=NONE
-            hi  Parameters cterm=NONE gui=NONE
+            hi  Parameter cterm=NONE gui=NONE
       ]]
       return groups
     end,

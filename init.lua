@@ -2,9 +2,6 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.opt.colorcolumn = '80'
 
---in rust set to 100
-vim.api.nvim_create_autocmd('Filetype', { pattern = 'rust', command = 'set colorcolumn=100' })
-
 -- Function to get the current Git branch
 local function get_git_branch()
   local branch = vim.fn.system('git branch --show-current 2>/dev/null'):gsub('\n', '')
