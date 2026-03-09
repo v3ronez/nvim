@@ -13,7 +13,7 @@ return {
     on_colors = function(colors, color)
       return {
         base3 = '#FFF3D0',
-        base00 = '#5F737A',
+        base00 = '#53666d',
         -- yellow = '#A77F07',a
         yellow = '#B37100',
         -- green = '#767A02',

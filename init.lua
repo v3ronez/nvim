@@ -460,22 +460,6 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
-  { -- You can easily change to a different colorscheme.
-    -- Change the name of the colorscheme plugin below, and then
-    -- change the command in the config to whatever the name of that colorscheme is.
-    --
-    -- If you want to see what colorschemes are already installed, you can use `:Telescope colorscheme`.
-    'folke/tokyonight.nvim',
-    priority = 1000, -- Make sure to load this before all the other start plugins.
-    config = function()
-      ---@diagnostic disable-next-line: missing-fields
-      require('tokyonight').setup {
-        styles = {
-          comments = { italic = false }, -- Disable italics in comments
-        },
-      }
-    end,
-  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
@@ -591,21 +575,25 @@ end
 
 load_custom_functions()
 
-vim.o.background = 'light'
+vim.o.background = 'dark'
 if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'gruvbox-material'
   vim.cmd.colorscheme 'solarized'
   -- vim.cmd.colorscheme 'solarized8'
   -- vim.cmd.colorscheme 'zenbones'
 else
+  -- vim.cmd.colorscheme 'catppuccin'
+  -- vim.cmd.colorscheme 'termy-dark'
   -- vim.cmd.colorscheme 'gruber-darker'
-  vim.cmd.colorscheme 'melange'
-  -- vim.cmd.colorscheme 'rose-pine'
+  -- vim.cmd.colorscheme 'melange'
+  vim.cmd.colorscheme 'rose-pine'
 end
 
--- vim.cmd [[
---   hi  String cterm=NONE gui=NONE
---   hi  Comment  cterm=NONE gui=NONE
--- ]]
+vim.cmd [[
+  hi  String cterm=NONE gui=NONE
+  hi  Comment  cterm=NONE gui=NONE
+  hi  @comment cterm=NONE gui=NONE
+  hi Conditional cterm=NONE gui=NONE
+]]
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et

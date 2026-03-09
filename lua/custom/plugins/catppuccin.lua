@@ -5,7 +5,7 @@ return {
     priority = 1000,
     config = function()
       require('catppuccin').setup {
-        flavour = 'frappe',
+        flavour = 'mocha',
         -- float = {
         -- 	-- transparent = true,
         -- 	-- solid = false,
@@ -16,8 +16,6 @@ return {
           harpoon = true,
           mason = true,
           native_lsp = { enabled = true },
-          noice = true,
-          notify = true,
           symbols_outline = true,
           snacks = {
             enabled = true,
@@ -27,8 +25,10 @@ return {
           telescope = true,
           treesitter = true,
           treesitter_context = true,
-          ufo = true,
-          which_key = true,
+          neotest = true,
+          blink_cmp = {
+            style = 'bordered',
+          },
         },
         highlight_overrides = {
           all = function(colors)
@@ -37,12 +37,6 @@ return {
               ['LineNrAbove'] = { fg = colors.surface1 },
               ['LineNr'] = { fg = orange },
               ['LineNrBelow'] = { fg = colors.surface1 },
-            }
-          end,
-          frappe = function()
-            local pink = '#DC67A0'
-            return {
-              ['@comment'] = { fg = pink },
             }
           end,
         },
