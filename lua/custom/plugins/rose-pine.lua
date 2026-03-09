@@ -24,6 +24,10 @@ return {
         TelescopeSelection = { fg = 'text', bg = 'base' },
         TelescopeSelectionCaret = { fg = 'iris', bg = 'iris' },
         --telescope end
+        LineNrAbove = { fg = 'muted' },
+        LineNr = { fg = 'gold' },
+        LineNrBelow = { fg = 'muted' },
+        ColorColumn = { bg = 'muted' },
       },
     }
 
