@@ -583,6 +583,7 @@ if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'solarized8'
   -- vim.cmd.colorscheme 'zenbones'
 else
+  -- vim.cmd.colorscheme 'github_dark_default'
   vim.cmd.colorscheme 'scholar'
   -- vim.cmd.colorscheme 'catppuccin'
   -- vim.cmd.colorscheme 'termy-dark'
