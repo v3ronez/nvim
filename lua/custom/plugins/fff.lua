@@ -32,7 +32,7 @@ return {
       function()
         require('fff').live_grep()
       end,
-      desc = '[F]iles [S]can',
+      desc = '[F]iles [G]rep',
     },
     {
       'fw',

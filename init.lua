@@ -575,7 +575,7 @@ end
 
 load_custom_functions()
 
-vim.o.background = 'dark'
+vim.o.background = 'light'
 if vim.o.background == 'light' then
   vim.cmd.colorscheme 'scholar'
   -- vim.cmd.colorscheme 'gruvbox-material'
@@ -619,5 +619,3 @@ vim.cmd [[
   hi DiagnosticSignInfo cterm=NONE gui=NONE
   hi DiagnosticSignHint cterm=NONE gui=NONE
 ]]
--- The line beneath this is called `modeline`. See `:help modeline`
--- vim: ts=2 sts=2 sw=2 et
