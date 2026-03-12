@@ -24,6 +24,7 @@ return {
           vim.api.nvim_set_hl(0, 'LspReferenceText', { fg = '#553F35', bg = '#CDB69A' })
           vim.api.nvim_set_hl(0, 'LspReferenceRead', { fg = '#553F35', bg = '#CDB69A' })
           vim.api.nvim_set_hl(0, 'LspReferenceWrite', { fg = '#553F35', bg = '#CDB69A' })
+          vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#DBC4AB' })
         end,
       }),
     }
