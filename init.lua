@@ -583,19 +583,15 @@ if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'solarized8'
   -- vim.cmd.colorscheme 'zenbones'
 else
-  -- vim.cmd.colorscheme 'github_dark_default'
-  -- vim.cmd.colorscheme 'scholar'
-  vim.cmd.colorscheme 'catppuccin'
-  -- vim.cmd.colorscheme 'termy-dark'
-  -- vim.cmd.colorscheme 'gruber-darker'
-  -- vim.cmd.colorscheme 'melange'
-  -- vim.cmd.colorscheme 'rose-pine'
+  -- vim.cmd.colorscheme 'mellifluous'
+  vim.cmd.colorscheme 'vesper'
+  -- vim.cmd.colorscheme 'catppuccin'
 end
 
 vim.cmd [[
-  hi  String cterm=NONE gui=NONE
-  hi  Comment  cterm=NONE gui=NONE
-  hi  @comment cterm=NONE gui=NONE
+  hi String cterm=NONE gui=NONE
+  hi Comment  cterm=NONE gui=NONE
+  hi @comment cterm=NONE gui=NONE
   hi Conditional cterm=NONE gui=NONE
 
   hi DiagnosticError cterm=NONE gui=NONE

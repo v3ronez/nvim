@@ -9,9 +9,9 @@ return {
         light1 = '#EFDFCA',
         light3 = '#E0C9AF',
         light4 = '#CDB499',
-        faded_purple = '#8A4A24',
+        faded_purple = '#7D3912',
         faded_orange = '#77402B',
-        faded_red = '#7C4931',
+        faded_red = '#A75B38',
         dark1 = '#39231F',
       },
 
@@ -25,6 +25,8 @@ return {
           vim.api.nvim_set_hl(0, 'LspReferenceRead', { fg = '#553F35', bg = '#CDB69A' })
           vim.api.nvim_set_hl(0, 'LspReferenceWrite', { fg = '#553F35', bg = '#CDB69A' })
           vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#DBC4AB' })
+          vim.api.nvim_set_hl(0, 'Comment', { fg = '#8A7054' })
+          vim.api.nvim_set_hl(0, '@comment', { fg = '#8A7054' })
         end,
       }),
     }
