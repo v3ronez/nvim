@@ -441,6 +441,13 @@ return {
       command = 'setlocal commentstring=<!--\\ %s\\ -->',
     })
 
+    vim.api.nvim_create_autocmd('FileType', {
+      pattern = 'php',
+      callback = function()
+        vim.bo.commentstring = '// %s'
+      end,
+    })
+
     -- Go organize imports on save
     vim.api.nvim_create_autocmd('BufWritePre', {
       pattern = '*.go',

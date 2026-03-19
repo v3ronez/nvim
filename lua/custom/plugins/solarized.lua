@@ -14,7 +14,7 @@ return {
       return {
         base3 = '#FFF3D0',
         base00 = '#53666d',
-        -- yellow = '#A77F07',a
+        -- yellow = '#A77F07',
         yellow = '#B37100',
         -- green = '#767A02',
         green = '#6B7A09',

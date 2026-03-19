@@ -575,43 +575,47 @@ end
 
 load_custom_functions()
 
+--TH
 vim.o.background = 'light'
 if vim.o.background == 'light' then
-  vim.cmd.colorscheme 'scholar'
+  -- vim.cmd.colorscheme 'scholar'
   -- vim.cmd.colorscheme 'gruvbox-material'
   -- vim.cmd.colorscheme 'solarized'
-  -- vim.cmd.colorscheme 'solarized8'
-  -- vim.cmd.colorscheme 'zenbones'
+  vim.cmd.colorscheme 'atomonelight_matte'
 else
+  vim.cmd.colorscheme 'gruvbox-material'
   -- vim.cmd.colorscheme 'mellifluous'
-  vim.cmd.colorscheme 'vesper'
-  -- vim.cmd.colorscheme 'catppuccin'
+  -- vim.cmd.colorscheme 'vesper'
+  -- vim.cmd.colorscheme 'catppuccin-nvim'
 end
 
-vim.cmd [[
-  hi String cterm=NONE gui=NONE
-  hi Comment  cterm=NONE gui=NONE
-  hi @comment cterm=NONE gui=NONE
-  hi Conditional cterm=NONE gui=NONE
-
-  hi DiagnosticError cterm=NONE gui=NONE
-  hi DiagnosticWarn cterm=NONE gui=NONE
-  hi DiagnosticInfo cterm=NONE gui=NONE
-  hi DiagnosticHint cterm=NONE gui=NONE
-  hi DiagnosticOk cterm=NONE gui=NONE
-
-  hi DiagnosticUnderlineError cterm=NONE gui=NONE
-  hi DiagnosticUnderlineWarn cterm=NONE gui=NONE
-  hi DiagnosticUnderlineInfo cterm=NONE gui=NONE
-  hi DiagnosticUnderlineHint cterm=NONE gui=NONE
-
-  hi DiagnosticVirtualTextError cterm=NONE gui=NONE
-  hi DiagnosticVirtualTextWarn cterm=NONE gui=NONE
-  hi DiagnosticVirtualTextInfo cterm=NONE gui=NONE
-  hi DiagnosticVirtualTextHint cterm=NONE gui=NONE
-
-  hi DiagnosticSignError cterm=NONE gui=NONE
-  hi DiagnosticSignWarn cterm=NONE gui=NONE
-  hi DiagnosticSignInfo cterm=NONE gui=NONE
-  hi DiagnosticSignHint cterm=NONE gui=NONE
-]]
+-- vim.cmd [[
+--   hi String cterm=NONE gui=NONE
+--   hi Comment  cterm=NONE gui=NONE
+--   hi @comment cterm=NONE gui=NONE
+--   hi Conditional cterm=NONE gui=NONE
+--
+--   hi DiagnosticError cterm=NONE gui=NONE
+--   hi DiagnosticWarn cterm=NONE gui=NONE
+--   hi DiagnosticInfo cterm=NONE gui=NONE
+--   hi DiagnosticHint cterm=NONE gui=NONE
+--   hi DiagnosticOk cterm=NONE gui=NONE
+--
+--   hi DiagnosticUnderlineError cterm=NONE gui=NONE
+--   hi DiagnosticUnderlineWarn cterm=NONE gui=NONE
+--   hi DiagnosticUnderlineInfo cterm=NONE gui=NONE
+--   hi DiagnosticUnderlineHint cterm=NONE gui=NONE
+--
+--   hi DiagnosticVirtualTextError cterm=NONE gui=NONE
+--   hi DiagnosticVirtualTextWarn cterm=NONE gui=NONE
+--   hi DiagnosticVirtualTextInfo cterm=NONE gui=NONE
+--   hi DiagnosticVirtualTextHint cterm=NONE gui=NONE
+--
+--   hi DiagnosticSignError cterm=NONE gui=NONE
+--   hi DiagnosticSignWarn cterm=NONE gui=NONE
+--   hi DiagnosticSignInfo cterm=NONE gui=NONE
+--   hi DiagnosticSignHint cterm=NONE gui=NONE
+-- ]]
+-- vim.api.nvim_set_hl(0, 'Keyword', { bold = true })
+-- vim.api.nvim_set_hl(0, 'Function', { bold = true })
+-- vim.api.nvim_set_hl(0, 'Type', { bold = true })
