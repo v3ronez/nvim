@@ -39,22 +39,23 @@ return {
         local client = vim.lsp.get_client_by_id(event.data.client_id)
         --
         -- --code Lens
-        -- if client and client.server_capabilities.codeLensProvider then
-        --   local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
-        --   vim.lsp.codelens.refresh { bufnr = event.buf }
-        --   vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
-        --     buffer = event.buf,
-        --     group = codelens_augroup,
-        --     callback = vim.lsp.codelens.refresh,
-        --   })
-        --
-        --   vim.api.nvim_create_autocmd('LspDetach', {
-        --     buffer = event.buf,
-        --     callback = function()
-        --       vim.api.nvim_clear_autocmds { group = codelens_augroup }
-        --     end,
-        --   })
-        -- end
+        if client and client.server_capabilities.codeLensProvider then
+          local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
+          vim.lsp.codelens.refresh { bufnr = event.buf }
+
+          vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
+            pattern = '*.ml,*.mli, *.mlx',
+            group = codelens_augroup,
+            callback = vim.lsp.codelens.refresh,
+          })
+
+          vim.api.nvim_create_autocmd('LspDetach', {
+            buffer = event.buf,
+            callback = function()
+              vim.api.nvim_clear_autocmds { group = codelens_augroup }
+            end,
+          })
+        end
 
         if client then
           local supports_highlight = false
@@ -120,25 +121,25 @@ return {
       },
     }
 
-    -- local border = {
-    --   { '╭', 'FloatBorder' },
-    --   { '─', 'FloatBorder' },
-    --   { '╮', 'FloatBorder' },
-    --   { '│', 'FloatBorder' },
-    --   { '╯', 'FloatBorder' },
-    --   { '─', 'FloatBorder' },
-    --   { '╰', 'FloatBorder' },
-    --   { '│', 'FloatBorder' },
-    -- }
-    --
-    -- local handlers = {
-    --   ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-    --     border = border,
-    --   }),
-    --   ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-    --     border = border,
-    --   }),
-    -- }
+    local border = {
+      { '╭', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╮', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+      { '╯', 'FloatBorder' },
+      { '─', 'FloatBorder' },
+      { '╰', 'FloatBorder' },
+      { '│', 'FloatBorder' },
+    }
+
+    local handlers = {
+      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+        border = border,
+      }),
+      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+        border = border,
+      }),
+    }
 
     -- Apply borders to all LSP floating windows
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
@@ -392,6 +393,14 @@ return {
         },
       },
     })
+    vim.lsp.config('ocamllsp', {
+      cmd = { 'dune', 'exec', 'ocamllsp' },
+      settings = {
+        codelens = { enable = true },
+        inlayHints = { enable = true },
+        syntaxDocumentation = { enable = true },
+      },
+    })
 
     vim.lsp.config('lua_ls', {
       cmd = { 'lua-language-server' },
@@ -425,6 +434,7 @@ return {
     vim.lsp.enable 'lua_ls'
     vim.lsp.enable 'sqls'
     vim.lsp.enable 'vue_ls'
+    vim.lsp.enable 'ocamllsp'
 
     -- Templ filetype setup
     vim.filetype.add { extension = { templ = 'templ' } }
