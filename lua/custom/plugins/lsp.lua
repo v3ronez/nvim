@@ -33,6 +33,7 @@ return {
         map('<space>th', function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
         end, '[T]oggle Inlay [H]ints')
+        -- vim.lsp.inlay_hint.enable(true, { bufnr = event.buf })
 
         -- Document highlight
         local client = vim.lsp.get_client_by_id(event.data.client_id)
