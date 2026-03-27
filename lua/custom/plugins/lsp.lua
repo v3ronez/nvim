@@ -40,21 +40,23 @@ return {
         --
         -- --code Lens
         if client and client.server_capabilities.codeLensProvider then
-          local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
-          vim.lsp.codelens.refresh { bufnr = event.buf }
+          local ft = vim.bo[event.buf].filetype
+          if ft == 'ocaml' or ft == 'ocamlinterface' then
+            local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
+            vim.lsp.codelens.refresh { bufnr = event.buf }
+            vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
+              buffer = event.buf,
+              group = codelens_augroup,
+              callback = vim.lsp.codelens.refresh,
+            })
 
-          vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
-            pattern = '*.ml,*.mli, *.mlx',
-            group = codelens_augroup,
-            callback = vim.lsp.codelens.refresh,
-          })
-
-          vim.api.nvim_create_autocmd('LspDetach', {
-            buffer = event.buf,
-            callback = function()
-              vim.api.nvim_clear_autocmds { group = codelens_augroup }
-            end,
-          })
+            vim.api.nvim_create_autocmd('LspDetach', {
+              buffer = event.buf,
+              callback = function()
+                vim.api.nvim_clear_autocmds { group = codelens_augroup }
+              end,
+            })
+          end
         end
 
         if client then
@@ -480,6 +482,36 @@ return {
 
     -- Mason setup for automatic installation
     require('mason').setup()
+
+    -- Renderiza code lens do OCaml acima da linha
+    local orig_codelens_display = vim.lsp.codelens.display
+
+    vim.lsp.codelens.display = function(lenses, bufnr, client_id)
+      local ft = vim.bo[bufnr].filetype
+      if ft ~= 'ocaml' and ft ~= 'ocamlinterface' then
+        return orig_codelens_display(lenses, bufnr, client_id)
+      end
+
+      -- Chama o display original (limpa o namespace dele)
+      orig_codelens_display({}, bufnr, client_id)
+
+      if not lenses or #lenses == 0 then
+        return
+      end
+
+      local ns = vim.api.nvim_create_namespace 'ocaml_codelens_above'
+      vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
+
+      for _, lens in ipairs(lenses) do
+        if lens.command and lens.command.title then
+          local line = lens.range.start.line
+          vim.api.nvim_buf_set_extmark(bufnr, ns, line, 0, {
+            virt_lines = { { { lens.command.title, 'LspCodeLens' } } },
+            virt_lines_above = true,
+          })
+        end
+      end
+    end
 
     local ensure_installed = {
       'stylua',

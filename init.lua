@@ -576,14 +576,15 @@ end
 load_custom_functions()
 
 --TH
-vim.o.background = 'light'
+vim.o.background = 'dark'
 if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'scholar'
   -- vim.cmd.colorscheme 'gruvbox-material'
   -- vim.cmd.colorscheme 'solarized'
   vim.cmd.colorscheme 'atomonelight_matte'
 else
-  vim.cmd.colorscheme 'gruvbox-material'
+  vim.cmd.colorscheme 'material'
+  -- vim.cmd.colorscheme 'gruvbox-material'
   -- vim.cmd.colorscheme 'mellifluous'
   -- vim.cmd.colorscheme 'vesper'
   -- vim.cmd.colorscheme 'catppuccin-nvim'

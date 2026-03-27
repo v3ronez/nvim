@@ -34,9 +34,35 @@ return {
           all = function(colors)
             local orange = '#DC8F58'
             return {
-              ['LineNrAbove'] = { fg = colors.surface1 },
-              ['LineNr'] = { fg = orange },
-              ['LineNrBelow'] = { fg = colors.surface1 },
+              LineNrAbove = { fg = colors.surface1 },
+              LineNr = { fg = orange },
+              LineNrBelow = { fg = colors.surface1 },
+
+              String = { italic = false },
+              Comment = { italic = false },
+              ['@comment'] = { italic = false },
+              Conditional = { italic = false },
+
+              DiagnosticError = { italic = false },
+              DiagnosticWarn = { italic = false },
+              DiagnosticInfo = { italic = false },
+              DiagnosticHint = { italic = false },
+              DiagnosticOk = { italic = false },
+
+              DiagnosticUnderlineError = { italic = false },
+              DiagnosticUnderlineWarn = { italic = false },
+              DiagnosticUnderlineInfo = { italic = false },
+              DiagnosticUnderlineHint = { italic = false },
+
+              DiagnosticVirtualTextError = { italic = false },
+              DiagnosticVirtualTextWarn = { italic = false },
+              DiagnosticVirtualTextInfo = { italic = false },
+              DiagnosticVirtualTextHint = { italic = false },
+
+              DiagnosticSignError = { italic = false },
+              DiagnosticSignWarn = { italic = false },
+              DiagnosticSignInfo = { italic = false },
+              DiagnosticSignHint = { italic = false },
             }
           end,
         },
