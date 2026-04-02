@@ -123,26 +123,6 @@ return {
       },
     }
 
-    local border = {
-      { '╭', 'FloatBorder' },
-      { '─', 'FloatBorder' },
-      { '╮', 'FloatBorder' },
-      { '│', 'FloatBorder' },
-      { '╯', 'FloatBorder' },
-      { '─', 'FloatBorder' },
-      { '╰', 'FloatBorder' },
-      { '│', 'FloatBorder' },
-    }
-
-    local handlers = {
-      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = border,
-      }),
-      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = border,
-      }),
-    }
-
     -- Apply borders to all LSP floating windows
     local orig_util_open_floating_preview = vim.lsp.util.open_floating_preview
     function vim.lsp.util.open_floating_preview(contents, syntax, opts, ...)
@@ -204,30 +184,30 @@ return {
       location = vue_language_server_path,
       languages = { 'vue' },
     }
-
-    local border = {
-      { '╭', 'FloatBorder' },
-      { '─', 'FloatBorder' },
-      { '╮', 'FloatBorder' },
-      { '│', 'FloatBorder' },
-      { '╯', 'FloatBorder' },
-      { '─', 'FloatBorder' },
-      { '╰', 'FloatBorder' },
-      { '│', 'FloatBorder' },
-    }
-
-    local handlers = {
-      ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
-        border = border,
-      }),
-      ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
-        border = border,
-      }),
-    }
+    --
+    -- local border = {
+    --   { '╭', 'FloatBorder' },
+    --   { '─', 'FloatBorder' },
+    --   { '╮', 'FloatBorder' },
+    --   { '│', 'FloatBorder' },
+    --   { '╯', 'FloatBorder' },
+    --   { '─', 'FloatBorder' },
+    --   { '╰', 'FloatBorder' },
+    --   { '│', 'FloatBorder' },
+    -- }
+    --
+    -- local handlers = {
+    --   ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, {
+    --     border = border,
+    --   }),
+    --   ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+    --     border = border,
+    --   }),
+    -- }
 
     vim.lsp.config('*', {
       capabilities = capabilities,
-      handlers = handlers,
+      -- handlers = handlers,
     })
     -- Server configurations using Neovim 0.11 API
     vim.lsp.config('intelephense', {
@@ -315,6 +295,7 @@ return {
           cargo = {
             targetDir = true,
           },
+          checkOnSave = true,
         },
       },
     })
@@ -396,7 +377,8 @@ return {
       },
     })
     vim.lsp.config('ocamllsp', {
-      cmd = { 'dune', 'exec', 'ocamllsp' },
+      -- cmd = { 'dune', 'exec', 'ocamllsp' },
+      cmd = { 'ocamllsp' },
       settings = {
         codelens = { enable = true },
         inlayHints = { enable = true },
@@ -448,12 +430,13 @@ return {
       pattern = '*.templ',
       callback = templ_format,
     })
-    -- Vue commaentstring
+    -- Vue commeentstring
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'vue',
       command = 'setlocal commentstring=<!--\\ %s\\ -->',
     })
 
+    -- PHP commentstring
     vim.api.nvim_create_autocmd('FileType', {
       pattern = 'php',
       callback = function()
@@ -529,6 +512,8 @@ return {
       'lua-language-server',
       'vtsls',
       'vue-language-server',
+      'docker-compose-language-service',
+      'docker-language-server',
     }
 
     require('mason-tool-installer').setup {

@@ -35,6 +35,17 @@ return {
       desc = '[F]iles [G]rep',
     },
     {
+      'fz',
+      function()
+        require('fff').live_grep {
+          grep = {
+            modes = { 'fuzzy', 'plain' },
+          },
+        }
+      end,
+      desc = 'Live fffuzy grep',
+    },
+    {
       'fw',
       function()
         require('fff').live_grep { query = vim.fn.expand '<cword>' }

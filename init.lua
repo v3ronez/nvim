@@ -63,8 +63,8 @@ vim.opt.timeoutlen = 250
 vim.opt.conceallevel = 0
 vim.opt.splitright = true
 vim.opt.splitbelow = true
-vim.opt.scrolloff = 99999
-vim.opt.sidescrolloff = 99999
+-- vim.opt.scrolloff = 99999
+-- vim.opt.sidescrolloff = 99999
 vim.opt.clipboard = { 'unnamed', 'unnamedplus' }
 vim.opt.inccommand = 'split'
 

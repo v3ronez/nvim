@@ -17,7 +17,7 @@ return {
 
       styles = { -- Give comments style such as bold, italic, underline etc.
         comments = {
-          italic = false,
+          italic = true,
         },
         strings = { --[[ bold = true ]]
         },

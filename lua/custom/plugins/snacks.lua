@@ -52,4 +52,9 @@ return {
     statuscolumn = { enabled = false },
     words = { enabled = true },
   },
+  vim.keymap.set({ 'n', 'x' }, '<leader>gg', function()
+    require('snacks.gitbrowse').open {
+      branch = 'main',
+    }
+  end, { desc = 'Open git link in the browser', silent = true }),
 }
