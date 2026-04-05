@@ -42,20 +42,7 @@ return {
         if client and client.server_capabilities.codeLensProvider then
           local ft = vim.bo[event.buf].filetype
           if ft == 'ocaml' or ft == 'ocamlinterface' then
-            local codelens_augroup = vim.api.nvim_create_augroup('lsp-codelens-' .. event.buf, { clear = true })
-            vim.lsp.codelens.refresh { bufnr = event.buf }
-            vim.api.nvim_create_autocmd({ 'BufEnter', 'BufWritePost' }, {
-              buffer = event.buf,
-              group = codelens_augroup,
-              callback = vim.lsp.codelens.refresh,
-            })
-
-            vim.api.nvim_create_autocmd('LspDetach', {
-              buffer = event.buf,
-              callback = function()
-                vim.api.nvim_clear_autocmds { group = codelens_augroup }
-              end,
-            })
+            vim.lsp.codelens.enable(true, { bufnr = event.buf })
           end
         end
 
@@ -265,6 +252,12 @@ return {
       filetypes = { 'css', 'scss', 'less' },
       capabilities = capabilities,
     })
+    vim.lsp.config('oxlint', {
+      cmd = { 'oxlint', '--lsp' },
+      filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact', 'vue' },
+      root_markers = { '.oxlintrc.json' },
+      capabilities = capabilities,
+    })
 
     vim.lsp.config('tailwindcss', {
       cmd = { 'tailwindcss-language-server', '--stdio' },
@@ -292,10 +285,7 @@ return {
       capabilities = capabilities,
       settings = {
         ['rust-analyzer'] = {
-          cargo = {
-            targetDir = true,
-          },
-          checkOnSave = true,
+          check = { command = 'clippy', features = 'all' },
         },
       },
     })
@@ -346,7 +336,13 @@ return {
           tsserver = {
             useSyntaxServer = false,
           },
+          preferences = {
+            importModuleSpecifierPreference = 'non-relative',
+          },
         },
+      },
+      handlers = {
+        ['textDocument/publishDiagnostics'] = function() end,
       },
     })
 
@@ -377,8 +373,8 @@ return {
       },
     })
     vim.lsp.config('ocamllsp', {
-      -- cmd = { 'dune', 'exec', 'ocamllsp' },
-      cmd = { 'ocamllsp' },
+      cmd = { 'dune', 'exec', 'ocamllsp' },
+      -- cmd = { 'ocamllsp' },
       settings = {
         codelens = { enable = true },
         inlayHints = { enable = true },
@@ -419,6 +415,7 @@ return {
     vim.lsp.enable 'sqls'
     vim.lsp.enable 'vue_ls'
     vim.lsp.enable 'ocamllsp'
+    vim.lsp.enable 'oxlint'
 
     -- Templ filetype setup
     vim.filetype.add { extension = { templ = 'templ' } }
@@ -514,6 +511,9 @@ return {
       'vue-language-server',
       'docker-compose-language-service',
       'docker-language-server',
+      'oxlint',
+      'prettierd',
+      'oxfmt',
     }
 
     require('mason-tool-installer').setup {

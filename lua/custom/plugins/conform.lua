@@ -27,15 +27,42 @@ return {
         },
         stdin = false,
       },
-      -- ['ml-format'] = {
-      --   command = 'ocamlformat',
-      --   args = {
-      --     '--enable-outside-detected-project',
-      --     '--name',
-      --     '$FILENAME',
-      --     '-',
-      --   },
-      -- },
+      ['ml-format'] = {
+        command = 'ocamlformat',
+        args = {
+          '--enable-outside-detected-project',
+          '--name',
+          '$FILENAME',
+          '-',
+        },
+      },
+      oxfmt = {
+        condition = function(_, ctx)
+          return vim.fs.find({ '.oxfmtrc.json', '.oxfmtrc.jsonc' }, {
+            path = ctx.filename,
+            upward = true,
+            stop = vim.uv.os_homedir(),
+          })[1] ~= nil
+        end,
+      },
+      prettierd = {
+        condition = function(_, ctx)
+          return vim.fs.find({
+            '.prettierrc',
+            '.prettierrc.json',
+            '.prettierrc.js',
+            '.prettierrc.cjs',
+            '.prettierrc.mjs',
+            'prettier.config.js',
+            'prettier.config.cjs',
+            'prettier.config.mjs',
+          }, {
+            path = ctx.filename,
+            upward = true,
+            stop = vim.uv.os_homedir(),
+          })[1] ~= nil
+        end,
+      },
     },
     format_on_save = function(bufnr)
       -- Disable "format_on_save lsp_fallback" for languages that don't
@@ -57,17 +84,19 @@ return {
       lua = { 'stylua' },
       php = { 'php_cs_fixer' },
       blade = { 'blade-formatter', 'rustywind' },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      javascript = { 'prettierd', 'prettier', stop_after_first = true },
+      astro = { 'oxfmt', 'biome', 'prettierd', stop_after_first = true },
+      javascript = { 'oxfmt', 'biome', 'prettierd', stop_after_first = true },
+      typescript = { 'oxfmt', 'biome', 'prettierd', stop_after_first = true },
+      javascriptreact = { 'oxfmt', 'biome', 'prettierd', stop_after_first = true },
+      typescriptreact = { 'oxfmt', 'biome', 'prettierd', stop_after_first = true },
+      svelte = { 'oxfmt', 'prettierd', stop_after_first = true },
       ocaml = { 'ocamlformat' },
       ocaml_mlx = { 'ocamlformat_mlx' },
       elixir = { 'mix' },
       eelixir = { 'mix' },
       heex = { 'mix' },
       surface = { 'mix' },
-      vue = { 'prettierd', 'prettier', stop_after_first = true },
+      vue = { 'oxfmt', 'prettierd', 'prettier', stop_after_first = true },
     },
   },
 }
