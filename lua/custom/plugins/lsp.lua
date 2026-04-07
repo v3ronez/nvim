@@ -327,6 +327,13 @@ return {
         'typescript.tsx',
         'vue',
       },
+      capabilities = {
+        textDocument = {
+          semanticTokens = {
+            multilineTokenSupport = false,
+          },
+        },
+      },
       root_markers = { 'tsconfig.json', 'jsconfig.json', 'package.json', '.git' },
       init_options = {
         plugins = { vue_plugin },
@@ -341,9 +348,9 @@ return {
           },
         },
       },
-      handlers = {
-        ['textDocument/publishDiagnostics'] = function() end,
-      },
+      -- handlers = {
+      --   ['textDocument/publishDiagnostics'] = function() end,
+      -- },
     })
 
     vim.lsp.config('jsonls', {

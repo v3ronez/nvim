@@ -89,6 +89,8 @@ return {
         ['@module'] = { fg = orange },
         ['@property'] = { fg = white },
         ['@lsp.type.decorator.rust'] = { link = 'Keyword' },
+        ['@lsp.type.interface.typescript'] = { link = 'Type' },
+        ['@variable.typescript'] = { link = 'Type' },
         LspCodeLens = { fg = '#818181' },
       }, -- Overwrite highlights with your own
     }
