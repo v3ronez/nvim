@@ -12,7 +12,7 @@ return {
     variant = 'summer', -- "spring" | "summer" | "autumn" | "winter" (default)
     on_colors = function(colors, color)
       return {
-        base3 = '#FFF3D0',
+        -- base3 = '#FFF3D0',
         base00 = '#53666d',
         -- yellow = '#A77F07',
         yellow = '#B37100',

@@ -106,7 +106,6 @@ return {
         noremap = true,
       },
     },
-    event = { 'VeryLazy' },
     opts = {
       features = {
         pickers = {

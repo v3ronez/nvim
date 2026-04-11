@@ -528,14 +528,15 @@ local function load_custom_functions()
 end
 
 load_custom_functions()
+require('custom.functions.brain').setup()
 
 --TH
 vim.o.background = 'light'
 if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'scholar'
   -- vim.cmd.colorscheme 'gruvbox-material'
-  -- vim.cmd.colorscheme 'solarized'
-  vim.cmd.colorscheme 'atomonelight_matte'
+  vim.cmd.colorscheme 'solarized'
+  -- vim.cmd.colorscheme 'atomonelight_matte'
 else
   vim.cmd.colorscheme 'material'
   -- vim.cmd.colorscheme 'gruvbox-material'
