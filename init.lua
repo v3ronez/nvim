@@ -531,7 +531,7 @@ load_custom_functions()
 require('custom.functions.brain').setup()
 
 --TH
-vim.o.background = 'light'
+vim.o.background = 'dark'
 if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'scholar'
   -- vim.cmd.colorscheme 'gruvbox-material'

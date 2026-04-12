@@ -40,6 +40,30 @@ local function db_search(query)
   vim.fn.chdir(prev_cwd)
 end
 
+-- =============================================================
+-- Markdown: restore native gf (overrides phptools.nvim global mapping)
+-- =============================================================
+local function setup_markdown_gf()
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'markdown',
+    desc = 'Brain: restore gf for markdown files',
+    callback = function(ev)
+      vim.keymap.set('n', 'gf', function()
+        -- get word under cursor, strip [[ and ]] if wikilink style
+        local path = vim.fn.expand '<cfile>'
+        path = path:gsub('^%[%[', ''):gsub('%]%]$', '')
+        -- add .md if no extension
+        if not path:find '%.' then
+          path = path .. '.md'
+        end
+        -- resolve relative to DB
+        local full = path:sub(1, 1) == '/' and path or (DB .. '/' .. path)
+        vim.cmd('edit ' .. full)
+      end, { buffer = ev.buf, noremap = true, silent = true, desc = 'Brain: follow markdown link' })
+    end,
+  })
+end
+
 -- Full interactive live grep across notes
 local function db_live_search()
   local ok, fff = pcall(require, 'fff')
@@ -148,6 +172,7 @@ end
 -- =============================================================
 function M.setup()
   setup_keymaps()
+  setup_markdown_gf()
   setup_git_autocommit()
   print('🧠 Brain loaded → ' .. DB)
 end
