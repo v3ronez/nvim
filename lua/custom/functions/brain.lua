@@ -33,35 +33,7 @@ local function db_search(query)
     pattern = query .. '\\b'
   end
 
-  -- Temporarily change cwd so fff scopes to notes folder
-  local prev_cwd = vim.fn.getcwd()
-  vim.fn.chdir(DB)
   fff.live_grep { query = pattern or '', cwd = DB }
-  vim.fn.chdir(prev_cwd)
-end
-
--- =============================================================
--- Markdown: restore native gf (overrides phptools.nvim global mapping)
--- =============================================================
-local function setup_markdown_gf()
-  vim.api.nvim_create_autocmd('FileType', {
-    pattern = 'markdown',
-    desc = 'Brain: restore gf for markdown files',
-    callback = function(ev)
-      vim.keymap.set('n', 'gf', function()
-        -- get word under cursor, strip [[ and ]] if wikilink style
-        local path = vim.fn.expand '<cfile>'
-        path = path:gsub('^%[%[', ''):gsub('%]%]$', '')
-        -- add .md if no extension
-        if not path:find '%.' then
-          path = path .. '.md'
-        end
-        -- resolve relative to DB
-        local full = path:sub(1, 1) == '/' and path or (DB .. '/' .. path)
-        vim.cmd('edit ' .. full)
-      end, { buffer = ev.buf, noremap = true, silent = true, desc = 'Brain: follow markdown link' })
-    end,
-  })
 end
 
 -- Full interactive live grep across notes
@@ -72,12 +44,59 @@ local function db_live_search()
     return
   end
 
-  local prev_cwd = vim.fn.getcwd()
-  vim.fn.chdir(DB)
   fff.live_grep { cwd = DB }
-  vim.fn.chdir(prev_cwd)
 end
+-- =============================================================
+-- Markdown: restore native gf (overrides phptools.nvim global mapping)
+-- =============================================================
+local function setup_markdown_gf()
+  vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'markdown',
+    desc = 'Brain: restore gf for markdown files',
+    callback = function(ev)
+      vim.keymap.set('n', 'gf', function()
+        local path = nil
+        local line = vim.api.nvim_get_current_line()
+        local col = vim.api.nvim_win_get_cursor(0)[2] + 1 -- 1-indexed
 
+        -- 1) Markdown link: [text](path)
+        --    cursor can be on [text] OR (path) — scan all matches on the line
+        for full_match, link_text, link_path in line:gmatch '()%[([^%]]+)%]%(([^%)]+)%)' do
+          local match_start = full_match
+          local match_end = match_start + #('[' .. link_text .. '](' .. link_path .. ')') - 1
+          if col >= match_start and col <= match_end then
+            path = link_path
+            break
+          end
+        end
+
+        -- 2) Wikilink: [[path]]
+        if not path then
+          local wikilink = line:match '%[%[([^%]]+)%]%]'
+          if wikilink then
+            path = wikilink
+          end
+        end
+
+        -- 3) fallback: word under cursor
+        if not path then
+          path = vim.fn.expand '<cfile>'
+        end
+
+        -- add .md if no extension
+        if path and not path:find '%.' then
+          path = path .. '.md'
+        end
+
+        -- resolve relative to DB
+        if path then
+          local full = path:sub(1, 1) == '/' and path or (DB .. '/' .. path)
+          vim.cmd('edit ' .. vim.fn.fnameescape(full))
+        end
+      end, { buffer = ev.buf, noremap = true, silent = true, desc = 'Brain: follow markdown link' })
+    end,
+  })
+end
 -- =============================================================
 -- Keymaps
 -- =============================================================
@@ -100,7 +119,7 @@ local function setup_keymaps()
   map('n', '<leader>dD', function()
     local date = os.date '%Y-%m-%d'
     local daily_path = DB .. '/5_Daily/' .. date .. '.md'
-    vim.fn.mkdir(DB .. '/5_Daily', 'p') -- ensure folder exists
+    vim.fn.mkdir(DB .. '/today', 'p') -- ensure folder exists
     vim.cmd('edit ' .. daily_path)
     -- Seed the file with a heading if it's brand new
     if vim.fn.getfsize(daily_path) <= 0 then
@@ -124,10 +143,7 @@ local function setup_keymaps()
     if not ok then
       return
     end
-    local prev_cwd = vim.fn.getcwd()
-    vim.fn.chdir(DB)
-    fff.find_files { cwd = DB }
-    vim.fn.chdir(prev_cwd)
+    fff.find_files_in_dir(DB)
   end, vim.tbl_extend('force', opts, { desc = 'Brain: find note by name' }))
 end
 
@@ -157,12 +173,6 @@ local function setup_git_autocommit()
       end
 
       vim.fn.system('cd ' .. DB .. ' && git push origin main')
-
-      if vim.v.shell_error == 0 then
-        print('🧠 Brain synced: ' .. datetime)
-      else
-        print '🧠 Brain sync failed (git error)'
-      end
     end,
   })
 end
@@ -174,7 +184,6 @@ function M.setup()
   setup_keymaps()
   setup_markdown_gf()
   setup_git_autocommit()
-  print('🧠 Brain loaded → ' .. DB)
 end
 
 return M
