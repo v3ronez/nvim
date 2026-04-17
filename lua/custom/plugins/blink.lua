@@ -14,9 +14,15 @@ return {
       config = function()
         local luasnip = require 'luasnip'
 
-        -- Loads all the snippets installed by extensions in vscode.
-        -- require('luasnip.loaders.from_vscode').lazy_load()
-        require('luasnip.loaders.from_vscode').lazy_load()
+        require('luasnip.loaders.from_vscode').lazy_load {
+          paths = { vim.fn.stdpath 'config' .. '/snippets' },
+        }
+
+        -- TypeScript herda snippets do JavaScript
+        luasnip.filetype_extend('typescript', { 'javascript' })
+        luasnip.filetype_extend('typescriptreact', { 'javascript', 'typescript' })
+        luasnip.filetype_extend('vue', { 'javascript', 'typescript' })
+
         luasnip.config.set_config {
           region_check_events = 'InsertEnter',
           delete_check_events = 'InsertLeave',
@@ -129,26 +135,27 @@ return {
     sources = {
       default = { 'lsp', 'laravel', 'snippets', 'path' },
       providers = {
-        lsp = {
-          score_offset = 90, -- Extreme priority to override fuzzy matching
-        },
+        -- lsp = {
+        --   score_offset = 2000,
+        -- },
+        -- snippets = {
+        --   score_offset = 200,
+        --   -- max_items = 4,
+        --   -- min_keyword_length = 2,
+        -- },
         laravel = {
           name = 'laravel',
           module = 'blink.compat.source',
-          score_offset = 95,
+          score_offset = 90,
         },
-        path = {
-          score_offset = 60, -- File paths moderate priority
-        },
-        snippets = {
-          score_offset = 50, -- Much lower priority
-          max_items = 2,
-          min_keyword_length = 2,
-        },
-        buffer = {
-          score_offset = 40, -- Lowest priority
-          min_keyword_length = 3, -- Only show after 3 chars
-        },
+
+        -- path = {
+        --   score_offset = 40,
+        -- },
+        -- buffer = {
+        --   score_offset = 30, -- Lowest priority
+        --   min_keyword_length = 3, -- Only show after 3 chars
+        -- },
       },
     },
 

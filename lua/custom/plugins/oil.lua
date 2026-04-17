@@ -18,14 +18,22 @@ return {
           ['<C-k>'] = false,
           ['<C-j>'] = false,
           ['<C-r>'] = 'actions.refresh',
-          ['<M-h>'] = 'actions.select_split',
+          ['cc'] = {
+            desc = 'Copy filepath to system clipboard',
+            callback = function()
+              require('oil.actions').copy_entry_path.callback()
+              vim.fn.setreg('+', vim.fn.getreg(vim.v.register))
+            end,
+          },
         },
+        default_file_explorer = true,
+        delete_to_trash = true,
         view_options = {
           show_hidden = true,
-          is_always_hidden = function(name, _)
-            local folder_skip = { 'dev-tools.locks', 'dune.lock', '_build', 'vendor', 'node_module', 'target' }
-            return vim.tbl_contains(folder_skip, name)
-          end,
+          case_insensitive = true,
+        },
+        lsp_file_methods = {
+          autosave_changes = true,
         },
       }
 

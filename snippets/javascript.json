@@ -3,16 +3,103 @@
         "prefix": "log",
         "description": "console.log",
         "body": [
-            "console.log(${1:expression});"
+            "console.log(${1});"
         ]
     },
     "Arrow function": {
         "prefix": "ar",
         "description": "arrow function",
         "body": [
-            "${1:param} => {",
-            "\t${2:body}",
+            "${1} => {",
+            "\t${2}",
             "}"
+        ]
+    },
+    "Describe block": {
+        "prefix": "desc",
+        "description": "describe and test block",
+        "body": [
+            "describe(\"${1:description}\", () => {",
+            "\ttest(\"${2:test name}\", () => {",
+            "\t\t${3:}",
+            "\t});",
+            "});"
+        ]
+    },
+    "Require": {
+        "prefix": "req",
+        "description": "const x = require",
+        "body": [
+            "const ${1:name} = require('${2:module}');"
+        ]
+    },
+    "Import destructured": {
+        "prefix": "imp",
+        "description": "import with destructuring",
+        "body": [
+            "import { ${1:name} } from '${2:module}';"
+        ]
+    },
+    "Express middleware": {
+        "prefix": "mw",
+        "description": "express middleware",
+        "body": [
+            "const ${1:name} = (req, res, next) => {",
+            "\t${2:}",
+            "\tnext();",
+            "};"
+        ]
+    },
+    "Process env": {
+        "prefix": "env",
+        "description": "process.env variable",
+        "body": [
+            "process.env.${1:VARIABLE}"
+        ]
+    },
+    "Promise": {
+        "prefix": "pro",
+        "description": "new Promise",
+        "body": [
+            "new Promise((resolve, reject) => {",
+            "\t${1:}",
+            "});"
+        ]
+    },
+    "Test block": {
+        "prefix": "test",
+        "description": "single test block",
+        "body": [
+            "test('${1:test name}', () => {",
+            "\t${2:}",
+            "});"
+        ]
+    },
+    "It block": {
+        "prefix": "it",
+        "description": "it block",
+        "body": [
+            "it('${1:should}', () => {",
+            "\t${2:}",
+            "});"
+        ]
+    },
+    "BeforeEach": {
+        "prefix": "bef",
+        "description": "beforeEach hook",
+        "body": [
+            "beforeEach(() => {",
+            "\t${1:}",
+            "});"
+        ]
+    },
+    "AfterEach": {
+        "prefix": "aft",
+        "description": "afterEach hook",
+        "body": [
+            "afterEach(() => {",
+            "\t${1:}",
+            "});"
         ]
     }
 }

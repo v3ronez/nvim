@@ -1,5 +1,5 @@
 {
-    "name": "friendly-snippets",
+    "name": "snippets",
     "engines": {
         "vscode": "^1.11.0"
     },
@@ -7,31 +7,31 @@
         "snippets": [
             {
                 "language": "go",
-                "path": "./snippets/go.json"
-            },
-            {
-                "language": "rust",
-                "path": "./snippets/rust.json"
-            },
-            {
-                "language": "php",
-                "path": "./snippets/php.json"
-            },
-            {
-                "language": "vue",
-                "path": "./snippets/vue.json"
-            },
-            {
-                "language": "typescript",
-                "path": "./snippets/typescript.json"
-            },
-            {
-                "language": "typescriptreact",
-                "path": "./snippets/typescriptreact.json"
+                "path": "./go.json"
             },
             {
                 "language": "javascript",
-                "path": "./snippets/javascript.json"
+                "path": "./javascript.json"
+            },
+            {
+                "language": "php",
+                "path": "./php.json"
+            },
+            {
+                "language": "rust",
+                "path": "./rust.json"
+            },
+            {
+                "language": "typescript",
+                "path": "./typescript.json"
+            },
+            {
+                "language": "typescriptreact",
+                "path": "./typescriptreact.json"
+            },
+            {
+                "language": "vue",
+                "path": "./vue.json"
             }
         ]
     }

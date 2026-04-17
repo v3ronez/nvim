@@ -534,8 +534,8 @@ require('custom.functions.brain').setup()
 vim.o.background = 'dark'
 if vim.o.background == 'light' then
   -- vim.cmd.colorscheme 'scholar'
-  -- vim.cmd.colorscheme 'gruvbox-material'
-  vim.cmd.colorscheme 'solarized'
+  vim.cmd.colorscheme 'gruvbox-material'
+  -- vim.cmd.colorscheme 'solarized'
   -- vim.cmd.colorscheme 'atomonelight_matte'
 else
   vim.cmd.colorscheme 'material'

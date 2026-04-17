@@ -73,6 +73,11 @@ return {
       max_results = 60, -- Maximum search results to display
       max_threads = 4, -- Maximum threads for fuzzy search
 
+      git = {
+        status_text_color = false, -- Apply git status colors to filename text (default: false, only sign column)
+      },
+      prompt_vim_mode = true,
+
       keymaps = {
         close = '<Esc>',
         select = '<CR>',

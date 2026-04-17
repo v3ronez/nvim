@@ -1,7 +1,4 @@
 {
-    "extends": [
-        "javascript"
-    ],
     "Setup TS": {
         "prefix": "set",
         "description": "Vue template with script setup TS and empty body",

@@ -24,6 +24,18 @@ return {
         map('gr', require('snacks').picker.lsp_references, '[G]oto [R]eferences')
         map('gi', require('snacks').picker.lsp_implementations, '[G]oto [I]mplementation')
         map('gt', require('snacks').picker.lsp_type_definitions, 'Type [D]efinition')
+        map('gv', function()
+          vim.cmd 'vsplit'
+          vim.lsp.buf.definition {
+            on_list = function(options)
+              local item = options.items[1]
+              if item then
+                vim.cmd('edit ' .. item.filename)
+                vim.api.nvim_win_set_cursor(0, { item.lnum, item.col - 1 })
+              end
+            end,
+          }
+        end, 'Go to Definition (vsplit)')
         map('<leader>ds', require('snacks').picker.lsp_symbols, '[D]ocument [S]ymbols')
         map('<leader>ws', require('snacks').picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
