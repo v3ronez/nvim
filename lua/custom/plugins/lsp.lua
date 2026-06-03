@@ -40,8 +40,8 @@ return {
         map('<leader>ws', require('snacks').picker.lsp_workspace_symbols, '[W]orkspace [S]ymbols')
         map('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
         map('<leader>ca', vim.lsp.buf.code_action, '[C]ode [A]ction')
-        map('<space>li', '<cmd>LspInfo<cr>', '[L]sp [I]nfo')
-        map('<space>lr', '<cmd>LspRestart<cr>', '[L]sp [R]estart')
+        map('<space>li', '<cmd>checkhealth vim.lsp<cr>', '[L]sp [I]nfo')
+        map('<space>lr', '<cmd>lsp restart<cr>', '[L]sp [R]estart')
         map('<space>th', function()
           vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
         end, '[T]oggle Inlay [H]ints')
@@ -209,25 +209,31 @@ return {
       -- handlers = handlers,
     })
     -- Server configurations using Neovim 0.11 API
-    vim.lsp.config('intelephense', {
-      cmd = { 'intelephense', '--stdio' },
-      filetypes = { 'php', 'blade', 'php_only' },
+    vim.lsp.config('phpantom', {
+      cmd = { 'phpantom_lsp' },
+      filetypes = { 'php' },
       root_markers = { 'composer.json', '.git' },
-      capabilities = capabilities,
-      default_config = {
-        init_options = {
-          licenceKey = '$HOME/intelephense/licence.txt',
-        },
-      },
-      settings = {
-        intelephense = {
-          files = {
-            associations = { '*.php', '*.blade.php' },
-            maxSize = 5000000,
-          },
-        },
-      },
     })
+
+    -- vim.lsp.config('intelephense', {
+    --   cmd = { 'intelephense', '--stdio' },
+    --   filetypes = { 'php', 'blade', 'php_only' },
+    --   root_markers = { 'composer.json', '.git' },
+    --   capabilities = capabilities,
+    --   default_config = {
+    --     init_options = {
+    --       licenceKey = '$HOME/intelephense/licence.txt',
+    --     },
+    --   },
+    --   settings = {
+    --     intelephense = {
+    --       files = {
+    --         associations = { '*.php', '*.blade.php' },
+    --         maxSize = 5000000,
+    --       },
+    --     },
+    --   },
+    -- })
 
     vim.lsp.config('gopls', {
       cmd = { 'gopls' },
@@ -419,7 +425,8 @@ return {
       },
     })
 
-    vim.lsp.enable 'intelephense'
+    -- vim.lsp.enable 'intelephense'
+    vim.lsp.enable 'phpantom'
     vim.lsp.enable 'vuels'
     vim.lsp.enable 'gopls'
     vim.lsp.enable 'html'
@@ -482,35 +489,55 @@ return {
     -- Mason setup for automatic installation
     require('mason').setup()
 
-    -- Renderiza code lens do OCaml acima da linha
-    local orig_codelens_display = vim.lsp.codelens.display
-
-    vim.lsp.codelens.display = function(lenses, bufnr, client_id)
-      local ft = vim.bo[bufnr].filetype
-      if ft ~= 'ocaml' and ft ~= 'ocamlinterface' then
-        return orig_codelens_display(lenses, bufnr, client_id)
-      end
-
-      -- Chama o display original (limpa o namespace dele)
-      orig_codelens_display({}, bufnr, client_id)
-
-      if not lenses or #lenses == 0 then
-        return
-      end
-
-      local ns = vim.api.nvim_create_namespace 'ocaml_codelens_above'
+    -- Get hover type info and render above eta-reduced bindings
+    local function show_type_above(bufnr)
+      local ns = vim.api.nvim_create_namespace 'ocaml_type_above'
       vim.api.nvim_buf_clear_namespace(bufnr, ns, 0, -1)
 
-      for _, lens in ipairs(lenses) do
-        if lens.command and lens.command.title then
-          local line = lens.range.start.line
-          vim.api.nvim_buf_set_extmark(bufnr, ns, line, 0, {
-            virt_lines = { { { lens.command.title, 'LspCodeLens' } } },
-            virt_lines_above = true,
-          })
+      local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+      for i, line in ipairs(lines) do
+        -- captura let bindings em qualquer nível de indentação
+        local col = line:find '%f[%w]let%f[%W]'
+        if col and line:match 'let%s+%w' then
+          local row = i - 1
+          -- posiciona o cursor no nome do binding (após "let ")
+          local name_col = line:find('%w+', col + 3)
+
+          vim.lsp.buf_request(bufnr, 'textDocument/hover', {
+            textDocument = vim.lsp.util.make_text_document_params(bufnr),
+            position = { line = row, character = (name_col or col) - 1 },
+          }, function(_, result)
+            if result and result.contents then
+              local content = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+              for _, text in ipairs(content) do
+                if text:match '^val ' then
+                  vim.api.nvim_buf_set_extmark(bufnr, ns, row, 0, {
+                    virt_lines = { { { text, 'LspCodeLens' } } },
+                    virt_lines_above = true,
+                  })
+                  break
+                end
+              end
+            end
+          end)
         end
       end
     end
+
+    -- Trigger after LSP attaches
+    vim.api.nvim_create_autocmd('LspAttach', {
+      pattern = '*.ml',
+      callback = function(ev)
+        local bufnr = ev.buf
+        vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
+          buffer = bufnr,
+          callback = function()
+            show_type_above(bufnr)
+          end,
+        })
+      end,
+    })
 
     local ensure_installed = {
       'stylua',
@@ -533,6 +560,7 @@ return {
       'oxlint',
       'prettierd',
       'oxfmt',
+      'phpantom_lsp',
     }
 
     require('mason-tool-installer').setup {

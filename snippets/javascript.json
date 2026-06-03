@@ -57,13 +57,38 @@
             "process.env.${1:VARIABLE}"
         ]
     },
-    "Promise": {
+    "TryCatch": {
+        "prefix": "try",
+        "description": "new try catch block",
+        "body": [
+            "try {",
+            "\t${1:}",
+            "}catch(err) {",
+            "\t",
+            "}"
+        ]
+    },
+    "Promise (Long)": {
         "prefix": "pro",
         "description": "new Promise",
         "body": [
             "new Promise((resolve, reject) => {",
             "\t${1:}",
             "});"
+        ]
+    },
+    "Promise resolve": {
+        "prefix": "resol",
+        "description": "new Promise resolve",
+        "body": [
+            "new Promise((resolve) => resolve(${1:}));"
+        ]
+    },
+    "Promise reject": {
+        "prefix": "rejec",
+        "description": "new Promise reject",
+        "body": [
+            "new Promise((_resolve, reject) => reject(${1:}));"
         ]
     },
     "Test block": {

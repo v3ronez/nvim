@@ -76,7 +76,7 @@ return {
       git = {
         status_text_color = false, -- Apply git status colors to filename text (default: false, only sign column)
       },
-      prompt_vim_mode = true,
+      prompt_vim_mode = true, -- <leader>l and <leader>p
 
       keymaps = {
         close = '<Esc>',

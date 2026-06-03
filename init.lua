@@ -86,7 +86,8 @@ vim.filetype.add {
   },
 }
 vim.opt.laststatus = 3 -- Or 3 for global statusline
-vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
+-- vim.opt.statusline = '  %f %m %= %l:%c [%{v:lua.get_git_branch()}] λ    '
+vim.opt.statusline = '  %f %m %= %p%% %l:%c [%{v:lua.get_git_branch()}] λ    '
 -- vim.opt.statusline = '   %f %m %= %l:%c λ    '
 vim.opt.list = true
 vim.opt.listchars = 'tab:^ ,nbsp:¬,extends:»,precedes:«,trail:•'
@@ -531,18 +532,23 @@ load_custom_functions()
 require('custom.functions.brain').setup()
 
 --TH
-vim.o.background = 'dark'
+vim.o.background = 'light'
 if vim.o.background == 'light' then
+  -- vim.cmd.colorscheme 'melange'
   -- vim.cmd.colorscheme 'scholar'
-  vim.cmd.colorscheme 'gruvbox-material'
+  -- vim.cmd.colorscheme 'gruvbox-material'
   -- vim.cmd.colorscheme 'solarized'
   -- vim.cmd.colorscheme 'atomonelight_matte'
+  vim.cmd.colorscheme 'github_light'
 else
-  vim.cmd.colorscheme 'material'
+  vim.cmd.colorscheme 'github_dark'
+  -- vim.cmd.colorscheme 'melange'
+  -- vim.cmd.colorscheme 'material'
   -- vim.cmd.colorscheme 'gruvbox-material'
   -- vim.cmd.colorscheme 'mellifluous'
   -- vim.cmd.colorscheme 'vesper'
   -- vim.cmd.colorscheme 'catppuccin-nvim'
+  -- vim.cmd.colorscheme 'tokyonight-storm'
 end
 
 -- vim.cmd [[
